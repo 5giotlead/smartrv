@@ -1,0 +1,24 @@
+{
+    "@@locale": "en",
+    "loginAppBarTitle": "Login",
+    "@loginAppBarTitle": {
+     "description": "Text shown in the AppBar of the Login Page"
+    },
+    "logoutAppBarTitle": "Logout",
+    "@logoutAppBarTitle": {
+    "description": "Text shown in the AppBar of the Logout Page"
+    },
+    "loggingOutText": "Logging out...",
+    "bottomNavBarTab1": "Search",
+    "@bottomNavBarTab1": {
+        "description": "Text shown in the first of BottomNavBar."
+    },
+    "bottomNavBarTab2": "Search",
+    "@bottomNavBarTab2": {
+        "description": "Text shown in the second of BottomNavBar."
+    },
+    "bottomNavBarTab3": "Search",
+    "@bottomNavBarTab3": {
+        "description": "Text shown in the third of BottomNavBar."
+    }
+}

@@ -1,0 +1,38 @@
+import 'package:dio/dio.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_triple/flutter_triple.dart';
+import 'package:thingsboard_client/thingsboard_client.dart';
+
+class AuthStore extends NotifierStore<Exception, bool> {
+  AuthStore() : super(false);
+
+  final _tbClient = Modular.get<ThingsboardClient>();
+  final _dio = Modular.get<Dio>();
+  final _storage = Modular.get<FlutterSecureStorage>();
+
+  Future<void> checkAccess() async {
+    if (state) {
+      // print(
+      //   await _dio.get('/smartrv/access/${_tbClient.getAuthUser()?.userId}'),
+      // );
+    }
+  }
+
+  Future<void> setOauthAccess(String token, String refreshToken) async {
+    await _tbClient.setUserFromJwtToken(token, refreshToken, true);
+    await _storage.write(key: 'token', value: token);
+    await _storage.write(key: 'refreshToken', value: refreshToken);
+  }
+
+  Future<bool> checkAuth() async {
+    final token = await _storage.read(key: 'token');
+    final refreshToken = await _storage.read(key: 'refreshToken');
+    if (token != null && refreshToken != null) {
+      await _tbClient.setUserFromJwtToken(token, refreshToken, true);
+    }
+    update(_tbClient.isAuthenticated() && _tbClient.isJwtTokenValid());
+    await checkAccess();
+    return _tbClient.isAuthenticated() && _tbClient.isJwtTokenValid();
+  }
+}

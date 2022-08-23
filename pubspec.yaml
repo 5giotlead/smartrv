@@ -1,0 +1,54 @@
+name: flutter_rv_pms
+description: A Very Good Project created by Very Good CLI.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: 3.0.5
+
+dependencies:
+  bloc: ^8.1.0
+  dio: ^4.0.6
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.0.1
+  flutter_form_builder: ^7.4.0
+  flutter_icons_null_safety: ^1.1.0
+  flutter_launcher_icons: ^0.9.3
+  flutter_localizations:
+    sdk: flutter
+  flutter_modular: ^5.0.3
+  flutter_screenutil: ^5.5.3+2
+  flutter_secure_storage: ^5.1.0
+  flutter_svg: ^1.1.1+1
+  flutter_triple: ^1.2.7+4
+  form_builder_validators: ^8.2.0
+  google_fonts: ^3.0.1
+  http: ^0.13.4
+  intl: ^0.17.0
+  mobile_scanner: ^2.0.0
+  passcode_screen: ^2.0.1
+  qr_code_scanner: ^1.0.0
+  smooth_page_indicator: ^1.0.0+2
+  syncfusion_flutter_datepicker: ^20.2.39
+  thingsboard_client: ^1.0.2
+  uni_links: ^0.5.1
+  url_launcher: ^6.1.5
+  url_strategy: ^0.2.0
+  web_socket_channel: ^2.2.0
+
+dev_dependencies:
+  bloc_test: ^9.0.3
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/images/
+    - assets/svg/

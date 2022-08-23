@@ -1,0 +1,19 @@
+{
+    "@@locale": "zh",
+    "loginAppBarTitle": "登入",
+    "@loginAppBarTitle": {
+     "description": "Text shown in the AppBar of the Login Page"
+    },
+    "bottomNavBarTab1": "搜尋",
+    "@bottomNavBarTab1": {
+        "description": "Text shown in the first of BottomNavBar."
+    },
+    "bottomNavBarTab2": "我的最愛",
+    "@bottomNavBarTab2": {
+        "description": "Text shown in the second of BottomNavBar."
+    },
+    "bottomNavBarTab3": "登入",
+    "@bottomNavBarTab3": {
+        "description": "Text shown in the third of BottomNavBar."
+    }
+}
