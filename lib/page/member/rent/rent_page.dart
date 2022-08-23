@@ -1,36 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/widgets/input_widget.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
 
 class RentPage extends StatefulWidget {
-  final data;
-
-  // final GlobalKey isQRData = false;
-  RentPage(this.data, {super.key});
+  RentPage({super.key, required typeId, required assetId});
 
   @override
-  _RentPageState createState() {
-    // if (!data.toString().isEmpty) {
-    //   isQRData = true;
-    //   return _RentPageState(jsonDecode(data.toString())['data']['attributes']['name']);
-    // } else {
-    // print();
-    // Map<String, dynamic> a = jsonDecode(data.toString());
-    return _RentPageState();
-    // }
-  }
+  State<StatefulWidget> createState() => _RentPageState();
 }
 
 class _RentPageState extends State<RentPage> {
-  // final data;
-  // _RentPageState(this.data);
+  final typeId = Modular.args.params['typeId'];
+  final assetId = Modular.args.params['assetId'];
 
   @override
   Widget build(BuildContext context) {
-    // debugPaintSizeEnabled = true;
-    // print(data);
-    // print(jsonDecode(data.toString())['data']['attributes']['name']);
-
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 219, 217, 217),
         // bottomNavigationBar: BottomNavBar(),

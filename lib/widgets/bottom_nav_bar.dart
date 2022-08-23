@@ -50,7 +50,7 @@ class _NavBarState extends State<BottomNavBar> {
       setState(() {});
     } else {
       setState(() {
-        Modular.to.navigate('/auth/login');
+        Modular.to.navigate('/member/rent');
       });
     }
   }

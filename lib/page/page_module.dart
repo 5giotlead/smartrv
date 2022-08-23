@@ -40,16 +40,29 @@ class PageModule extends Module {
       ];
 }
 
-class EntryPage extends StatelessWidget {
+class EntryPage extends StatefulWidget {
   const EntryPage({super.key});
 
-  // void removeUriParams() {
-  void removeUriParams() async {
+  @override
+  State<StatefulWidget> createState() => _EntryState();
+}
+
+class _EntryState extends State<EntryPage> {
+  final _authStore = Modular.get<AuthStore>();
+
+  @override
+  void initState() {
+    super.initState();
+    removeUriParams();
+  }
+
+  Future<void> removeUriParams() async {
     final token = Modular.args.queryParams['accessToken'];
     final refreshToken = Modular.args.queryParams['refreshToken'];
     if (token != null && refreshToken != null) {
       if (kIsWeb) {
-        await Modular.get<AuthStore>().setOauthAccess(token, refreshToken);
+        await _authStore.setOauthAccess(token, refreshToken);
+        Modular.to.navigate('/home');
         // } else if (Platform.isAndroid) {
       } else {
         if (!await launchUrl(
@@ -61,23 +74,26 @@ class EntryPage extends StatelessWidget {
           throw 'Could not launch';
         }
       }
+    } else {
+      if (kIsWeb && _authStore.pastPage == '') {
+        Modular.to.navigate('/home');
+      }
     }
-    Modular.to.navigate('/home');
   }
 
   @override
   Widget build(BuildContext context) {
-    removeUriParams();
-    // debugPaintSizeEnabled = true;
+// debugPaintSizeEnabled = true;
     return Scaffold(
-        bottomNavigationBar: BottomNavBar(),
-        body: Container(
-          child: Row(
-            children: const [
-              // Container(width: 2, color: Colors.black45),
-              Expanded(child: RouterOutlet()),
-            ],
-          ),
-        ));
+      bottomNavigationBar: BottomNavBar(),
+      body: Container(
+        child: Row(
+          children: const [
+            // Container(width: 2, color: Colors.black45),
+            Expanded(child: RouterOutlet()),
+          ],
+        ),
+      ),
+    );
   }
 }

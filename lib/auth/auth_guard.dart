@@ -6,8 +6,13 @@ import 'package:flutter_rv_pms/auth/auth_store.dart';
 class AuthGuard extends RouteGuard {
   AuthGuard() : super(redirectTo: '/auth/login');
 
+  final _authStore = Modular.get<AuthStore>();
+
   @override
   Future<bool> canActivate(String path, ModularRoute route) {
+    if (path != '/auth/logout') {
+      _authStore.pastPage = path;
+    }
     return Modular.get<AuthStore>().checkAuth();
   }
 }

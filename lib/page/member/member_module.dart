@@ -22,9 +22,15 @@ class MemberModule extends Module {
           '/control',
           child: (context, args) => ControlPage(),
         ),
-        ChildRoute('/rent', child: (context, args) => RentPage({args.data})),
-        ChildRoute('/shopping', child: (context, args) => ShoppingPage()),
-        ChildRoute('/check', child: (context, args) => CheckPage()),
+        ChildRoute(
+          '/rent/:typeId/:assetId',
+          child: (context, args) => RentPage(
+            typeId: args.params['typeId'],
+            assetId: args.params['assetId'],
+          ),
+        ),
+        ChildRoute('/shopping', child: (context, args) => const ShoppingPage()),
+        ChildRoute('/check', child: (context, args) => const CheckPage()),
         ChildRoute(
           '/booking',
           child: (context, args) => BookingPage(args.data),

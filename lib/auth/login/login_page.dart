@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter_rv_pms/auth/login/cubit/login_cubit.dart';
@@ -125,6 +126,7 @@ class LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _login() async {
+    final _authStore = Modular.get<AuthStore>();
     FocusScope.of(context).unfocus();
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       final loginRequest = _formKey.currentState!.value;
@@ -137,7 +139,8 @@ class LoginFormState extends State<LoginForm> {
         await _storage.write(
             key: 'refreshToken', value: loginResponse.refreshToken);
         _isLoginNotifier.value = true;
-        Modular.to.navigate('/home');
+        Modular.to.navigate(_authStore.pastPage);
+        _authStore.pastPage = '';
       } catch (e) {
         print(e);
         _isLoginNotifier.value = false;
