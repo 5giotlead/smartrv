@@ -16,10 +16,16 @@ class TogglePage extends StatelessWidget {
         'method': 'Switch.Toggle',
         'params': {'id': 0}
       });
-      await tbClient.post<String>(
-        '/api/rpc/twoway/$deviceId',
-        data: data,
-      );
+      try {
+        await tbClient.post<String>(
+          '/api/rpc/twoway/$deviceId',
+          data: data,
+        );
+      } catch (e) {
+        print(e);
+      } finally {
+        Modular.to.navigate('/home');
+      }
     }
   }
 

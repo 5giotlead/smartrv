@@ -69,18 +69,18 @@ class _QRScanState extends State<QRScan> {
                               fontSize: 12,
                             ),
                           ),
-                          InkWell(
-                            child: const Text(
-                              'Go',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontSize: 12,
-                              ),
-                            ),
-                            onTap: () {
-                              onScan(result?.code);
-                            },
-                          ),
+                          // InkWell(
+                          //   child: const Text(
+                          //     'Go',
+                          //     style: TextStyle(
+                          //       color: Colors.blue,
+                          //       fontSize: 12,
+                          //     ),
+                          //   ),
+                          //   onTap: () {
+                          //     onScan(result?.code);
+                          //   },
+                          // ),
                         ],
                       )
                     : Center(child: Text('Scan a code')),
@@ -96,7 +96,7 @@ class _QRScanState extends State<QRScan> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        result = scanData;
+        onScan(scanData?.code);
       });
     });
   }
