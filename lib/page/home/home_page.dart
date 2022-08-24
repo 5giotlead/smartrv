@@ -146,7 +146,7 @@ class _RvKindListState extends State<RvKindList> {
             child: Row(children: <Widget>[
               RvKind(
                 '北部',
-                const Icon(Icons.home),
+                const Icon(Icons.temple_buddhist),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
@@ -155,7 +155,7 @@ class _RvKindListState extends State<RvKindList> {
               ),
               RvKind(
                 '中部',
-                const Icon(Icons.ac_unit),
+                const Icon(Icons.hiking),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
@@ -164,7 +164,7 @@ class _RvKindListState extends State<RvKindList> {
               ),
               RvKind(
                 '南部',
-                const Icon(Icons.access_time),
+                const Icon(Icons.sunny),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
@@ -173,7 +173,7 @@ class _RvKindListState extends State<RvKindList> {
               ),
               RvKind(
                 '東部',
-                const Icon(Icons.account_balance_rounded),
+                const Icon(Icons.bike_scooter),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
@@ -182,7 +182,7 @@ class _RvKindListState extends State<RvKindList> {
               ),
               RvKind(
                 '離島',
-                const Icon(Icons.accessibility_new_sharp),
+                const Icon(Icons.water),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
