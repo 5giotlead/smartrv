@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
-          title: const Text('PMS'),
+          title: const Text('RV'),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.logout),
