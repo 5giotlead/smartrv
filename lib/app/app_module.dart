@@ -32,6 +32,6 @@ class AppModule extends Module {
           '/auth',
           module: AuthModule(),
         ),
-        // WildcardRoute(child: (context, args) => NotFoundPage()),
+        WildcardRoute(child: (context, args) => NotFoundPage()),
       ];
 }

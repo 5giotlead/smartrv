@@ -23,10 +23,10 @@ class MemberModule extends Module {
           child: (context, args) => ControlPage(),
         ),
         ChildRoute(
-          '/rent/:typeId/:assetId',
+          '/rent',
           child: (context, args) => RentPage(
-            typeId: args.params['typeId'],
-            assetId: args.params['assetId'],
+            typeId: args.queryParams['typeId'],
+            assetId: args.queryParams['assetId'],
           ),
         ),
         ChildRoute('/shopping', child: (context, args) => const ShoppingPage()),
