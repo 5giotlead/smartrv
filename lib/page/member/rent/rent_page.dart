@@ -25,7 +25,7 @@ class _RentPageState extends State<RentPage> {
       'name': '150',
       'description': 'TEST',
       'type': {
-        'id': typeId != null ? typeId : '7a0e1a61-7f70-4116-96f3-31b618ce2138'
+        'id': typeId != null ? typeId : '7c2ad09f-0242-4fee-a006-0cd720ec9e2b'
       },
       'assetId': assetId != null ? assetId : ''
     });
