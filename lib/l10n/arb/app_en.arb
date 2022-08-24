@@ -13,11 +13,11 @@
     "@bottomNavBarTab1": {
         "description": "Text shown in the first of BottomNavBar."
     },
-    "bottomNavBarTab2": "Search",
+    "bottomNavBarTab2": "My Favorites",
     "@bottomNavBarTab2": {
         "description": "Text shown in the second of BottomNavBar."
     },
-    "bottomNavBarTab3": "Search",
+    "bottomNavBarTab3": "Login",
     "@bottomNavBarTab3": {
         "description": "Text shown in the third of BottomNavBar."
     }
