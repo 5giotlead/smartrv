@@ -261,39 +261,32 @@ class LoginFormState extends State<LoginForm> {
                 ),
               ),
               Container(
-                height: 20,
+                height: 30,
                 width: 500,
                 // color: Color.fromARGB(255, 28, 142, 70),
               ),
               Container(
                 height: 50,
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: _loginByOAuth,
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 14.0),
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Color.fromARGB(204, 251, 250, 250),
                     ),
                     child: Row(
                       children: [
-                        MaterialButton(
-                          color: Theme.of(context).colorScheme.secondary,
-                          onPressed: _loginByOAuth,
-                          child: const Text(
-                            "OAuth2",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        SvgPicture.asset(
-                          "assets/svg/google.svg",
-                          width: 30.0,
-                        ),
+                        // SvgPicture.asset(
+                        //   "assets/svg/google.svg",
+                        //   width: 30.0,
+                        // ),
+                        const Icon(Icons.login),
                         SizedBox(
-                          width: 10.0,
+                          width: 15,
                         ),
                         Text(
-                          "Google",
+                          "Oauth2",
                           style: TextStyle(
                             color: Color.fromRGBO(105, 108, 121, 1),
                           ),
@@ -303,39 +296,69 @@ class LoginFormState extends State<LoginForm> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 10.0,
-              ),
-              Container(
-                height: 50,
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 14.0),
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                    ),
-                    child: Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/svg/facebook.svg",
-                          width: 30.0,
-                        ),
-                        SizedBox(
-                          width: 10.0,
-                        ),
-                        Text(
-                          "Facebook",
-                          style: TextStyle(
-                            color: Color.fromRGBO(105, 108, 121, 1),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Container(
+              //   height: 50,
+              //   child: GestureDetector(
+              //     onTap: () {},
+              //     child: Container(
+              //       padding: EdgeInsets.symmetric(horizontal: 14.0),
+              //       height: 50,
+              //       decoration: BoxDecoration(
+              //         color: Colors.white,
+              //       ),
+              //       child: Row(
+              //         children: [
+              //           SvgPicture.asset(
+              //             "assets/svg/google.svg",
+              //             width: 30.0,
+              //           ),
+              //           SizedBox(
+              //             width: 10.0,
+              //           ),
+              //           Text(
+              //             "Google",
+              //             style: TextStyle(
+              //               color: Color.fromRGBO(105, 108, 121, 1),
+              //             ),
+              //           )
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   width: 10.0,
+              // ),
+              // Container(
+              //   height: 50,
+              //   child: GestureDetector(
+              //     onTap: () {},
+              //     child: Container(
+              //       padding: EdgeInsets.symmetric(horizontal: 14.0),
+              //       height: 50,
+              //       decoration: BoxDecoration(
+              //         color: Colors.white,
+              //       ),
+              //       child: Row(
+              //         children: [
+              //           SvgPicture.asset(
+              //             "assets/svg/facebook.svg",
+              //             width: 30.0,
+              //           ),
+              //           SizedBox(
+              //             width: 10.0,
+              //           ),
+              //           Text(
+              //             "Facebook",
+              //             style: TextStyle(
+              //               color: Color.fromRGBO(105, 108, 121, 1),
+              //             ),
+              //           )
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
