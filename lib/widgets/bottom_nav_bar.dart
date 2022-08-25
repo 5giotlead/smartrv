@@ -14,7 +14,6 @@ class BottomNavBar extends StatefulWidget {
 
 class _NavBarState extends State<BottomNavBar> {
   final _pageStore = Modular.get<PageStore>();
-  int index = 0;
 
   @override
   void initState() {

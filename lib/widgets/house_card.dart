@@ -1,9 +1,9 @@
-import 'package:flutter_rv_pms/widgets/models/property.dart';
-import 'package:flutter_rv_pms/utils/constants.dart';
-import 'package:flutter_rv_pms/utils/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_rv_pms/page/page_store.dart';
+import 'package:flutter_rv_pms/utils/constants.dart';
+import 'package:flutter_rv_pms/widgets/models/property.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 String base_image_url = 'https://rv.5giotlead.com/static/camp/';
 
@@ -12,12 +12,15 @@ class HouseCard extends StatelessWidget {
 
   HouseProperty house;
 
+  final _pageStore = Modular.get<PageStore>();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         // Helper.nextPage(context, SinglePropertyPage());
         String id = 'axssaf';
+        _pageStore.setIndex(0);
         Modular.to.navigate('/booking', arguments: id);
       },
       child: Container(

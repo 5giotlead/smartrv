@@ -12,7 +12,7 @@ class BookingPage extends StatefulWidget {
   final data;
 
   @override
-  _BookingPageState createState() => _BookingPageState();
+  State<BookingPage> createState() => _BookingPageState();
 }
 
 class _BookingPageState extends State<BookingPage> {
