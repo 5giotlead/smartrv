@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
-import 'package:flutter_rv_pms/page/home/provider/qr_scan2.dart';
 import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
+import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/utils/static_data_property.dart';
 import 'package:flutter_rv_pms/widgets/house_card.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
@@ -10,6 +10,7 @@ import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
+  @override
   Widget build(BuildContext context) {
     // debugPaintSizeEnabled = true; // After Build Widget
     return Scaffold(
@@ -57,7 +58,6 @@ class HomePage extends StatelessWidget {
               icon: const Icon(Icons.qr_code_scanner),
               tooltip: 'QR Code Scanner',
               onPressed: () {
-                print('scanner');
                 Navigator.of(context).push(_createRoute());
               },
             ),

@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rv_pms/widgets/datepicker_range.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:flutter_rv_pms/widgets/primary_button.dart';
-import 'package:flutter_rv_pms/widgets/chart.dart';
-import 'package:flutter_rv_pms/widgets/datepicker.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_rv_pms/page/page_store.dart';
+import 'package:flutter_rv_pms/widgets/chart.dart';
+import 'package:flutter_rv_pms/widgets/datepicker_range.dart';
+import 'package:flutter_rv_pms/widgets/primary_button.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class BookingPage extends StatefulWidget {
   const BookingPage(this.data, {super.key});
+
   final data;
 
   @override
-  _BookingPageState createState() => _BookingPageState();
+  State<BookingPage> createState() => _BookingPageState();
 }
 
 class _BookingPageState extends State<BookingPage> {
   PageController? pageViewController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _pageStore = Modular.get<PageStore>();
 
   @override
   Widget build(BuildContext context) {

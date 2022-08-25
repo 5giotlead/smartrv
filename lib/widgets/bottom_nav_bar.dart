@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/l10n/l10n.dart';
+import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -11,7 +13,13 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _NavBarState extends State<BottomNavBar> {
-  int _currentIndex = 0;
+  final _pageStore = Modular.get<PageStore>();
+
+  @override
+  void initState() {
+    _pageStore.observer(onState: (state) => setState(() {}));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +38,23 @@ class _NavBarState extends State<BottomNavBar> {
           label: context.l10n.bottomNavBarTab3,
         ),
       ],
-      currentIndex: _currentIndex, // now index
+      currentIndex: _pageStore.state, // now index
       fixedColor: Colors.amber, // selecter page
       onTap: _onItemClick, // press event
     );
   }
 
-  void _onItemClick(int index) async {
-    _currentIndex = index;
+  Future<void> _onItemClick(int index) async {
+    _pageStore.setIndex(index);
     if (index == 0) {
-      setState(() {
-        Modular.to.navigate('/home');
-      });
+      Modular.to.navigate('/home');
     } else if (index == 1) {
       await launchUrl(
         Uri.parse('smartrv://rv.5giotlead.com/member/control'),
         webOnlyWindowName: '_self',
       );
-      setState(() {});
     } else {
-      setState(() {
-        Modular.to.navigate('/member/rent');
-      });
+      Modular.to.navigate('/member/rent');
     }
   }
 }
