@@ -56,7 +56,6 @@ class HomePage extends StatelessWidget {
               icon: const Icon(Icons.qr_code_scanner),
               tooltip: 'QR Code Scanner',
               onPressed: () {
-                print('scanner');
                 Navigator.of(context).push(_createRoute());
               },
             ),

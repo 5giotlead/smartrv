@@ -9,6 +9,7 @@ String base_image_url = 'https://rv.5giotlead.com/static/camp/';
 
 class HouseCard extends StatelessWidget {
   HouseCard(this.house);
+
   HouseProperty house;
 
   @override
@@ -17,7 +18,6 @@ class HouseCard extends StatelessWidget {
       onTap: () {
         // Helper.nextPage(context, SinglePropertyPage());
         String id = 'axssaf';
-        print('booking');
         Modular.to.navigate('/booking', arguments: id);
       },
       child: Container(
