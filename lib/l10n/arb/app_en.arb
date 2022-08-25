@@ -17,7 +17,7 @@
     "@bottomNavBarTab2": {
         "description": "Text shown in the second of BottomNavBar."
     },
-    "bottomNavBarTab3": "Login",
+    "bottomNavBarTab3": "Rent Out",
     "@bottomNavBarTab3": {
         "description": "Text shown in the third of BottomNavBar."
     }
