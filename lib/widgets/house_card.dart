@@ -5,10 +5,10 @@ import 'package:flutter_rv_pms/utils/constants.dart';
 import 'package:flutter_rv_pms/widgets/models/property.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-String base_image_url = 'https://rv.5giotlead.com/static/camp/';
+String baseImageUrl = 'https://rv.5giotlead.com/static/camp/';
 
 class HouseCard extends StatelessWidget {
-  HouseCard(this.house);
+  HouseCard(this.house, {super.key});
 
   HouseProperty house;
 
@@ -48,7 +48,7 @@ class HouseCard extends StatelessWidget {
                       topRight: Radius.circular(12),
                     ),
                     child: Image.network(
-                      base_image_url + house.imagePath,
+                      baseImageUrl + house.imagePath,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                     ),

@@ -1,50 +1,63 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:passcode_screen/circle.dart';
 import 'package:passcode_screen/keyboard.dart';
 import 'package:passcode_screen/passcode_screen.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:thingsboard_client/thingsboard_client.dart';
 
-String storedPasscode = '123456';
-
-class PscScreen extends StatefulWidget {
-  String psw;
-
-  PscScreen(this.psw, {Key? key}) : super(key: key);
+class TogglePage extends StatefulWidget {
+  TogglePage({super.key, required deviceId});
 
   @override
   State<StatefulWidget> createState() => _PscScreenState();
 }
 
-class _PscScreenState extends State<PscScreen> {
+class _PscScreenState extends State<TogglePage> {
+  final _tbClient = Modular.get<ThingsboardClient>();
+  final _dio = Modular.get<Dio>();
+  String passcode = '';
+
+  Future<void> _toggleSwitch(String passcode) async {
+    bool isValid = false;
+    final rvId = Modular.args.params['rvId'] as String;
+    try {
+      final res = await _dio.get(
+        '/smartrv/locker/$rvId/$passcode',
+      );
+      if (res.data['message'] == null) {
+        isValid = true;
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      _verificationNotifier.add(isValid);
+    }
+  }
+
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
 
-  bool isAuthenticated = false;
-
   @override
   Widget build(BuildContext context) {
-    storedPasscode = widget.psw;
     return Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('輸入密碼'),
-        //   backgroundColor: Colors.transparent,
-        //   elevation: 0,
-        // ),
         body: Center(
       child: PasscodeScreen(
-        title: Text(
+        title: const Text(
           '請輸入密碼',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white, fontSize: 28),
         ),
-        circleUIConfig: CircleUIConfig(
+        circleUIConfig: const CircleUIConfig(
             borderColor: Colors.blue, fillColor: Colors.blue, circleSize: 30),
-        keyboardUIConfig:
-            KeyboardUIConfig(digitBorderWidth: 2, primaryColor: Colors.blue),
+        keyboardUIConfig: const KeyboardUIConfig(
+            digitBorderWidth: 2, primaryColor: Colors.blue),
         passwordEnteredCallback: _onPasscodeEntered,
-        cancelButton: Icon(
+        isValidCallback: _navToHome,
+        cancelButton: const Icon(
           Icons.turn_left,
           color: Colors.blue,
         ),
@@ -52,28 +65,25 @@ class _PscScreenState extends State<PscScreen> {
         shouldTriggerVerification: _verificationNotifier.stream,
         backgroundColor: Colors.black.withOpacity(0.8),
         cancelCallback: _onPasscodeCancelled,
-        digits: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+        digits: const ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
         passwordDigits: 6,
         bottomWidget: _buildPasscodeRestoreButton(),
-        isValidCallback: _validFunc,
-        // passwordResetCallback: _resetAppPassword,
       ),
     ));
   }
 
-  _validFunc() {
-    print('Valid');
+  void _navToHome() {
     Modular.to.navigate('/home');
   }
 
-  _onPasscodeEntered(String enteredPasscode) {
-    bool isValid = storedPasscode == enteredPasscode;
-    _verificationNotifier.add(isValid);
+  Future<void> _onPasscodeEntered(String enteredCode) async {
+    if (enteredCode.length == 6) {
+      await _toggleSwitch(enteredCode);
+    }
   }
 
-  _onPasscodeCancelled() {
-    // Navigator.of(context).pop();
-    Modular.to.navigate('/home');
+  void _onPasscodeCancelled() {
+    _navToHome();
   }
 
   @override
@@ -104,6 +114,6 @@ class _PscScreenState extends State<PscScreen> {
   }
 
   _resetAppPassword() {
-    print('reset');
+    passcode = '';
   }
 }
