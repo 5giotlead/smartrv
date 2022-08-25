@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rv_pms/widgets/datepicker_range.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
@@ -222,7 +223,7 @@ class _BookingPageState extends State<BookingPage> {
                                 ),
                               ),
                               Container(
-                                child: DatePicker(),
+                                child: DatePickerRange(),
                               ),
                               // Align(
                               //   alignment: AlignmentDirectional(-1, 0),

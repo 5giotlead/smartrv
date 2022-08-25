@@ -1,226 +1,105 @@
-// Copyright 2019 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
+import 'package:flutter/material.dart';
 
-// import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
+class DatePickerRange extends StatefulWidget {
+  const DatePickerRange({Key? key, this.restorationId}) : super(key: key);
 
-// class PickerDemo extends StatefulWidget {
-//   const PickerDemo({Key? key, required this.type}) : super(key: key);
+  final String? restorationId;
 
-//   final PickerDemoType type;
+  @override
+  State<DatePickerRange> createState() => _DatePickerRangeState();
+}
 
-//   @override
-//   State<PickerDemo> createState() => _PickerDemoState();
-// }
+/// RestorationProperty objects can be used because of RestorationMixin.
+class _DatePickerRangeState extends State<DatePickerRange>
+    with RestorationMixin {
+  // In this example, the restoration ID for the mixin is passed in through
+  // the [StatefulWidget]'s constructor.
+  @override
+  String? get restorationId => widget.restorationId;
 
-// class _PickerDemoState extends State<PickerDemo> with RestorationMixin {
-//   final RestorableDateTime _fromDate = RestorableDateTime(DateTime.now());
-//   final RestorableTimeOfDay _fromTime = RestorableTimeOfDay(
-//     TimeOfDay.fromDateTime(DateTime.now()),
-//   );
-//   final RestorableDateTime _startDate = RestorableDateTime(DateTime.now());
-//   final RestorableDateTime _endDate = RestorableDateTime(DateTime.now());
+  final RestorableDateTimeN _startDate = RestorableDateTimeN(
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
+  final RestorableDateTimeN _endDate = RestorableDateTimeN(
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
+  late final RestorableRouteFuture<DateTimeRange?>
+      _restorableDateRangePickerRouteFuture =
+      RestorableRouteFuture<DateTimeRange?>(
+    onComplete: _selectDateRange,
+    onPresent: (NavigatorState navigator, Object? arguments) {
+      return navigator
+          .restorablePush(_dateRangePickerRoute, arguments: <String, dynamic>{
+        'initialStartDate': _startDate.value?.millisecondsSinceEpoch,
+        'initialEndDate': _endDate.value?.millisecondsSinceEpoch,
+      });
+    },
+  );
 
-//   late RestorableRouteFuture<DateTime> _restorableDatePickerRouteFuture;
-//   late RestorableRouteFuture<DateTimeRange>
-//       _restorableDateRangePickerRouteFuture;
-//   late RestorableRouteFuture<TimeOfDay> _restorableTimePickerRouteFuture;
+  void _selectDateRange(DateTimeRange? newSelectedDate) {
+    if (newSelectedDate != null) {
+      setState(() {
+        _startDate.value = newSelectedDate.start;
+        _endDate.value = newSelectedDate.end;
+      });
+    }
+  }
 
-//   void _selectDate(DateTime selectedDate) {
-//     if (selectedDate != _fromDate.value) {
-//       setState(() {
-//         _fromDate.value = selectedDate;
-//       });
-//     }
-//   }
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_startDate, 'start_date');
+    registerForRestoration(_endDate, 'end_date');
+    registerForRestoration(
+        _restorableDateRangePickerRouteFuture, 'date_picker_route_future');
+  }
 
-//   void _selectDateRange(DateTimeRange newSelectedDate) {
-//     setState(() {
-//       _startDate.value = newSelectedDate.start;
-//       _endDate.value = newSelectedDate.end;
-//     });
-//   }
+  static Route<DateTimeRange?> _dateRangePickerRoute(
+    BuildContext context,
+    Object? arguments,
+  ) {
+    return DialogRoute<DateTimeRange?>(
+      context: context,
+      builder: (BuildContext context) {
+        return DateRangePickerDialog(
+          restorationId: 'date_picker_dialog',
+          initialDateRange:
+              _initialDateTimeRange(arguments! as Map<dynamic, dynamic>),
+          firstDate: DateTime(DateTime.now().year),
+          currentDate: DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          lastDate: DateTime(DateTime.now().year + 1),
+        );
+      },
+    );
+  }
 
-//   void _selectTime(TimeOfDay selectedTime) {
-//     if (selectedTime != _fromTime.value) {
-//       setState(() {
-//         _fromTime.value = selectedTime;
-//       });
-//     }
-//   }
+  static DateTimeRange? _initialDateTimeRange(Map<dynamic, dynamic> arguments) {
+    if (arguments['initialStartDate'] != null &&
+        arguments['initialEndDate'] != null) {
+      return DateTimeRange(
+        start: DateTime.fromMillisecondsSinceEpoch(
+            arguments['initialStartDate'] as int),
+        end: DateTime.fromMillisecondsSinceEpoch(
+            arguments['initialEndDate'] as int),
+      );
+    }
 
-//   static Route<DateTime> _datePickerRoute(
-//     BuildContext context,
-//     Object? arguments,
-//   ) {
-//     return DialogRoute<DateTime>(
-//       context: context,
-//       builder: (context) {
-//         return DatePickerDialog(
-//           restorationId: 'date_picker_dialog',
-//           initialDate: DateTime.fromMillisecondsSinceEpoch(arguments as int),
-//           firstDate: DateTime(2015, 1),
-//           lastDate: DateTime(2100),
-//         );
-//       },
-//     );
-//   }
+    return null;
+  }
 
-//   static Route<TimeOfDay> _timePickerRoute(
-//     BuildContext context,
-//     Object? arguments,
-//   ) {
-//     final args = arguments as List<Object>;
-//     final initialTime = TimeOfDay(
-//       hour: args[0] as int,
-//       minute: args[1] as int,
-//     );
-
-//     return DialogRoute<TimeOfDay>(
-//       context: context,
-//       builder: (context) {
-//         return TimePickerDialog(
-//           restorationId: 'time_picker_dialog',
-//           initialTime: initialTime,
-//         );
-//       },
-//     );
-//   }
-
-//   static Route<DateTimeRange> _dateRangePickerRoute(
-//     BuildContext context,
-//     Object? arguments,
-//   ) {
-//     return DialogRoute<DateTimeRange>(
-//       context: context,
-//       builder: (context) {
-//         return DateRangePickerDialog(
-//           restorationId: 'date_rage_picker_dialog',
-//           firstDate: DateTime(DateTime.now().year - 5),
-//           lastDate: DateTime(DateTime.now().year + 5),
-//         );
-//       },
-//     );
-//   }
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _restorableDatePickerRouteFuture = RestorableRouteFuture<DateTime>(
-//       onComplete: _selectDate,
-//       onPresent: (navigator, arguments) {
-//         return navigator.restorablePush(
-//           _datePickerRoute,
-//           arguments: _fromDate.value.millisecondsSinceEpoch,
-//         );
-//       },
-//     );
-//     _restorableDateRangePickerRouteFuture =
-//         RestorableRouteFuture<DateTimeRange>(
-//       onComplete: _selectDateRange,
-//       onPresent: (navigator, arguments) =>
-//           navigator.restorablePush(_dateRangePickerRoute),
-//     );
-
-//     _restorableTimePickerRouteFuture = RestorableRouteFuture<TimeOfDay>(
-//       onComplete: _selectTime,
-//       onPresent: (navigator, arguments) => navigator.restorablePush(
-//         _timePickerRoute,
-//         arguments: [_fromTime.value.hour, _fromTime.value.minute],
-//       ),
-//     );
-//   }
-
-//   @override
-//   String get restorationId => 'picker_demo';
-
-//   @override
-//   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-//     registerForRestoration(_fromDate, 'from_date');
-//     registerForRestoration(_fromTime, 'from_time');
-//     registerForRestoration(_startDate, 'start_date');
-//     registerForRestoration(_endDate, 'end_date');
-//     registerForRestoration(
-//       _restorableDatePickerRouteFuture,
-//       'date_picker_route',
-//     );
-//     registerForRestoration(
-//       _restorableDateRangePickerRouteFuture,
-//       'date_range_picker_route',
-//     );
-//     registerForRestoration(
-//       _restorableTimePickerRouteFuture,
-//       'time_picker_route',
-//     );
-//   }
-
-//   String get _title {
-//     final localizations = GalleryLocalizations.of(context)!;
-//     switch (widget.type) {
-//       case PickerDemoType.date:
-//         return localizations.demoDatePickerTitle;
-//       case PickerDemoType.time:
-//         return localizations.demoTimePickerTitle;
-//       case PickerDemoType.range:
-//         return localizations.demoDateRangePickerTitle;
-//       default:
-//         return '';
-//     }
-//   }
-
-//   String get _labelText {
-//     switch (widget.type) {
-//       case PickerDemoType.date:
-//         return DateFormat.yMMMd().format(_fromDate.value);
-//       case PickerDemoType.time:
-//         return _fromTime.value.format(context);
-//       case PickerDemoType.range:
-//         return '${DateFormat.yMMMd().format(_startDate.value)} - ${DateFormat.yMMMd().format(_endDate.value)}';
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Navigator(
-//       onGenerateRoute: (settings) {
-//         return MaterialPageRoute<void>(
-//           builder: (context) => Scaffold(
-//             appBar: AppBar(
-//               automaticallyImplyLeading: false,
-//               title: Text(_title),
-//             ),
-//             body: Center(
-//               child: Column(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   Text(_labelText),
-//                   const SizedBox(height: 16),
-//                   ElevatedButton(
-//                     onPressed: () {
-//                       switch (widget.type) {
-//                         case PickerDemoType.date:
-//                           _restorableDatePickerRouteFuture.present();
-//                           break;
-//                         case PickerDemoType.time:
-//                           _restorableTimePickerRouteFuture.present();
-//                           break;
-//                         case PickerDemoType.range:
-//                           _restorableDateRangePickerRouteFuture.present();
-//                           break;
-//                       }
-//                     },
-//                     child: Text(
-//                       GalleryLocalizations.of(context)!.demoPickersShowPicker,
-//                     ),
-//                   )
-//                 ],
-//               ),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      IconButton(
+        icon: const Icon(Icons.date_range),
+        iconSize: 20,
+        tooltip: 'Date',
+        onPressed: () {
+          _restorableDateRangePickerRouteFuture.present();
+        },
+      ),
+      Text(
+        '2022/08/25~2022/09/28',
+        style: TextStyle(fontSize: 5),
+      )
+    ]);
+  }
+}

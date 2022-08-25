@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
+import 'package:flutter_rv_pms/page/home/provider/qr_scan2.dart';
 import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
 import 'package:flutter_rv_pms/utils/static_data_property.dart';
 import 'package:flutter_rv_pms/widgets/house_card.dart';
@@ -26,8 +27,14 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
-          title: const Text('RV'),
+          title: const Text('PMS'),
           actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.ac_unit_rounded),
+              onPressed: () {
+                Modular.to.navigate('/passcode');
+              },
+            ),
             IconButton(
               icon: const Icon(Icons.logout),
               tooltip: 'Logout',
@@ -107,7 +114,7 @@ class HomePage extends StatelessWidget {
 
 Route _createRoute() {
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => QRScan(),
+    pageBuilder: (context, animation, secondaryAnimation) => QRScan2(),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);
       const end = Offset.zero;
@@ -146,7 +153,7 @@ class _RvKindListState extends State<RvKindList> {
             child: Row(children: <Widget>[
               RvKind(
                 '北部',
-                const Icon(Icons.temple_buddhist),
+                const Icon(Icons.home),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
@@ -155,7 +162,7 @@ class _RvKindListState extends State<RvKindList> {
               ),
               RvKind(
                 '中部',
-                const Icon(Icons.hiking),
+                const Icon(Icons.ac_unit),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
@@ -164,7 +171,7 @@ class _RvKindListState extends State<RvKindList> {
               ),
               RvKind(
                 '南部',
-                const Icon(Icons.sunny),
+                const Icon(Icons.access_time),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
@@ -173,7 +180,7 @@ class _RvKindListState extends State<RvKindList> {
               ),
               RvKind(
                 '東部',
-                const Icon(Icons.bike_scooter),
+                const Icon(Icons.account_balance_rounded),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
@@ -182,7 +189,7 @@ class _RvKindListState extends State<RvKindList> {
               ),
               RvKind(
                 '離島',
-                const Icon(Icons.water),
+                const Icon(Icons.accessibility_new_sharp),
                 callBack: (text) async {
                   getData = await text;
                   key.currentState?.changeState();
