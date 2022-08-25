@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
+import 'package:thingsboard_client/thingsboard_client.dart';
 
 class CheckPage extends StatefulWidget {
   const CheckPage({Key? key}) : super(key: key);
@@ -9,6 +13,19 @@ class CheckPage extends StatefulWidget {
 }
 
 class _CheckPageState extends State<CheckPage> {
+  final _tbClient = Modular.get<ThingsboardClient>();
+
+  Future<void> _saveOrd() async {
+    final data = jsonEncode({
+      'total': 3000,
+      'startDate': '2022-08-25',
+      'endDate': '2022-08-26',
+      'userId': '',
+      'discountId': ''
+    });
+    print(await _tbClient.post<String>('/smartrv/ord', data: data));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

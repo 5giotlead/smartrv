@@ -20,16 +20,17 @@ class _RentPageState extends State<RentPage> {
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
 
-  Future<void> _addRV() async {
+  Future<void> _saveRV() async {
     final data = jsonEncode({
       'name': '150',
       'description': 'TEST',
+      'assetId': assetId != null ? assetId : '',
       'type': {
         'id': typeId != null ? typeId : '7c2ad09f-0242-4fee-a006-0cd720ec9e2b'
       },
-      'assetId': assetId != null ? assetId : ''
+      'camp': {'id': 'f6fd537e-16e7-4b6f-ac15-6c8bf57349df'},
     });
-    print(await _tbClient.post<String>('/smartrv/rv', data: data));
+    print(await _dio.post<String>('/smartrv/rv', data: data));
   }
 
   @override
@@ -76,7 +77,7 @@ class _RentPageState extends State<RentPage> {
           InputWidget("描述", false, Icons.note), // selectable param
           PrimaryButton(
             '送出',
-            _addRV,
+            _saveRV,
           ),
           PrimaryButton(
             '清除',
