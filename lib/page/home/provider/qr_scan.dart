@@ -96,7 +96,7 @@ class _QRScanState extends State<QRScan> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        onScan(scanData?.code);
+        onScan(scanData.code);
       });
     });
   }
