@@ -36,55 +36,85 @@ class _RentPageState extends State<RentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            '出租',
+            style: TextStyle(
+              height: 1.4,
+              fontSize: 25,
+              color: Colors.black,
+            ),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         backgroundColor: Color.fromARGB(255, 219, 217, 217),
         // bottomNavigationBar: BottomNavBar(),
         body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 12),
             child: ListBody(children: [
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: "出租\n",
-                  style: TextStyle(
-                    height: 1.4,
-                    fontSize: 25,
-                    color: Colors.black,
-                  ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "請填寫以下資料...",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-                TextSpan(
-                  text: "請填寫以下資料...",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
+              ),
+              InputWidget("房名", false, Icons.door_back_door_outlined),
+              InputWidget("營區", false, Icons.landscape_outlined),
+              InputWidget("描述", false, Icons.note),
+              InputWidget("圖片", false, Icons.photo),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: double.infinity,
+                height: 200,
+                child: Image.network(
+                  'https://media.discordapp.net/attachments/992357029064740944/1003581864969240658/unknown.png?width=938&height=703',
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
                 ),
-              ],
-            ),
-          ),
-          InputWidget("房名", false, Icons.door_back_door_outlined),
-          InputWidget("營區", false, Icons.landscape_outlined),
-          Container(
-            width: 200,
-            height: 200,
-            // color: Colors.red,
-            child: const Image(
-              image: NetworkImage(
-                  'https://media.discordapp.net/attachments/992357029064740944/1003581864969240658/unknown.png?width=938&height=703'),
-            ),
-          ),
-          InputWidget("圖片", false, Icons.photo),
-          InputWidget("描述", false, Icons.note), // selectable param
-          PrimaryButton(
-            '送出',
-            _saveRV,
-          ),
-          PrimaryButton(
-            '清除',
-            () {
-              print('clear');
-            },
-          ),
-        ])));
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 10),
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: PrimaryButton(
+                        '送出',
+                        _saveRV,
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: PrimaryButton(
+                        '清除',
+                        () {
+                          print('clear');
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ])));
   }
 }

@@ -14,7 +14,8 @@ class InputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      height: 59,
+      margin: EdgeInsets.symmetric(vertical: 5),
+      height: 50,
       decoration: BoxDecoration(
         color: Color.fromRGBO(247, 247, 249, 1),
         borderRadius: BorderRadius.circular(12.0),

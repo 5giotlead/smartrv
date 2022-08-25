@@ -17,7 +17,6 @@ class PrimaryButton extends StatelessWidget {
         this.onPressed();
       },
       child: Container(
-        width: double.infinity,
         height: 30,
         decoration: BoxDecoration(
           color: Constants.primaryColor,
