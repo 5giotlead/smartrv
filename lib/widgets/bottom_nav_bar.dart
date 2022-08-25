@@ -34,7 +34,7 @@ class _NavBarState extends State<BottomNavBar> {
           label: context.l10n.bottomNavBarTab2,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.login),
+          icon: Icon(Icons.car_repair),
           label: context.l10n.bottomNavBarTab3,
         ),
       ],

@@ -47,7 +47,7 @@ class _RentPageState extends State<RentPage> {
           ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Modular.to.pop(),
           ),
           backgroundColor: Colors.transparent,
           elevation: 0,

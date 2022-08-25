@@ -12,7 +12,7 @@
     "@bottomNavBarTab2": {
         "description": "Text shown in the second of BottomNavBar."
     },
-    "bottomNavBarTab3": "登入",
+    "bottomNavBarTab3": "上架",
     "@bottomNavBarTab3": {
         "description": "Text shown in the third of BottomNavBar."
     }
