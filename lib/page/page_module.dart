@@ -85,9 +85,9 @@ class _EntryState extends State<EntryPage> {
         }
       }
     } else {
-      if (kIsWeb && _authStore.pastPage == '') {
-        Modular.to.navigate('/home');
-      }
+      // if (kIsWeb) {
+      //   Modular.to.navigate(_authStore.pastPage);
+      // }
     }
   }
 

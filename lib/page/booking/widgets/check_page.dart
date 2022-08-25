@@ -18,6 +18,7 @@ class _CheckPageState extends State<CheckPage> {
   Future<void> _saveOrd() async {
     final data = jsonEncode({
       'total': 3000,
+      'state': '',
       'startDate': '2022-08-25',
       'endDate': '2022-08-26',
       'userId': '',

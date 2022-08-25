@@ -19,7 +19,14 @@ class TogglePage extends StatefulWidget {
 class _PscScreenState extends State<TogglePage> {
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
-  String passcode = '';
+  final StreamController<bool> _verificationNotifier =
+      StreamController<bool>.broadcast();
+
+  @override
+  void dispose() {
+    _verificationNotifier.close();
+    super.dispose();
+  }
 
   Future<void> _toggleSwitch(String passcode) async {
     bool isValid = false;
@@ -38,8 +45,19 @@ class _PscScreenState extends State<TogglePage> {
     }
   }
 
-  final StreamController<bool> _verificationNotifier =
-      StreamController<bool>.broadcast();
+  void _navToHome() {
+    Modular.to.navigate('/home');
+  }
+
+  Future<void> _onPasscodeEntered(String enteredCode) async {
+    if (enteredCode.length == 6) {
+      await _toggleSwitch(enteredCode);
+    }
+  }
+
+  void _onPasscodeCancelled() {
+    _navToHome();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,26 +90,6 @@ class _PscScreenState extends State<TogglePage> {
     ));
   }
 
-  void _navToHome() {
-    Modular.to.navigate('/home');
-  }
-
-  Future<void> _onPasscodeEntered(String enteredCode) async {
-    if (enteredCode.length == 6) {
-      await _toggleSwitch(enteredCode);
-    }
-  }
-
-  void _onPasscodeCancelled() {
-    _navToHome();
-  }
-
-  @override
-  void dispose() {
-    _verificationNotifier.close();
-    super.dispose();
-  }
-
   Widget _buildPasscodeRestoreButton() {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -104,7 +102,7 @@ class _PscScreenState extends State<TogglePage> {
             style: const TextStyle(
                 fontSize: 16, color: Colors.white, fontWeight: FontWeight.w300),
           ),
-          onPressed: _resetAppPassword,
+          onPressed: _resetPasscode,
           // splashColor: Colors.white.withOpacity(0.4),
           // highlightColor: Colors.white.withOpacity(0.2),
           // ),
@@ -113,7 +111,7 @@ class _PscScreenState extends State<TogglePage> {
     );
   }
 
-  _resetAppPassword() {
-    passcode = '';
+  _resetPasscode() {
+    // passcode = '';
   }
 }
