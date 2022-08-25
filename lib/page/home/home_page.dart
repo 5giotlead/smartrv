@@ -6,13 +6,17 @@ import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/utils/static_data_property.dart';
 import 'package:flutter_rv_pms/widgets/house_card.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
+import 'package:flutter_rv_pms/auth/auth_store.dart';
+import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+  final _dio = Modular.get<AuthStore>();
 
   @override
   Widget build(BuildContext context) {
     // debugPaintSizeEnabled = true; // After Build Widget
+
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 219, 217, 217),
         appBar: AppBar(
@@ -30,30 +34,40 @@ class HomePage extends StatelessWidget {
           ),
           title: const Text('RV'),
           actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.ac_unit_rounded),
-              onPressed: () {
-                Modular.to.navigate('/passcode');
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.logout),
-              tooltip: 'Logout',
-              onPressed: () {
-                Modular.to.navigate('/auth/logout');
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text('Home')));
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.search),
-              tooltip: 'Control',
-              onPressed: () {
-                Modular.to.navigate('/member/control');
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(const SnackBar(content: Text('Search')));
-              },
-            ),
+            LayoutBuilder(builder: (context, constraints) {
+              if (_dio.state) {
+                return IconButton(
+                  icon: const Icon(Icons.logout),
+                  tooltip: 'Logout',
+                  onPressed: () {
+                    Modular.to.navigate('/auth/logout');
+                  },
+                );
+              } else {
+                return IconButton(
+                  icon: const Icon(Icons.login),
+                  tooltip: 'Login',
+                  onPressed: () {
+                    Modular.to.navigate('/auth/login');
+                  },
+                );
+              }
+            }),
+            LayoutBuilder(builder: (context, constraints) {
+              if (_dio.state) {
+                return IconButton(
+                  icon: const Icon(Icons.search),
+                  tooltip: 'Control',
+                  onPressed: () {
+                    Modular.to.navigate('/member/control');
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text('Search')));
+                  },
+                );
+              } else {
+                return Container();
+              }
+            }),
             IconButton(
               icon: const Icon(Icons.qr_code_scanner),
               tooltip: 'QR Code Scanner',
@@ -61,39 +75,29 @@ class HomePage extends StatelessWidget {
                 Navigator.of(context).push(_createRoute());
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.shopping_bag),
-              tooltip: 'Booking',
-              onPressed: () {
-                Modular.to.navigate('/member/shopping');
-              },
-            ),
-            CircleAvatar(
-              backgroundColor: Colors.transparent,
-              radius: 20.0,
-              backgroundImage: const AssetImage("assets/images/dp.png"),
-              child: PopupMenuButton<Text>(
-                itemBuilder: (context) {
-                  return [
-                    const PopupMenuItem(
-                      child: Text('First'),
-                    ),
-                    const PopupMenuItem(
-                      child: Text('Second'),
-                    ),
-                    const PopupMenuItem(
-                      child: Text('Third'),
-                    ),
-                  ];
-                },
-                tooltip: 'Me',
-              ),
-            ),
+            LayoutBuilder(builder: (context, constraints) {
+              return (_dio.state)
+                  ? Avatar('assets/images/lady.png')
+                  : Avatar('assets/images/dp.png');
+            }),
+            // IconButton(
+            //   icon: const Icon(Icons.shopping_bag),
+            //   tooltip: 'Booking',
+            //   onPressed: () {
+            //     Modular.to.navigate('/member/shopping');
+            //   },
+            // ),
+            // IconButton(
+            //   icon: const Icon(Icons.ac_unit_rounded),
+            //   onPressed: () {
+            //     Modular.to.navigate('/passcode');
+            //   },
+            // ),
           ],
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        // bottomNavigationBar: BottomNavBar(),
+        //bottomNavigationBar: BottomNavBar(),
         body: Column(children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
