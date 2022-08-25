@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
@@ -22,7 +23,9 @@ class TogglePage extends StatelessWidget {
           data: data,
         );
       } catch (e) {
-        print(e);
+        if (kDebugMode) {
+          print(e);
+        }
       } finally {
         Modular.to.navigate('/home');
       }
