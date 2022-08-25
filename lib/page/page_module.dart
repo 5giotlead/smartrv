@@ -9,6 +9,7 @@ import 'package:flutter_rv_pms/page/member/control/control_store.dart';
 import 'package:flutter_rv_pms/page/member/member_module.dart';
 import 'package:flutter_rv_pms/widgets/bottom_nav_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_rv_pms/widgets/passcode.dart';
 
 class PageModule extends Module {
   @override
@@ -25,6 +26,10 @@ class PageModule extends Module {
             ChildRoute(
               '/home',
               child: (context, args) => HomePage(),
+            ),
+            ChildRoute(
+              '/passcode',
+              child: (context, args) => PscScreen('456789'),
             ),
             ChildRoute(
               '/booking',

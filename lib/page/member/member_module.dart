@@ -22,7 +22,7 @@ class MemberModule extends Module {
           '/control',
           child: (context, args) => ControlPage(),
         ),
-        ChildRoute('/rent', child: (context, args) => RentPage({args.data})),
+        ChildRoute('/rent', child: (context, args) => RentPage()),
         ChildRoute('/shopping', child: (context, args) => ShoppingPage()),
         ChildRoute('/check', child: (context, args) => CheckPage()),
         ChildRoute(
