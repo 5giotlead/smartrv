@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
-import 'package:flutter_rv_pms/page/home/provider/qr_scan2.dart';
 import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
 import 'package:flutter_rv_pms/utils/static_data_property.dart';
 import 'package:flutter_rv_pms/widgets/house_card.dart';
