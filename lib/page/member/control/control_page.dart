@@ -11,6 +11,7 @@ import 'package:thingsboard_client/thingsboard_client.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 const assetId = '5cb562f0-1951-11ed-a371-210ec0665214';
+
 ThingsboardClient tbClient = Modular.get<ThingsboardClient>();
 
 class ControlPage extends StatelessWidget {
@@ -19,38 +20,9 @@ class ControlPage extends StatelessWidget {
   final store = Modular.get<ControlStore>();
 
   Widget build(BuildContext context) {
-    // debugPaintSizeEnabled = true;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 219, 217, 217),
-      body:
-          //   children: [
-          // Padding(
-          //   padding:
-          //       const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-          //   child: Container(
-          //       height: 200,
-          //       decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(8.0),
-          //       ),
-          //       padding: const EdgeInsets.only(left: 16.0, right: 8.0),
-          //       child: Stack(alignment: Alignment.center, children: <Widget>[
-          //         Container(
-          //           width: 500,
-          //           height: 500,
-          //           // color: Colors.red,
-          //           child: const Image(
-          //             image: NetworkImage(
-          //                 'https://media.discordapp.net/attachments/992357029064740944/1003581864969240658/unknown.png?width=938&height=703'),
-          //           ),
-          //         ),
-          //         Container(
-          //           width: 200,
-          //           height: 200,
-          //           color: Colors.green,
-          //         ),
-          //       ])),
-          // ),
-          Column(
+      body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
           Container(
@@ -72,6 +44,7 @@ class ControlPage extends StatelessWidget {
                     Align(
                       alignment: AlignmentDirectional(0, -1.03),
                       child: Container(
+                        color: Color.fromARGB(204, 150, 150, 150),
                         width: double.infinity,
                         height: 30,
                         child: Row(
@@ -88,8 +61,9 @@ class ControlPage extends StatelessWidget {
                               child: Text(
                                 '南投縣 畢瓦客露營區',
                                 style: TextStyle(
-                                    color: Colors.black.withOpacity(0.6),
-                                    fontSize: 10),
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontSize: 15),
                               ),
                             ),
                           ],
@@ -127,9 +101,9 @@ class ControlPage extends StatelessWidget {
                                       child: Text(
                                         'Good',
                                         style: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.6),
-                                            fontSize: 10),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
                                       ),
                                     ),
                                   ],
@@ -152,9 +126,9 @@ class ControlPage extends StatelessWidget {
                                       child: Text(
                                         store.state ? 'ON' : 'OFF',
                                         style: TextStyle(
-                                            color:
-                                                Colors.black.withOpacity(0.6),
-                                            fontSize: 10),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
                                       ),
                                     ),
                                   ],
@@ -165,15 +139,21 @@ class ControlPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Align(
-                      alignment: AlignmentDirectional(0, -1),
+                    Container(
+                      height: 30,
+                    ),
+                    Expanded(
                       child: Container(
+                        color: Color.fromARGB(204, 150, 150, 150),
+                        alignment: Alignment.bottomCenter,
                         width: double.infinity,
-                        height: 30,
+                        height: 25,
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Container(
+                              padding: EdgeInsets.only(
+                                  left: 10, top: 0, right: 0, bottom: 0),
                               width: MediaQuery.of(context).size.width * 0.5,
                               height: 100,
                               child: Row(
@@ -188,33 +168,34 @@ class ControlPage extends StatelessWidget {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         5, 0, 0, 0),
                                     child: Text(
-                                      '南投縣 畢瓦客露營區',
+                                      'NOMADIC 5 遊牧旅居車',
                                       style: TextStyle(
-                                          color: Colors.black.withOpacity(0.6),
-                                          fontSize: 10),
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                             Container(
-                              alignment: AlignmentDirectional.bottomEnd,
                               width: MediaQuery.of(context).size.width * 0.5,
                               height: 100,
                               child: Align(
-                                alignment: AlignmentDirectional(0, 0.05),
+                                alignment: AlignmentDirectional(0.8, 0.05),
                                 child: Text(
                                   '20220822 08:03',
                                   style: TextStyle(
-                                      color: Colors.black.withOpacity(0.6),
-                                      fontSize: 10),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -225,7 +206,7 @@ class ControlPage extends StatelessWidget {
             child: PowerSwitch(),
           ),
           const SizedBox(
-            height: 10,
+            height: 15,
           ),
           Expanded(
             // padding: EdgeInsets.symmetric(horizontal: 24.0),
