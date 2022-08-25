@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_rv_pms/widgets/input_widget.dart';
+import 'package:flutter_rv_pms/widgets/primary_button.dart';
+
+class RentPage extends StatefulWidget {
+  final data;
+
+  // final GlobalKey isQRData = false;
+  RentPage(this.data, {super.key});
+
+  @override
+  _RentPageState createState() {
+    // if (!data.toString().isEmpty) {
+    //   isQRData = true;
+    //   return _RentPageState(jsonDecode(data.toString())['data']['attributes']['name']);
+    // } else {
+    // print();
+    // Map<String, dynamic> a = jsonDecode(data.toString());
+    return _RentPageState();
+    // }
+  }
+}
+
+class _RentPageState extends State<RentPage> {
+  // final data;
+  // _RentPageState(this.data);
+
+  @override
+  Widget build(BuildContext context) {
+    // debugPaintSizeEnabled = true;
+    // print(data);
+    // print(jsonDecode(data.toString())['data']['attributes']['name']);
+
+    return Scaffold(
+        backgroundColor: Color.fromARGB(255, 219, 217, 217),
+        // bottomNavigationBar: BottomNavBar(),
+        body: SingleChildScrollView(
+            child: ListBody(children: [
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: "出租\n",
+                  style: TextStyle(
+                    height: 1.4,
+                    fontSize: 25,
+                    color: Colors.black,
+                  ),
+                ),
+                TextSpan(
+                  text: "請填寫以下資料...",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          InputWidget("房名", false, Icons.door_back_door_outlined),
+          InputWidget("營區", false, Icons.landscape_outlined),
+          Container(
+            width: 200,
+            height: 200,
+            // color: Colors.red,
+            child: const Image(
+              image: NetworkImage(
+                  'https://media.discordapp.net/attachments/992357029064740944/1003581864969240658/unknown.png?width=938&height=703'),
+            ),
+          ),
+          InputWidget("圖片", false, Icons.photo),
+          InputWidget("描述", false, Icons.note), // selectable param
+          PrimaryButton(
+            '送出',
+            () {
+              print('submit');
+            },
+          ),
+          PrimaryButton(
+            '清除',
+            () {
+              print('clear');
+            },
+          ),
+        ])));
+  }
+}
