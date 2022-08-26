@@ -139,8 +139,9 @@ class LoginFormState extends State<LoginForm> {
         await _storage.write(
             key: 'refreshToken', value: loginResponse.refreshToken);
         _isLoginNotifier.value = true;
+        await Modular.get<AuthStore>().checkAuth();
         Modular.to.navigate(_authStore.pastPage);
-        _authStore.pastPage = '';
+        _authStore.pastPage = '/home';
       } catch (e) {
         print(e);
         _isLoginNotifier.value = false;

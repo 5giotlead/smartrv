@@ -19,8 +19,8 @@ class LogoutPage extends StatelessWidget {
     // await _storage.deleteAll();
     await _storage.delete(key: 'token');
     await _storage.delete(key: 'refreshToken');
-    _authStore.pastPage = '';
-    Modular.to.navigate('/');
+    _authStore.pastPage = '/home';
+    Modular.to.navigate(_authStore.pastPage);
   }
 
   @override

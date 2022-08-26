@@ -8,6 +8,7 @@ import 'package:flutter_rv_pms/page/home/home_page.dart';
 import 'package:flutter_rv_pms/page/member/control/control_store.dart';
 import 'package:flutter_rv_pms/page/member/member_module.dart';
 import 'package:flutter_rv_pms/page/page_store.dart';
+import 'package:flutter_rv_pms/page/toggle/toggle_page.dart';
 import 'package:flutter_rv_pms/widgets/bottom_nav_bar.dart';
 import 'package:flutter_rv_pms/widgets/passcode.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,8 +31,10 @@ class PageModule extends Module {
               child: (context, args) => HomePage(),
             ),
             ChildRoute(
-              '/passcode',
-              child: (context, args) => PscScreen('456789'),
+              '/toggle/:rvId',
+              child: (context, args) => TogglePage(
+                deviceId: args.params['rvId'],
+              ),
             ),
             ChildRoute(
               '/booking',
@@ -82,9 +85,9 @@ class _EntryState extends State<EntryPage> {
         }
       }
     } else {
-      if (kIsWeb && _authStore.pastPage == '') {
-        Modular.to.navigate('/home');
-      }
+      // if (kIsWeb) {
+      //   Modular.to.navigate(_authStore.pastPage);
+      // }
     }
   }
 
@@ -92,14 +95,12 @@ class _EntryState extends State<EntryPage> {
   Widget build(BuildContext context) {
 // debugPaintSizeEnabled = true;
     return Scaffold(
-      bottomNavigationBar: BottomNavBar(),
-      body: Container(
-        child: Row(
-          children: const [
-            // Container(width: 2, color: Colors.black45),
-            Expanded(child: RouterOutlet()),
-          ],
-        ),
+      bottomNavigationBar: const BottomNavBar(),
+      body: Row(
+        children: const [
+          // Container(width: 2, color: Colors.black45),
+          Expanded(child: RouterOutlet()),
+        ],
       ),
     );
   }

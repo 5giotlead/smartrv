@@ -10,7 +10,7 @@ class AuthStore extends NotifierStore<Exception, bool> {
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
   final _storage = Modular.get<FlutterSecureStorage>();
-  String pastPage = '';
+  String pastPage = '/home';
 
   Future<void> checkAccess() async {
     if (state) {
