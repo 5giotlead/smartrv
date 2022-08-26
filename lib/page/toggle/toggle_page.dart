@@ -46,7 +46,7 @@ class _PscScreenState extends State<TogglePage> {
   }
 
   void _navToHome() {
-    Modular.to.navigate('/');
+    Modular.to.navigate('/home');
   }
 
   Future<void> _onPasscodeEntered(String enteredCode) async {
@@ -83,35 +83,9 @@ class _PscScreenState extends State<TogglePage> {
         shouldTriggerVerification: _verificationNotifier.stream,
         backgroundColor: Colors.black.withOpacity(0.8),
         cancelCallback: _onPasscodeCancelled,
-        digits: const ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+        // digits: const ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
         passwordDigits: 6,
-        // bottomWidget: _buildPasscodeRestoreButton(),
       ),
     ));
   }
-
-// Widget _buildPasscodeRestoreButton() {
-//   return Align(
-//     alignment: Alignment.bottomCenter,
-//     child: Container(
-//       margin: const EdgeInsets.only(bottom: 10.0, top: 20.0),
-//       child: TextButton(
-//         child: Text(
-//           "清除全部",
-//           textAlign: TextAlign.center,
-//           style: const TextStyle(
-//               fontSize: 16, color: Colors.white, fontWeight: FontWeight.w300),
-//         ),
-//         onPressed: _resetPasscode,
-//         // splashColor: Colors.white.withOpacity(0.4),
-//         // highlightColor: Colors.white.withOpacity(0.2),
-//         // ),
-//       ),
-//     ),
-//   );
-// }
-//
-// _resetPasscode() {
-//   // passcode = '';
-// }
 }
