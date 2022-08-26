@@ -25,7 +25,11 @@ class _HomeState extends State<HomePage> {
   void initState() {
     super.initState();
     mounted = true;
-    _authStore.observer(onState: (state) => {if (mounted) setState(() {})});
+    _authStore.observer(
+      onState: (state) => {
+        if (mounted) {setState(() {})}
+      },
+    );
   }
 
   @override
