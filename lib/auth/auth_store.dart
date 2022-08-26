@@ -10,7 +10,7 @@ class AuthStore extends NotifierStore<Exception, bool> {
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
   final _storage = Modular.get<FlutterSecureStorage>();
-  String pastPage = '/home';
+  String pastPage = '';
 
   Future<void> checkAccess() async {
     if (state) {
@@ -29,11 +29,13 @@ class AuthStore extends NotifierStore<Exception, bool> {
   Future<bool> checkAuth() async {
     final token = await _storage.read(key: 'token');
     final refreshToken = await _storage.read(key: 'refreshToken');
-    if (token != null && refreshToken != null) {
+    if (!(_tbClient.isAuthenticated() ||
+        token == null ||
+        refreshToken == null)) {
       await _tbClient.setUserFromJwtToken(token, refreshToken, true);
     }
     update(_tbClient.isAuthenticated() && _tbClient.isJwtTokenValid());
-    await checkAccess();
-    return _tbClient.isAuthenticated() && _tbClient.isJwtTokenValid();
+    // await checkAccess();
+    return state;
   }
 }

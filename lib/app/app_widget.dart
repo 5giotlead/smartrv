@@ -58,6 +58,7 @@ class AppState extends State<AppWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Modular.setInitialRoute('/home');
     return MaterialApp.router(
       title: 'Smart RV',
       theme: ThemeData(primarySwatch: Colors.blue),

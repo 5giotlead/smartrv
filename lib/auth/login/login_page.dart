@@ -139,18 +139,21 @@ class LoginFormState extends State<LoginForm> {
         await _storage.write(
             key: 'refreshToken', value: loginResponse.refreshToken);
         _isLoginNotifier.value = true;
-        await Modular.get<AuthStore>().checkAuth();
-        Modular.to.navigate(_authStore.pastPage);
-        _authStore.pastPage = '/home';
       } catch (e) {
         print(e);
         _isLoginNotifier.value = false;
+      }
+      if (_authStore.pastPage != '') {
+        Modular.to.navigate(_authStore.pastPage);
+        _authStore.pastPage = '';
+      } else {
+        Modular.to.navigate('/home');
       }
     }
   }
 
   Future<void> _loginByOAuth() async {
-    var oAuth2Clients = await tbClient.getOAuth2Service().getOAuth2Clients();
+    final oAuth2Clients = await tbClient.getOAuth2Service().getOAuth2Clients();
     if (oAuth2Clients.isNotEmpty) {
       Uri _url;
       if (kIsWeb) {

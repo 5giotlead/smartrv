@@ -63,6 +63,7 @@ class _EntryState extends State<EntryPage> {
   @override
   void initState() {
     super.initState();
+    Modular.get<AuthStore>().checkAuth();
     removeUriParams();
   }
 
@@ -85,9 +86,9 @@ class _EntryState extends State<EntryPage> {
         }
       }
     } else {
-      // if (kIsWeb) {
-      //   Modular.to.navigate(_authStore.pastPage);
-      // }
+      if (kIsWeb && _authStore.pastPage != '') {
+        Modular.to.navigate(_authStore.pastPage);
+      }
     }
   }
 
