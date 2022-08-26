@@ -4,10 +4,12 @@ class InputWidget extends StatelessWidget {
   String hintText;
   IconData suffixIcon;
   bool obscureText;
-  TextEditingController controller = new TextEditingController();
+  bool isValidator;
+  TextEditingController controller = TextEditingController();
 
-  InputWidget(this.hintText, this.obscureText, this.suffixIcon) {
-    // controller.text = this.hintText;
+  InputWidget(
+      this.hintText, this.obscureText, this.suffixIcon, this.isValidator) {
+    this.controller.text = this.hintText;
   }
 
   @override
@@ -45,6 +47,14 @@ class InputWidget extends StatelessWidget {
             ),
           ),
         ),
+        validator: this.isValidator == null
+            ? null
+            : (value) {
+                if (value == null || value.isEmpty) {
+                  return '請輸入字元...';
+                }
+                return null;
+              },
       ),
     );
   }
