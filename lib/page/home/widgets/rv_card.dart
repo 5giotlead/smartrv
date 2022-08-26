@@ -7,10 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 String baseImageUrl = 'https://rv.5giotlead.com/static/camp/';
 
-class HouseCard extends StatelessWidget {
-  HouseCard(this.house, {super.key});
+class RVCard extends StatelessWidget {
+  RVCard(this.rv, {super.key});
 
-  HouseProperty house;
+  final rv;
 
   final _pageStore = Modular.get<PageStore>();
 
@@ -19,8 +19,7 @@ class HouseCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Helper.nextPage(context, SinglePropertyPage());
-        String id = 'axssaf';
-        Modular.to.navigate('/booking', arguments: id);
+        Modular.to.navigate('/booking', arguments: rv);
       },
       child: Container(
         height: 300,
@@ -47,7 +46,7 @@ class HouseCard extends StatelessWidget {
                       topRight: Radius.circular(12),
                     ),
                     child: Image.network(
-                      baseImageUrl + house.imagePath,
+                      baseImageUrl + 'bb63eb18-9fa9-42fd-a8be-b6bcbd2c25ee.jpg',
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                     ),
@@ -59,7 +58,7 @@ class HouseCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    house.location,
+                    '尖石之美',
                     style: const TextStyle(
                       fontSize: 15,
                       color: Color.fromRGBO(33, 45, 82, 1),
@@ -93,7 +92,7 @@ class HouseCard extends StatelessWidget {
                             //   ),
                             // ),
                             TextSpan(
-                              text: house.name,
+                              text: rv['name'] as String,
                               style: GoogleFonts.inter(
                                 color: Color.fromRGBO(33, 45, 82, 1),
                                 fontWeight: FontWeight.w600,

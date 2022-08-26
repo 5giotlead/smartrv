@@ -4,7 +4,7 @@ import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
 import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
 import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/utils/static_data_property.dart';
-import 'package:flutter_rv_pms/widgets/house_card.dart';
+import 'package:flutter_rv_pms/page/home/widgets/rv_card.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
@@ -210,7 +210,7 @@ class _RvListState extends State<RvList> {
       // padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
       scrollDirection: Axis.vertical,
       itemBuilder: (BuildContext context, int index) {
-        return HouseCard(
+        return RVCard(
           StaticData.HouseCardList[index],
         );
       },

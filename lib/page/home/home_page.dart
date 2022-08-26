@@ -1,12 +1,16 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
-import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
-import 'package:flutter_rv_pms/utils/static_data_property.dart';
-import 'package:flutter_rv_pms/widgets/house_card.dart';
-import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
+import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
+import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
+import 'package:flutter_rv_pms/shared/models/rv.dart';
+import 'package:flutter_rv_pms/utils/static_data_property.dart';
+import 'package:flutter_rv_pms/page/home/widgets/rv_card.dart';
+import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -171,6 +175,11 @@ class _RvKindListState extends State<RvKindList> {
   final GlobalKey<_RvListState> key = GlobalKey();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -245,24 +254,39 @@ class RvList extends StatefulWidget {
 }
 
 class _RvListState extends State<RvList> {
+  final _dio = Modular.get<Dio>();
+  List<dynamic> rvList = [];
+
+  Future<void> getRVList() async {
+    final res = await _dio.get<List<dynamic>>('/smartrv/rv');
+    setState(() {
+      rvList = res.data!;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getRVList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return ListView(
       // padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
       scrollDirection: Axis.vertical,
-      itemBuilder: (BuildContext context, int index) {
-        return HouseCard(
-          StaticData.HouseCardList[index],
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return const SizedBox(
-          width: 20,
-        );
-      },
+      children: [for (final rv in rvList) RVCard(rv)],
+      // separatorBuilder: (BuildContext context, int index) {
+      //   return const SizedBox(
+      //     width: 20,
+      //   );
+      // },
       // Make the length our static data length
-      itemCount: StaticData.HouseCardList.length,
+      // itemCount: StaticData.HouseCardList.length,
+      // )
+      // ,
     );
+    return const SizedBox();
   }
 
   changeState() {
