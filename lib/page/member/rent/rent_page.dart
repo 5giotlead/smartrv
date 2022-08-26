@@ -20,29 +20,33 @@ class _RentPageState extends State<RentPage> {
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
   final _formKey = GlobalKey<FormState>();
-  TextEditingController controller = TextEditingController();
-  TextEditingController controller2 = TextEditingController();
-  TextEditingController controller3 = TextEditingController();
-  TextEditingController controller4 = TextEditingController();
+  TextEditingController rvController = TextEditingController();
+  TextEditingController campController = TextEditingController();
+  TextEditingController desController = TextEditingController();
+  TextEditingController photoController = TextEditingController();
 
   Future<void> _saveRV() async {
     if (_formKey.currentState!.validate()) {
-      print(controller.text);
-      print(controller2.text);
-      print(controller3.text);
-      print(controller4.text);
+      print(rvController.text);
+      print(campController.text);
+      print(desController.text);
+      print(photoController.text);
+      final data = jsonEncode({
+        'name': '$rvController.text',
+        'description': '$desController.text',
+        'assetId': assetId != null ? assetId : '',
+        'filenames': [photoController.text],
+        'type': {
+          'id': typeId != null ? typeId : '7c2ad09f-0242-4fee-a006-0cd720ec9e2b'
+        },
+        'camp': {
+          'id': 'f6fd537e-16e7-4b6f-ac15-6c8bf57349df',
+          'name': '$campController.text',
+        },
+      });
+      print(await _dio.post<String>('/smartrv/rv', data: data));
+      ClearText();
     }
-
-    final data = jsonEncode({
-      'name': '150',
-      'description': 'TEST',
-      'assetId': assetId != null ? assetId : '',
-      'type': {
-        'id': typeId != null ? typeId : '7c2ad09f-0242-4fee-a006-0cd720ec9e2b'
-      },
-      'camp': {'id': 'f6fd537e-16e7-4b6f-ac15-6c8bf57349df'},
-    });
-    print(await _dio.post<String>('/smartrv/rv', data: data));
   }
 
   @override
@@ -96,7 +100,7 @@ class _RentPageState extends State<RentPage> {
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextFormField(
-                        controller: controller,
+                        controller: rvController,
                         obscureText: false,
                         decoration: InputDecoration(
                           hintText: '營車名',
@@ -135,7 +139,7 @@ class _RentPageState extends State<RentPage> {
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextFormField(
-                        controller: controller2,
+                        controller: campController,
                         obscureText: false,
                         decoration: InputDecoration(
                           hintText: '營區',
@@ -174,7 +178,7 @@ class _RentPageState extends State<RentPage> {
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextFormField(
-                        controller: controller3,
+                        controller: desController,
                         obscureText: false,
                         decoration: InputDecoration(
                           hintText: '描述',
@@ -213,7 +217,7 @@ class _RentPageState extends State<RentPage> {
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
                       child: TextFormField(
-                        controller: controller4,
+                        controller: photoController,
                         obscureText: false,
                         decoration: InputDecoration(
                           hintText: '圖片',
@@ -272,15 +276,7 @@ class _RentPageState extends State<RentPage> {
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.4,
-                            child: PrimaryButton(
-                              '清除',
-                              () {
-                                controller.text = '';
-                                controller2.text = '';
-                                controller3.text = '';
-                                controller4.text = '';
-                              },
-                            ),
+                            child: PrimaryButton('清除', ClearText),
                           )
                         ],
                       ),
@@ -289,5 +285,12 @@ class _RentPageState extends State<RentPage> {
                 ),
               ),
             ])));
+  }
+
+  ClearText() {
+    rvController.text = '';
+    campController.text = '';
+    desController.text = '';
+    photoController.text = '';
   }
 }
