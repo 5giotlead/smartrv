@@ -20,7 +20,6 @@ class HouseCard extends StatelessWidget {
       onTap: () {
         // Helper.nextPage(context, SinglePropertyPage());
         String id = 'axssaf';
-        _pageStore.setIndex(0);
         Modular.to.navigate('/booking', arguments: id);
       },
       child: Container(
