@@ -19,8 +19,20 @@ class _RentPageState extends State<RentPage> {
   final assetId = Modular.args.queryParams['assetId'];
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController controller = TextEditingController();
+  TextEditingController controller2 = TextEditingController();
+  TextEditingController controller3 = TextEditingController();
+  TextEditingController controller4 = TextEditingController();
 
   Future<void> _saveRV() async {
+    if (_formKey.currentState!.validate()) {
+      print(controller.text);
+      print(controller2.text);
+      print(controller3.text);
+      print(controller4.text);
+    }
+
     final data = jsonEncode({
       'name': '150',
       'description': 'TEST',
@@ -38,7 +50,7 @@ class _RentPageState extends State<RentPage> {
     return Scaffold(
         appBar: AppBar(
           title: const Text(
-            '出租',
+            '上架',
             style: TextStyle(
               height: 1.4,
               fontSize: 25,
@@ -53,7 +65,6 @@ class _RentPageState extends State<RentPage> {
           elevation: 0,
         ),
         backgroundColor: Color.fromARGB(255, 219, 217, 217),
-        // bottomNavigationBar: BottomNavBar(),
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 12),
             child: ListBody(children: [
@@ -71,50 +82,212 @@ class _RentPageState extends State<RentPage> {
                   ],
                 ),
               ),
-              InputWidget("房名", false, Icons.door_back_door_outlined),
-              InputWidget("營區", false, Icons.landscape_outlined),
-              InputWidget("描述", false, Icons.note),
-              InputWidget("圖片", false, Icons.photo),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: double.infinity,
-                height: 200,
-                child: Image.network(
-                  'https://media.discordapp.net/attachments/992357029064740944/1003581864969240658/unknown.png?width=938&height=703',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
                     Container(
-                      margin: EdgeInsets.only(right: 10),
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: PrimaryButton(
-                        '送出',
-                        _saveRV,
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(247, 247, 249, 1),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      child: TextFormField(
+                        controller: controller,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          hintText: '營車名',
+                          hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromRGBO(124, 124, 124, 1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          suffixIcon: Icon(
+                            Icons.door_back_door_outlined,
+                            color: Color.fromRGBO(105, 108, 121, 1),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '請輸入字元...';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: PrimaryButton(
-                        '清除',
-                        () {
-                          print('clear');
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(247, 247, 249, 1),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      child: TextFormField(
+                        controller: controller2,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          hintText: '營區',
+                          hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromRGBO(124, 124, 124, 1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          suffixIcon: Icon(
+                            Icons.landscape_outlined,
+                            color: Color.fromRGBO(105, 108, 121, 1),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '請輸入字元...';
+                          }
+                          return null;
                         },
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(247, 247, 249, 1),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      child: TextFormField(
+                        controller: controller3,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          hintText: '描述',
+                          hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromRGBO(124, 124, 124, 1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          suffixIcon: Icon(
+                            Icons.note,
+                            color: Color.fromRGBO(105, 108, 121, 1),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '請輸入字元...';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 5),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(247, 247, 249, 1),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      child: TextFormField(
+                        controller: controller4,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          hintText: '圖片',
+                          hintStyle: TextStyle(
+                            fontSize: 16,
+                            color: Color.fromRGBO(124, 124, 124, 1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                          suffixIcon: Icon(
+                            Icons.photo,
+                            color: Color.fromRGBO(105, 108, 121, 1),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return '請輸入字元...';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    // InputWidget("營區", false, Icons.landscape_outlined, false),
+                    // InputWidget("描述", false, Icons.note, false),
+                    // InputWidget("圖片", false, Icons.photo, false),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 200,
+                      child: Image.network(
+                        'https://media.discordapp.net/attachments/992357029064740944/1003581864969240658/unknown.png?width=938&height=703',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(right: 10),
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: PrimaryButton('送出', _saveRV),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: PrimaryButton(
+                              '清除',
+                              () {
+                                controller.text = '';
+                                controller2.text = '';
+                                controller3.text = '';
+                                controller4.text = '';
+                              },
+                            ),
+                          )
+                        ],
                       ),
                     )
                   ],
                 ),
-              )
+              ),
             ])));
   }
 }
