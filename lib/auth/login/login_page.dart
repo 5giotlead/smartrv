@@ -137,17 +137,19 @@ class LoginFormState extends State<LoginForm> {
             await tbClient.login(LoginRequest(username, password));
         await _storage.write(key: 'token', value: loginResponse.token);
         await _storage.write(
-            key: 'refreshToken', value: loginResponse.refreshToken);
+          key: 'refreshToken',
+          value: loginResponse.refreshToken,
+        );
+        if (_authStore.pastPage != '') {
+          Modular.to.navigate(_authStore.pastPage);
+          _authStore.pastPage = '';
+        } else {
+          Modular.to.navigate('/home');
+        }
         _isLoginNotifier.value = true;
       } catch (e) {
         print(e);
         _isLoginNotifier.value = false;
-      }
-      if (_authStore.pastPage != '') {
-        Modular.to.navigate(_authStore.pastPage);
-        _authStore.pastPage = '';
-      } else {
-        Modular.to.navigate('/home');
       }
     }
   }

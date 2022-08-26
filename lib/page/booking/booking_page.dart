@@ -21,6 +21,11 @@ class _BookingPageState extends State<BookingPage> {
   final _pageStore = Modular.get<PageStore>();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,

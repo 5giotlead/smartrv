@@ -32,16 +32,15 @@ class _RentPageState extends State<RentPage> {
       print(desController.text);
       print(photoController.text);
       final data = jsonEncode({
-        'name': rvController.text,
-        'description': desController.text,
+        'name': '$rvController.text',
+        'description': '$desController.text',
         'assetId': assetId != null ? assetId : '',
         'filenames': [photoController.text],
         'type': {
           'id': typeId != null ? typeId : '7c2ad09f-0242-4fee-a006-0cd720ec9e2b'
         },
         'camp': {
-          'id': 'f6fd537e-16e7-4b6f-ac15-6c8bf57349df',
-          // 'name': campController.text,
+          'id': 'f6fd537e-16e7-4b6f-ac15-6c8bf57349df'
         },
       });
       print(await _dio.post<String>('/smartrv/rv', data: data));

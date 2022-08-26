@@ -11,7 +11,6 @@ import 'package:flutter_rv_pms/page/member/member_module.dart';
 import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/page/toggle/toggle_page.dart';
 import 'package:flutter_rv_pms/widgets/bottom_nav_bar.dart';
-import 'package:flutter_rv_pms/widgets/passcode.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageModule extends Module {

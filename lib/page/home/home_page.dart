@@ -19,9 +19,23 @@ class _HomeState extends State<HomePage> {
   final _authStore = Modular.get<AuthStore>();
 
   @override
+  bool mounted = false;
+
+  @override
   void initState() {
     super.initState();
-    _authStore.observer(onState: (state) => setState(() {}));
+    mounted = true;
+    _authStore.observer(
+      onState: (state) => {
+        if (mounted) {setState(() {})}
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    mounted = false;
   }
 
   @override
