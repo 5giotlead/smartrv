@@ -5,53 +5,61 @@ import 'package:flutter_triple/flutter_triple.dart';
 class PageStore extends NotifierStore<Exception, List<PageInfo>> {
   PageStore()
       : super([
-          PageInfo('home', '/home', <String>['home', 'booking', 'login'],
-              const Icon(Icons.search)),
+          PageInfo(
+            'home',
+            '/home',
+            <String>['home', 'booking', 'control'],
+            const Icon(Icons.search),
+          ),
           PageInfo(
             'booking',
             '/booking',
-            <String>['home', 'rent', 'login'],
+            <String>['home', 'rent', 'control'],
             const Icon(Icons.search),
           ),
-          PageInfo('login', '/auth/login', <String>['home', 'booking', 'login'],
-              const Icon(Icons.login)),
+          PageInfo(
+            'login',
+            '/auth/login',
+            <String>['home', 'booking', 'control'],
+            const Icon(Icons.login),
+          ),
         ]);
 
   List<PageInfo> pages = <PageInfo>[
     PageInfo(
-      'home',
+      '首頁',
       '/home',
-      <String>['home', 'booking', 'login'],
+      <String>['首頁', '訂房', 'RV控制'],
       const Icon(Icons.search),
     ),
     PageInfo(
-      'rent',
+      '上架',
       '/member/rent',
-      <String>['home', 'control', 'logout'],
+      <String>['首頁', '訂房', 'RV控制'],
       const Icon(Icons.car_repair),
     ),
     PageInfo(
-      'control',
+      'RV控制',
       '/member/control',
-      <String>['home', 'rent', 'logout'],
-      const Icon(Icons.search),
+      <String>['首頁', '訂房', '上架'],
+      const Icon(Icons.control_camera),
     ),
     PageInfo(
-      'booking',
+      '訂房',
       '/booking',
-      <String>['home', 'rent', 'login'],
+      <String>['首頁', '上架', 'RV控制'],
       const Icon(Icons.search),
     ),
     PageInfo(
       'login',
       '/auth/login',
-      <String>['home', 'booking', 'login'],
+      <String>['首頁', '訂房', 'RV控制'],
       const Icon(Icons.login),
     ),
     PageInfo(
       'logout',
       '/auth/logout',
-      <String>['home', 'booking', 'login'],
+      <String>['home', 'booking', 'control'],
       const Icon(Icons.logout),
     ),
   ];

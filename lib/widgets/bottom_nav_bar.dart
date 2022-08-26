@@ -17,22 +17,22 @@ class _NavBarState extends State<BottomNavBar> {
   final _pageStore = Modular.get<PageStore>();
   List<PageInfo> pages = [
     PageInfo(
-      'home',
+      '首頁',
       '/home',
-      <String>['home', 'booking', 'login'],
+      <String>['首頁', '訂房', 'RV控制'],
       const Icon(Icons.search),
     ),
     PageInfo(
-      'booking',
+      '訂房',
       '/booking',
-      <String>['home', 'rent', 'login'],
-      const Icon(Icons.search),
+      <String>['首頁', '上架', 'RV控制'],
+      const Icon(Icons.playlist_add_check_circle_outlined),
     ),
     PageInfo(
-      'login',
-      '/auth/login',
-      <String>['home', 'booking', 'login'],
-      const Icon(Icons.login),
+      'RV控制',
+      '/member/control',
+      <String>['首頁', '訂房', '上架'],
+      const Icon(Icons.control_camera),
     ),
   ];
   int currentIndex = 0;
