@@ -10,7 +10,9 @@ class AuthGuard extends RouteGuard {
 
   @override
   Future<bool> canActivate(String path, ModularRoute route) {
-    _authStore.pastPage = path;
+    if (!path.startsWith('/auth')) {
+      _authStore.pastPage = path;
+    }
     return Modular.get<AuthStore>().checkAuth();
   }
 }

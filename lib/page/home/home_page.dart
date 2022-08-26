@@ -2,21 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
 import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
-import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/utils/static_data_property.dart';
 import 'package:flutter_rv_pms/widgets/house_card.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
-  final _dio = Modular.get<AuthStore>();
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _HomeState();
+}
+
+class _HomeState extends State<HomePage> {
+  final _authStore = Modular.get<AuthStore>();
+
+  @override
+  void initState() {
+    super.initState();
+    _authStore.observer(onState: (state) => setState(() {}));
+  }
 
   @override
   Widget build(BuildContext context) {
     // debugPaintSizeEnabled = true; // After Build Widget
-
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 219, 217, 217),
         appBar: AppBar(
@@ -35,7 +45,7 @@ class HomePage extends StatelessWidget {
           title: const Text('RV'),
           actions: <Widget>[
             LayoutBuilder(builder: (context, constraints) {
-              if (_dio.state) {
+              if (_authStore.state) {
                 return IconButton(
                   icon: const Icon(Icons.logout),
                   tooltip: 'Logout',
@@ -54,7 +64,7 @@ class HomePage extends StatelessWidget {
               }
             }),
             LayoutBuilder(builder: (context, constraints) {
-              if (_dio.state) {
+              if (_authStore.state) {
                 return IconButton(
                   icon: const Icon(Icons.search),
                   tooltip: 'Control',
@@ -76,7 +86,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             LayoutBuilder(builder: (context, constraints) {
-              return (_dio.state)
+              return (_authStore.state)
                   ? Avatar('assets/images/lady.png')
                   : Avatar('assets/images/dp.png');
             }),
