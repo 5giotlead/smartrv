@@ -42,7 +42,7 @@ class PageModule extends Module {
             ),
             ChildRoute(
               '/booking',
-              child: (context, args) => BookingPage({args.data}),
+              child: (context, args) => BookingPage(rv: args.data),
             ),
             ModuleRoute(
               '/member',

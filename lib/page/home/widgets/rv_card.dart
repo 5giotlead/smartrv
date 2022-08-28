@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_rv_pms/page/home/home_page.dart';
 import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/utils/constants.dart';
 import 'package:flutter_rv_pms/widgets/models/property.dart';
@@ -11,8 +13,11 @@ class RVCard extends StatelessWidget {
   RVCard(this.rv, {super.key});
 
   final rv;
+  final _dio = Modular.get<Dio>();
 
-  final _pageStore = Modular.get<PageStore>();
+  Future<void> deleteRV() async {
+    await _dio.delete('/smartrv/rv/${rv['id']}');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +63,7 @@ class RVCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '尖石之美',
+                    rv['camp']['name'] as String,
                     style: const TextStyle(
                       fontSize: 15,
                       color: Color.fromRGBO(33, 45, 82, 1),
@@ -104,10 +109,10 @@ class RVCard extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          print('已加入我的最愛');
+                          deleteRV();
                         },
                         child: Icon(
-                          Icons.favorite,
+                          Icons.delete,
                           color: Constants.primaryColor,
                         ),
                       )

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -7,10 +5,10 @@ import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
 import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
-import 'package:flutter_rv_pms/shared/models/rv.dart';
-import 'package:flutter_rv_pms/utils/static_data_property.dart';
 import 'package:flutter_rv_pms/page/home/widgets/rv_card.dart';
+import 'package:flutter_rv_pms/utils/constants.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,7 +28,8 @@ class _HomeState extends State<HomePage> {
     super.initState();
     mounted = true;
     _authStore.observer(
-      onState: (state) => {
+      onState: (state) =>
+      {
         if (mounted) {setState(() {})}
       },
     );
@@ -289,9 +288,6 @@ class _RvListState extends State<RvList> {
     return const SizedBox();
   }
 
-  changeState() {
-    setState(() {
-      print(getData);
-    });
-  }
+  void changeState() {}
 }
+

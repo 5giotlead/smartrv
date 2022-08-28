@@ -19,19 +19,19 @@ class _NavBarState extends State<BottomNavBar> {
     PageInfo(
       '首頁',
       '/home',
-      <String>['首頁', '訂房', 'RV控制'],
+      <String>['首頁', '上架', 'RV控制'],
       const Icon(Icons.search),
     ),
     PageInfo(
-      '訂房',
-      '/booking',
-      <String>['首頁', '上架', 'RV控制'],
-      const Icon(Icons.playlist_add_check_circle_outlined),
+      '上架',
+      '/member/rent',
+      <String>['首頁', 'RV控制', '登出'],
+      const Icon(Icons.car_repair),
     ),
     PageInfo(
       'RV控制',
       '/member/control',
-      <String>['首頁', '訂房', '上架'],
+      <String>['首頁', '上架', '登出'],
       const Icon(Icons.control_camera),
     ),
   ];
