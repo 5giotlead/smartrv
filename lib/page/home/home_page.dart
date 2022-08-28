@@ -28,8 +28,7 @@ class _HomeState extends State<HomePage> {
     super.initState();
     mounted = true;
     _authStore.observer(
-      onState: (state) =>
-      {
+      onState: (state) => {
         if (mounted) {setState(() {})}
       },
     );
@@ -263,6 +262,11 @@ class _RvListState extends State<RvList> {
     });
   }
 
+  Future<void> deleteRV(String rvId) async {
+    // await _dio.delete('/smartrv/rv/$rvId');
+    // await getRVList();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -274,7 +278,114 @@ class _RvListState extends State<RvList> {
     return ListView(
       // padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
       scrollDirection: Axis.vertical,
-      children: [for (final rv in rvList) RVCard(rv)],
+      children: [
+        for (final rv in rvList)
+          GestureDetector(
+            onTap: () {
+              // Helper.nextPage(context, SinglePropertyPage());
+              Modular.to.navigate('/booking', arguments: rv);
+            },
+            child: Container(
+              height: 300,
+              width: 500,
+              margin: const EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: const Color.fromRGBO(244, 245, 246, 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                      child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12))),
+                    child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0),
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                          child: Image.network(
+                            baseImageUrl +
+                                'bb63eb18-9fa9-42fd-a8be-b6bcbd2c25ee.jpg',
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          rv['camp']['name'] as String,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Color.fromRGBO(33, 45, 82, 1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        // const SizedBox(
+                        //   height: 5,
+                        // ),
+                        // Text(
+                        //   house.description,
+                        //   style: const TextStyle(
+                        //     fontSize: 13,
+                        //     color: Color.fromRGBO(138, 150, 190, 1),
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  // TextSpan(
+                                  //   text: "From\n",
+                                  //   style: GoogleFonts.inter(
+                                  //     color: Color.fromRGBO(64, 74, 106, 1),
+                                  //     fontWeight: FontWeight.w600,
+                                  //   ),
+                                  // ),
+                                  TextSpan(
+                                    text: rv['name'] as String,
+                                    style: GoogleFonts.inter(
+                                      color: Color.fromRGBO(33, 45, 82, 1),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                deleteRV(rv['id'] as String);
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                color: Constants.primaryColor,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+      ],
       // separatorBuilder: (BuildContext context, int index) {
       //   return const SizedBox(
       //     width: 20,
@@ -290,4 +401,3 @@ class _RvListState extends State<RvList> {
 
   void changeState() {}
 }
-
