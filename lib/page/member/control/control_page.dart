@@ -17,8 +17,6 @@ ThingsboardClient tbClient = Modular.get<ThingsboardClient>();
 class ControlPage extends StatelessWidget {
   ControlPage({super.key});
 
-  final store = Modular.get<ControlStore>();
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 219, 217, 217),
@@ -30,175 +28,12 @@ class ControlPage extends StatelessWidget {
             height: 200,
             child: Stack(children: [
               Image.network(
-                'https://picsum.photos/seed/762/600',
+                'https://rv.5giotlead.com/static/all/7d3cdf73-2761-498c-af2f-dd9fd5a11787.jpg',
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,
               ),
-              Container(
-                width: double.infinity,
-                height: 260,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Align(
-                      alignment: AlignmentDirectional(0, -1.03),
-                      child: Container(
-                        color: Color.fromARGB(204, 150, 150, 150),
-                        width: double.infinity,
-                        height: 30,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Icon(
-                              Icons.place,
-                              color: Colors.black,
-                              size: 24,
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                              child: Text(
-                                '南投縣 畢瓦客露營區',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 15),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 100,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [],
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                width: 100,
-                                height: 40,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Icon(
-                                      Icons.power,
-                                      color: Colors.black,
-                                      size: 20,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          15, 0, 0, 0),
-                                      child: Text(
-                                        'Good',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 100,
-                                height: 40,
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Icon(
-                                      Icons.sensor_door_rounded,
-                                      color: Colors.black,
-                                      size: 24,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10, 0, 0, 0),
-                                      child: Text(
-                                        store.state ? 'ON' : 'OFF',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 30,
-                    ),
-                    Expanded(
-                      child: Container(
-                        color: Color.fromARGB(204, 150, 150, 150),
-                        alignment: Alignment.bottomCenter,
-                        width: double.infinity,
-                        height: 25,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(
-                                  left: 10, top: 0, right: 0, bottom: 0),
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              height: 100,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Icon(
-                                    Icons.directions_car_rounded,
-                                    color: Colors.black,
-                                    size: 24,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        5, 0, 0, 0),
-                                    child: Text(
-                                      'NOMADIC 5 遊牧旅居車',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              height: 100,
-                              child: Align(
-                                alignment: AlignmentDirectional(0.8, 0.05),
-                                child: Text(
-                                  '20220822 08:03',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              Canvas(),
             ]),
           ),
           Container(
@@ -230,6 +65,193 @@ class ControlPage extends StatelessWidget {
           //     itemCount: StaticData.sensers.length,
           //   ),
           // ),
+        ],
+      ),
+    );
+  }
+}
+
+class Canvas extends StatefulWidget {
+  Canvas({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _CanvasState();
+}
+
+class _CanvasState extends State<Canvas> {
+  final store = Modular.get<ControlStore>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 260,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          // Align(
+          //   alignment: AlignmentDirectional(0, -1.03),
+          //   child: Container(
+          //     color: Color.fromARGB(204, 150, 150, 150),
+          //     width: double.infinity,
+          //     height: 30,
+          //     child: Row(
+          //       mainAxisSize: MainAxisSize.max,
+          //       children: [
+          //         Icon(
+          //           Icons.place,
+          //           color: Colors.black,
+          //           size: 24,
+          //         ),
+          //         Padding(
+          //           padding:
+          //               EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+          //           child: Text(
+          //             '南投縣 畢瓦客露營區',
+          //             style: TextStyle(
+          //                 fontWeight: FontWeight.bold,
+          //                 color: Colors.black,
+          //                 fontSize: 15),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          Container(
+            width: double.infinity,
+            height: 100,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [],
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 40,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(
+                            Icons.power,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
+                            child: Text(
+                              '12 W',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 100,
+                      height: 40,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          LayoutBuilder(builder: (context, constraints) {
+                            return (store.state == 'OFF')
+                                ? const Icon(
+                                    Icons.sensor_door_rounded,
+                                    color: Color.fromARGB(255, 255, 0, 0),
+                                    size: 24,
+                                  )
+                                : const Icon(
+                                    Icons.sensor_door_rounded,
+                                    // color: Colors.black,
+                                    size: 24,
+                                  );
+                          }),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                            child: Text(
+                              store.state ? 'ON' : 'OFF',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            height: 30,
+          ),
+          // Expanded(
+          //   child: Container(
+          //     color: Color.fromARGB(204, 150, 150, 150),
+          //     alignment: Alignment.bottomCenter,
+          //     width: double.infinity,
+          //     height: 25,
+          //     child: Row(
+          //       mainAxisSize: MainAxisSize.max,
+          //       children: [
+          //         Container(
+          //           padding: EdgeInsets.only(
+          //               left: 10, top: 0, right: 0, bottom: 0),
+          //           width: MediaQuery.of(context).size.width * 0.5,
+          //           height: 100,
+          //           child: Row(
+          //             mainAxisSize: MainAxisSize.max,
+          //             children: [
+          //               Icon(
+          //                 Icons.directions_car_rounded,
+          //                 color: Colors.black,
+          //                 size: 24,
+          //               ),
+          //               Padding(
+          //                 padding: EdgeInsetsDirectional.fromSTEB(
+          //                     5, 0, 0, 0),
+          //                 child: Text(
+          //                   'NOMADIC 5 遊牧旅居車',
+          //                   style: TextStyle(
+          //                       color: Colors.black,
+          //                       fontWeight: FontWeight.bold,
+          //                       fontSize: 12),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //         Container(
+          //           width: MediaQuery.of(context).size.width * 0.5,
+          //           height: 100,
+          //           child: Align(
+          //             alignment: AlignmentDirectional(0.8, 0.05),
+          //             child: Text(
+          //               '20220822 08:03',
+          //               style: TextStyle(
+          //                   color: Colors.black,
+          //                   fontWeight: FontWeight.bold,
+          //                   fontSize: 15),
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );

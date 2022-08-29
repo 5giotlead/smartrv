@@ -20,7 +20,7 @@ class _NavBarState extends State<BottomNavBar> {
       '首頁',
       '/home',
       <String>['首頁', '上架', 'RV控制'],
-      const Icon(Icons.search),
+      const Icon(Icons.home),
     ),
     PageInfo(
       '上架',
