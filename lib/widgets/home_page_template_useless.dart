@@ -1,5 +1,5 @@
 // import 'package:smart_rv_starter/pages/register.dart';
-// import 'package:smart_rv_starter/utils/constants.dart';
+// import 'package:smart_rv_starter/utils/constant_colors.dart';
 // import 'package:smart_rv_starter/utils/helper.dart';
 // import 'package:smart_rv_starter/widgets/page_indicator.dart';
 // import 'package:smart_rv_starter/widgets/primary_button.dart';

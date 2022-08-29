@@ -1,4 +1,4 @@
-// import 'package:smart_rv_starter/utils/constants.dart';
+// import 'package:smart_rv_starter/utils/constant_colors.dart';
 // import 'package:flutter/material.dart';
 
 // class PageIndicator extends StatelessWidget {

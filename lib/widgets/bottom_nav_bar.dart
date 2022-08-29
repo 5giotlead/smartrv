@@ -19,19 +19,19 @@ class _NavBarState extends State<BottomNavBar> {
     PageInfo(
       '首頁',
       '/home',
-      <String>['首頁', '上架', 'RV控制'],
-      const Icon(Icons.home),
+      <String>['首頁', 'RV管理', 'RV控制'],
+      const Icon(Icons.search),
     ),
     PageInfo(
-      '上架',
-      '/member/rent',
+      'RV管理',
+      '/member/manage',
       <String>['首頁', 'RV控制', '登出'],
       const Icon(Icons.car_repair),
     ),
     PageInfo(
       'RV控制',
       '/member/control',
-      <String>['首頁', '上架', '登出'],
+      <String>['首頁', 'RV管理', '登出'],
       const Icon(Icons.control_camera),
     ),
   ];
@@ -42,6 +42,7 @@ class _NavBarState extends State<BottomNavBar> {
 
   @override
   void initState() {
+    super.initState();
     mounted = true;
     _pageStore.observer(
       onState: (state) => {
@@ -51,7 +52,6 @@ class _NavBarState extends State<BottomNavBar> {
           }),
       },
     );
-    super.initState();
   }
 
   @override

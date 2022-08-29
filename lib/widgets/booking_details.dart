@@ -1,4 +1,4 @@
-import 'package:flutter_rv_pms/utils/constants.dart';
+import 'package:flutter_rv_pms/utils/constant_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -64,7 +64,7 @@ class BookingDetails extends StatelessWidget {
                   width: 45.0,
                   height: 45.0,
                   decoration: BoxDecoration(
-                    color: Constants.primaryColor,
+                    color: ConstantColors.primaryColor,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

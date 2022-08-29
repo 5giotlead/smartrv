@@ -1,5 +1,5 @@
 // import 'package:smart_rv_starter/pages_useless/booking_screen.dart';
-// import 'package:smart_rv_starter/utils/constants.dart';
+// import 'package:smart_rv_starter/utils/constant_colors.dart';
 // import 'package:smart_rv_starter/utils/helper.dart';
 // import 'package:smart_rv_starter/widgets/property_features.dart';
 // import 'package:flutter/material.dart';

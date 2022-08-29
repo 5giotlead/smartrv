@@ -50,7 +50,7 @@ class _PscScreenState extends State<TogglePage> {
   }
 
   Future<void> _onPasscodeEntered(String enteredCode) async {
-    if (enteredCode.length == 6) {
+    if (enteredCode.length == 4) {
       await _toggleSwitch(enteredCode);
     }
   }

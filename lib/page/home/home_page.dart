@@ -5,8 +5,7 @@ import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
 import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
-import 'package:flutter_rv_pms/page/home/widgets/rv_card.dart';
-import 'package:flutter_rv_pms/utils/constants.dart';
+import 'package:flutter_rv_pms/utils/constant_colors.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -108,19 +107,6 @@ class _HomeState extends State<HomePage> {
                   ? Avatar('assets/images/lady.png')
                   : Avatar('assets/images/dp.png');
             }),
-            // IconButton(
-            //   icon: const Icon(Icons.shopping_bag),
-            //   tooltip: 'Booking',
-            //   onPressed: () {
-            //     Modular.to.navigate('/member/shopping');
-            //   },
-            // ),
-            // IconButton(
-            //   icon: const Icon(Icons.ac_unit_rounded),
-            //   onPressed: () {
-            //     Modular.to.navigate('/passcode');
-            //   },
-            // ),
           ],
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -312,8 +298,7 @@ class _RvListState extends State<RvList> {
                             topRight: Radius.circular(12),
                           ),
                           child: Image.network(
-                            baseImageUrl +
-                                '${rv['camp']['fileName']}.jpg',
+                            baseImageUrl + '${rv['camp']['fileName']}.jpg',
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.cover,
                           ),
@@ -370,12 +355,10 @@ class _RvListState extends State<RvList> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
-                                deleteRV(rv['id'] as String);
-                              },
+                              onTap: () {},
                               child: Icon(
-                                Icons.delete,
-                                color: Constants.primaryColor,
+                                Icons.favorite,
+                                color: ConstantColors.primaryColor,
                               ),
                             )
                           ],

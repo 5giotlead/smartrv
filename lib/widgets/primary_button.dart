@@ -1,4 +1,4 @@
-import 'package:flutter_rv_pms/utils/constants.dart';
+import 'package:flutter_rv_pms/utils/constant_colors.dart';
 import 'package:flutter/material.dart';
 
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,7 +19,7 @@ class PrimaryButton extends StatelessWidget {
       child: Container(
         height: 30,
         decoration: BoxDecoration(
-          color: Constants.primaryColor,
+          color: ConstantColors.primaryColor,
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(

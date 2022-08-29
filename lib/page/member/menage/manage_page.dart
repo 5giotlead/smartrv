@@ -4,20 +4,20 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
-import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
-import 'package:flutter_rv_pms/page/home/widgets/rv_card.dart';
-import 'package:flutter_rv_pms/utils/constants.dart';
-import 'package:flutter_rv_pms/widgets/rv_kind.dart';
+import 'package:flutter_rv_pms/utils/constant_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:thingsboard_client/thingsboard_client.dart';
 
-class HomePage2 extends StatefulWidget {
-  const HomePage2({super.key});
+String baseImageUrl = 'https://rv.5giotlead.com/static/camp/';
+
+class ManagePage extends StatefulWidget {
+  const ManagePage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _Home2State();
+  State<StatefulWidget> createState() => _ManageState();
 }
 
-class _Home2State extends State<HomePage2> {
+class _ManageState extends State<ManagePage> {
   final _authStore = Modular.get<AuthStore>();
 
   @override
@@ -106,35 +106,18 @@ class _Home2State extends State<HomePage2> {
                   ? Avatar('assets/images/lady.png')
                   : Avatar('assets/images/dp.png');
             }),
-            // IconButton(
-            //   icon: const Icon(Icons.shopping_bag),
-            //   tooltip: 'Booking',
-            //   onPressed: () {
-            //     Modular.to.navigate('/member/shopping');
-            //   },
-            // ),
-            // IconButton(
-            //   icon: const Icon(Icons.ac_unit_rounded),
-            //   onPressed: () {
-            //     Modular.to.navigate('/passcode');
-            //   },
-            // ),
           ],
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
         //bottomNavigationBar: BottomNavBar(),
         body: Column(children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: HomeSearch(),
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 24, right: 24),
               child: Container(
                 margin: EdgeInsets.only(top: 24),
-                child: RvKindList(),
+                child: RvList(),
               ),
             ),
           )
@@ -160,90 +143,6 @@ Route _createRoute() {
   );
 }
 
-dynamic getData;
-
-class RvKindList extends StatefulWidget {
-  const RvKindList({super.key});
-
-  @override
-  State<StatefulWidget> createState() => _RvKindListState();
-}
-
-class _RvKindListState extends State<RvKindList> {
-  final GlobalKey<_RvListState> key = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(children: <Widget>[
-              RvKind(
-                '北部',
-                const Icon(Icons.temple_buddhist),
-                callBack: (text) async {
-                  getData = await text;
-                  key.currentState?.changeState();
-                  // print(await text);
-                },
-              ),
-              RvKind(
-                '中部',
-                const Icon(Icons.hiking),
-                callBack: (text) async {
-                  getData = await text;
-                  key.currentState?.changeState();
-                  // print(await text);
-                },
-              ),
-              RvKind(
-                '南部',
-                const Icon(Icons.sunny),
-                callBack: (text) async {
-                  getData = await text;
-                  key.currentState?.changeState();
-                  // print(await text);
-                },
-              ),
-              RvKind(
-                '東部',
-                const Icon(Icons.bike_scooter),
-                callBack: (text) async {
-                  getData = await text;
-                  key.currentState?.changeState();
-                  // print(await text);
-                },
-              ),
-              RvKind(
-                '離島',
-                const Icon(Icons.water),
-                callBack: (text) async {
-                  getData = await text;
-                  key.currentState?.changeState();
-                  // print(await text);
-                },
-              ),
-            ]),
-          ),
-        ),
-        Expanded(
-            flex: 8,
-            child: RvList(
-              key: key,
-            ))
-      ],
-    );
-  }
-}
-
 class RvList extends StatefulWidget {
   const RvList({super.key});
 
@@ -252,13 +151,22 @@ class RvList extends StatefulWidget {
 }
 
 class _RvListState extends State<RvList> {
+  final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
   List<dynamic> rvList = [];
 
   Future<void> getRVList() async {
-    final res = await _dio.get<List<dynamic>>('/smartrv/rv');
+    final assetList = await _tbClient.get(
+      '/api/customer/dc8089d0-1ec7-11ed-8663-afdbeac61784/assets?page=0&pageSize=10',
+    );
+    final assets = assetList.data;
+    for (int i = 0; i < (assets['totalElements'] as int); i++) {
+      final res = await _dio
+          .get<dynamic>('/smartrv/rv?assetId=${assets['data'][i]['id']['id']}');
+      // rvList.add(res.data);
+    }
     setState(() {
-      rvList = res.data!;
+      rvList;
     });
   }
 
@@ -367,12 +275,10 @@ class _RvListState extends State<RvList> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
-                                deleteRV(rv['id'] as String);
-                              },
+                              onTap: () {},
                               child: Icon(
                                 Icons.delete,
-                                color: Constants.primaryColor,
+                                color: ConstantColors.primaryColor,
                               ),
                             )
                           ],

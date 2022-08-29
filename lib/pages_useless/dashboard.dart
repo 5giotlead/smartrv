@@ -1,4 +1,4 @@
-// import 'package:smart_rv_starter/utils/constants.dart';
+// import 'package:smart_rv_starter/utils/constant_colors.dart';
 // import 'package:smart_rv_starter/utils/static_data_property.dart';
 // import 'package:smart_rv_starter/widgets/app_bottom_navigation.dart';
 // import 'package:smart_rv_starter/widgets/rv_card.dart';

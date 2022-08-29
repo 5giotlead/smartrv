@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Constants {
+class ConstantColors {
   static final Color primaryColor =
       Color.fromRGBO(71, 148, 255, 1); //Preffered primary color
   static final Color highlightColor =

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/page/member/control/control_store.dart';
+import 'package:flutter_rv_pms/page/member/control/power_store.dart';
 import 'package:flutter_rv_pms/shared/models/telemetry.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +29,7 @@ class ControlPage extends StatelessWidget {
             height: 200,
             child: Stack(children: [
               Image.network(
-                'https://rv.5giotlead.com/static/all/7d3cdf73-2761-498c-af2f-dd9fd5a11787.jpg',
+                'https://rv.5giotlead.com/static/rv/0ca29309-3f7d-49ab-a38c-183cd9592823.jpg',
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,
@@ -80,6 +81,30 @@ class Canvas extends StatefulWidget {
 
 class _CanvasState extends State<Canvas> {
   final store = Modular.get<ControlStore>();
+  final _powerStore = Modular.get<PowerStore>();
+  late dynamic power = 0;
+  @override
+  late bool mounted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    mounted = true;
+    _powerStore.observer(
+      onState: (state) => {
+        if (mounted)
+          setState(() {
+            power = state;
+          }),
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    mounted = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,35 +114,6 @@ class _CanvasState extends State<Canvas> {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          // Align(
-          //   alignment: AlignmentDirectional(0, -1.03),
-          //   child: Container(
-          //     color: Color.fromARGB(204, 150, 150, 150),
-          //     width: double.infinity,
-          //     height: 30,
-          //     child: Row(
-          //       mainAxisSize: MainAxisSize.max,
-          //       children: [
-          //         Icon(
-          //           Icons.place,
-          //           color: Colors.black,
-          //           size: 24,
-          //         ),
-          //         Padding(
-          //           padding:
-          //               EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-          //           child: Text(
-          //             '南投縣 畢瓦客露營區',
-          //             style: TextStyle(
-          //                 fontWeight: FontWeight.bold,
-          //                 color: Colors.black,
-          //                 fontSize: 15),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           Container(
             width: double.infinity,
             height: 100,
@@ -147,11 +143,11 @@ class _CanvasState extends State<Canvas> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                             child: Text(
-                              '12 W',
+                              '$power W',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 15),
+                                  fontSize: 10),
                             ),
                           ),
                         ],
@@ -267,8 +263,6 @@ class PowerSwitch extends StatefulWidget {
 
 class _PowerState extends State<PowerSwitch> {
   final tbClient = Modular.get<ThingsboardClient>();
-  final _storage = Modular.get<FlutterSecureStorage>();
-  final _dio = Modular.get<Dio>();
   final store = Modular.get<ControlStore>();
 
   @override
@@ -336,7 +330,7 @@ class TelemetryBlock extends StatefulWidget {
 class _TelemetryBlockState extends State<TelemetryBlock> {
   bool _connected = false;
   final _storage = Modular.get<FlutterSecureStorage>();
-
+  final _powerStore = Modular.get<PowerStore>();
   final baseWSURL = 'wss://rv.5giotlead.com';
 
   // final baseWSURL = 'wss://rv.5giotlead.com:8081';
@@ -419,6 +413,9 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
       setState(() {
         final data = jsonDecode(message)['data'] as Map;
         for (final element in data.entries) {
+          if (element.key == 'power') {
+            _powerStore.setPower(element.value[0][1] as String);
+          }
           telemetryData
               .where((telemetry) => telemetry.name == element.key)
               .first

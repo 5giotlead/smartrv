@@ -6,22 +6,22 @@ class PageStore extends NotifierStore<Exception, List<PageInfo>> {
   PageStore()
       : super([
           PageInfo(
-            'home',
+            '首頁',
             '/home',
-            <String>['home', 'booking', 'control'],
+            <String>['首頁', 'RV管理', 'RV控制'],
             const Icon(Icons.search),
           ),
           PageInfo(
-            'booking',
-            '/booking',
-            <String>['home', 'rent', 'control'],
-            const Icon(Icons.search),
+            'RV管理',
+            '/member/manage',
+            <String>['首頁', 'RV控制', '登出'],
+            const Icon(Icons.car_repair),
           ),
           PageInfo(
-            'login',
-            '/auth/login',
-            <String>['home', 'booking', 'control'],
-            const Icon(Icons.login),
+            'RV控制',
+            '/member/control',
+            <String>['首頁', 'RV管理', '登出'],
+            const Icon(Icons.control_camera),
           ),
         ]);
 
@@ -29,8 +29,20 @@ class PageStore extends NotifierStore<Exception, List<PageInfo>> {
     PageInfo(
       '首頁',
       '/home',
-      <String>['首頁', '上架', 'RV控制'],
+      <String>['首頁', 'RV管理', 'RV控制'],
       const Icon(Icons.search),
+    ),
+    PageInfo(
+      'RV管理',
+      '/member/manage',
+      <String>['首頁', 'RV控制', '登出'],
+      const Icon(Icons.car_repair),
+    ),
+    PageInfo(
+      'RV控制',
+      '/member/control',
+      <String>['首頁', 'RV管理', '登出'],
+      const Icon(Icons.control_camera),
     ),
     PageInfo(
       '上架',
@@ -39,21 +51,15 @@ class PageStore extends NotifierStore<Exception, List<PageInfo>> {
       const Icon(Icons.car_repair),
     ),
     PageInfo(
-      'RV控制',
-      '/member/control',
-      <String>['首頁', '上架', '登出'],
-      const Icon(Icons.control_camera),
-    ),
-    PageInfo(
       '登入',
       '/auth/login',
-      <String>['首頁', '上架', 'RV控制'],
+      <String>['首頁', 'RV管理', 'RV控制'],
       const Icon(Icons.login),
     ),
     PageInfo(
       '登出',
       '/auth/logout',
-      <String>['首頁', '上架', 'RV控制'],
+      <String>['首頁', 'RV管理', 'RV控制'],
       const Icon(Icons.logout),
     ),
   ];

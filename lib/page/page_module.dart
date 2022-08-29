@@ -5,7 +5,8 @@ import 'package:flutter_rv_pms/auth/auth_guard.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/booking/booking_page.dart';
 import 'package:flutter_rv_pms/page/home/home_page.dart';
-import 'package:flutter_rv_pms/page/home/home_page2.dart';
+import 'package:flutter_rv_pms/page/member/control/power_store.dart';
+import 'package:flutter_rv_pms/page/member/menage/manage_page.dart';
 import 'package:flutter_rv_pms/page/member/control/control_store.dart';
 import 'package:flutter_rv_pms/page/member/member_module.dart';
 import 'package:flutter_rv_pms/page/page_store.dart';
@@ -18,6 +19,7 @@ class PageModule extends Module {
   List<Bind> get binds => [
         Bind.lazySingleton((i) => PageStore()),
         Bind.lazySingleton((i) => ControlStore()),
+        Bind.lazySingleton((i) => PowerStore()),
       ];
 
   @override
@@ -29,10 +31,6 @@ class PageModule extends Module {
             ChildRoute(
               '/home',
               child: (context, args) => HomePage(),
-            ),
-            ChildRoute(
-              '/home2',
-              child: (context, args) => HomePage2(),
             ),
             ChildRoute(
               '/toggle/:rvId',

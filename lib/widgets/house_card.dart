@@ -1,5 +1,5 @@
 import 'package:flutter_rv_pms/widgets/models/property.dart';
-import 'package:flutter_rv_pms/utils/constants.dart';
+import 'package:flutter_rv_pms/utils/constant_colors.dart';
 import 'package:flutter_rv_pms/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -107,7 +107,7 @@ class HouseCard extends StatelessWidget {
                         },
                         child: Icon(
                           Icons.favorite,
-                          color: Constants.primaryColor,
+                          color: ConstantColors.primaryColor,
                         ),
                       )
                     ],

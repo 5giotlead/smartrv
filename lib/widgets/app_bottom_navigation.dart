@@ -1,5 +1,5 @@
 import 'package:flutter_rv_pms/widgets/models/bottom_bar_item.dart';
-import 'package:flutter_rv_pms/utils/constants.dart';
+import 'package:flutter_rv_pms/utils/constant_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -99,7 +99,7 @@ Widget getBottomWidgetItem(BottomBarItem item, bool isActive) {
     width: ScreenUtil().setWidth(62.0),
     decoration: BoxDecoration(
       shape: BoxShape.circle,
-      color: isActive ? Constants.primaryColor : Colors.transparent,
+      color: isActive ? ConstantColors.primaryColor : Colors.transparent,
     ),
     child: AnimatedSwitcher(
       duration: Duration(milliseconds: 450),
