@@ -53,7 +53,7 @@ class _PscScreenState extends State<PscScreen> {
         backgroundColor: Colors.black.withOpacity(0.8),
         cancelCallback: _onPasscodeCancelled,
         digits: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
-        passwordDigits: 6,
+        passwordDigits: 4,
         bottomWidget: _buildPasscodeRestoreButton(),
         isValidCallback: _validFunc,
         // passwordResetCallback: _resetAppPassword,
