@@ -1,22 +1,48 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
-import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
-import 'package:flutter_rv_pms/page/page_store.dart';
-import 'package:flutter_rv_pms/utils/static_data_property.dart';
-import 'package:flutter_rv_pms/page/home/widgets/rv_card.dart';
-import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
+import 'package:flutter_rv_pms/page/home/provider/qr_scan.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
+import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
+import 'package:flutter_rv_pms/page/home/widgets/rv_card.dart';
+import 'package:flutter_rv_pms/utils/constants.dart';
+import 'package:flutter_rv_pms/widgets/rv_kind.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class HomePage2 extends StatelessWidget {
-  HomePage2({super.key});
-  final _dio = Modular.get<AuthStore>();
+class HomePage2 extends StatefulWidget {
+  const HomePage2({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _Home2State();
+}
+
+class _Home2State extends State<HomePage2> {
+  final _authStore = Modular.get<AuthStore>();
+
+  @override
+  bool mounted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    mounted = true;
+    _authStore.observer(
+      onState: (state) => {
+        if (mounted) {setState(() {})}
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    mounted = false;
+  }
 
   @override
   Widget build(BuildContext context) {
     // debugPaintSizeEnabled = true; // After Build Widget
-
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 219, 217, 217),
         appBar: AppBar(
@@ -32,10 +58,10 @@ class HomePage2 extends StatelessWidget {
               );
             },
           ),
-          title: const Text('RV - Rent Out'),
+          title: const Text('RV'),
           actions: <Widget>[
             LayoutBuilder(builder: (context, constraints) {
-              if (_dio.state) {
+              if (_authStore.state) {
                 return IconButton(
                   icon: const Icon(Icons.logout),
                   tooltip: 'Logout',
@@ -54,7 +80,7 @@ class HomePage2 extends StatelessWidget {
               }
             }),
             LayoutBuilder(builder: (context, constraints) {
-              if (_dio.state) {
+              if (_authStore.state) {
                 return IconButton(
                   icon: const Icon(Icons.search),
                   tooltip: 'Control',
@@ -76,16 +102,33 @@ class HomePage2 extends StatelessWidget {
               },
             ),
             LayoutBuilder(builder: (context, constraints) {
-              return (_dio.state)
+              return (_authStore.state)
                   ? Avatar('assets/images/lady.png')
                   : Avatar('assets/images/dp.png');
             }),
+            // IconButton(
+            //   icon: const Icon(Icons.shopping_bag),
+            //   tooltip: 'Booking',
+            //   onPressed: () {
+            //     Modular.to.navigate('/member/shopping');
+            //   },
+            // ),
+            // IconButton(
+            //   icon: const Icon(Icons.ac_unit_rounded),
+            //   onPressed: () {
+            //     Modular.to.navigate('/passcode');
+            //   },
+            // ),
           ],
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
         //bottomNavigationBar: BottomNavBar(),
         body: Column(children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: HomeSearch(),
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 24, right: 24),
@@ -128,6 +171,11 @@ class RvKindList extends StatefulWidget {
 
 class _RvKindListState extends State<RvKindList> {
   final GlobalKey<_RvListState> key = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,29 +252,151 @@ class RvList extends StatefulWidget {
 }
 
 class _RvListState extends State<RvList> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      // padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
-      scrollDirection: Axis.vertical,
-      itemBuilder: (BuildContext context, int index) {
-        return RVCard(
-          StaticData.HouseCardList[index],
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return const SizedBox(
-          width: 20,
-        );
-      },
-      // Make the length our static data length
-      itemCount: StaticData.HouseCardList.length,
-    );
-  }
+  final _dio = Modular.get<Dio>();
+  List<dynamic> rvList = [];
 
-  changeState() {
+  Future<void> getRVList() async {
+    final res = await _dio.get<List<dynamic>>('/smartrv/rv');
     setState(() {
-      print(getData);
+      rvList = res.data!;
     });
   }
+
+  Future<void> deleteRV(String rvId) async {
+    // await _dio.delete('/smartrv/rv/$rvId');
+    // await getRVList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getRVList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      // padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
+      scrollDirection: Axis.vertical,
+      children: [
+        for (final rv in rvList)
+          GestureDetector(
+            onTap: () {
+              // Helper.nextPage(context, SinglePropertyPage());
+              Modular.to.navigate('/booking', arguments: rv);
+            },
+            child: Container(
+              height: 300,
+              width: 500,
+              margin: const EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: const Color.fromRGBO(244, 245, 246, 1),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                      child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(12))),
+                    child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0),
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                          child: Image.network(
+                            baseImageUrl + '${rv['camp']['fileName']}.jpg',
+                            width: MediaQuery.of(context).size.width,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
+                  )),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          rv['camp']['name'] as String,
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Color.fromRGBO(33, 45, 82, 1),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        // const SizedBox(
+                        //   height: 5,
+                        // ),
+                        // Text(
+                        //   house.description,
+                        //   style: const TextStyle(
+                        //     fontSize: 13,
+                        //     color: Color.fromRGBO(138, 150, 190, 1),
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  // TextSpan(
+                                  //   text: "From\n",
+                                  //   style: GoogleFonts.inter(
+                                  //     color: Color.fromRGBO(64, 74, 106, 1),
+                                  //     fontWeight: FontWeight.w600,
+                                  //   ),
+                                  // ),
+                                  TextSpan(
+                                    text: rv['name'] as String,
+                                    style: GoogleFonts.inter(
+                                      color: Color.fromRGBO(33, 45, 82, 1),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                deleteRV(rv['id'] as String);
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                color: Constants.primaryColor,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+      ],
+      // separatorBuilder: (BuildContext context, int index) {
+      //   return const SizedBox(
+      //     width: 20,
+      //   );
+      // },
+      // Make the length our static data length
+      // itemCount: StaticData.HouseCardList.length,
+      // )
+      // ,
+    );
+    return const SizedBox();
+  }
+
+  void changeState() {}
 }

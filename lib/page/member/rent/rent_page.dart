@@ -139,7 +139,7 @@ class _RentPageState extends State<RentPage> {
                       ),
                     ),
                     Container(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       height: 50,
                       decoration: BoxDecoration(
@@ -151,10 +151,10 @@ class _RentPageState extends State<RentPage> {
                         value: camp,
                         icon: const Icon(Icons.arrow_downward),
                         elevation: 16,
-                        style: const TextStyle(color: Colors.deepPurple),
+                        style: const TextStyle(color: Colors.black),
                         underline: Container(
                           height: 2,
-                          color: Colors.deepPurpleAccent,
+                          color: Colors.black,
                         ),
                         onChanged: (dynamic newValue) {
                           setState(() {
@@ -258,7 +258,7 @@ class _RentPageState extends State<RentPage> {
                       width: double.infinity,
                       height: 200,
                       child: Image.network(
-                        'https://media.discordapp.net/attachments/992357029064740944/1003581864969240658/unknown.png?width=938&height=703',
+                        'https://rv.5giotlead.com/static/all/7d3cdf73-2761-498c-af2f-dd9fd5a11787.jpg',
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
