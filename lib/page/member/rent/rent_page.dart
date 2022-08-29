@@ -70,10 +70,10 @@ class _RentPageState extends State<RentPage> {
               color: Colors.black,
             ),
           ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () => Modular.to.pop(),
-          ),
+          // leading: IconButton(
+          //   icon: Icon(Icons.arrow_back),
+          //   onPressed: () => Modular.to.pop(),
+          // ),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -146,14 +146,15 @@ class _RentPageState extends State<RentPage> {
                         color: const Color.fromRGBO(247, 247, 249, 1),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      padding: const EdgeInsets.only(left: 24, right: 32),
                       child: DropdownButton<dynamic>(
+                        isExpanded: true,
                         value: camp,
                         icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
+                        // elevation: 16,
                         style: const TextStyle(color: Colors.black),
                         underline: Container(
-                          height: 2,
+                          height: 1,
                           color: Colors.black,
                         ),
                         onChanged: (dynamic newValue) {
