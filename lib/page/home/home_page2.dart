@@ -8,10 +8,15 @@ import 'package:flutter_rv_pms/widgets/house_card.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert';
+import 'package:flutter_rv_pms/page/home/model/rv_data.dart';
+import 'package:flutter_rv_pms/widgets/models/property.dart';
 
 class HomePage2 extends StatelessWidget {
   HomePage2({super.key});
-  final _dio = Modular.get<AuthStore>();
+
+  final _getLogin = Modular.get<AuthStore>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +40,7 @@ class HomePage2 extends StatelessWidget {
           title: const Text('RV - Rent Out'),
           actions: <Widget>[
             LayoutBuilder(builder: (context, constraints) {
-              if (_dio.state) {
+              if (_getLogin.state) {
                 return IconButton(
                   icon: const Icon(Icons.logout),
                   tooltip: 'Logout',
@@ -54,7 +59,7 @@ class HomePage2 extends StatelessWidget {
               }
             }),
             LayoutBuilder(builder: (context, constraints) {
-              if (_dio.state) {
+              if (_getLogin.state) {
                 return IconButton(
                   icon: const Icon(Icons.search),
                   tooltip: 'Control',
@@ -76,7 +81,7 @@ class HomePage2 extends StatelessWidget {
               },
             ),
             LayoutBuilder(builder: (context, constraints) {
-              return (_dio.state)
+              return (_getLogin.state)
                   ? Avatar('assets/images/lady.png')
                   : Avatar('assets/images/dp.png');
             }),
@@ -204,14 +209,30 @@ class RvList extends StatefulWidget {
 }
 
 class _RvListState extends State<RvList> {
+  final _dio = Modular.get<Dio>();
+  List<HouseProperty> HouseCardList = StaticData.HouseCardList;
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      // padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
       scrollDirection: Axis.vertical,
       itemBuilder: (BuildContext context, int index) {
+        _dio.get<List<dynamic>>('/smartrv/rv').then((res) {
+          print(HouseCardList.length);
+          HouseCardList.clear();
+          RvData rvData;
+
+          for (int i = 0; i < res.data!.length; i++) {
+            rvData = RvData.fromJson(res.data?[i]);
+            HouseCardList.add(HouseProperty(
+              name: rvData.name,
+              location: '諾美蒂',
+              imagePath: 'bb63eb18-9fa9-42fd-a8be-b6bcbd2c25ee.jpg',
+            ));
+          }
+        });
         return HouseCard(
-          StaticData.HouseCardList[index],
+          HouseCardList[index],
         );
       },
       separatorBuilder: (BuildContext context, int index) {
@@ -219,8 +240,7 @@ class _RvListState extends State<RvList> {
           width: 20,
         );
       },
-      // Make the length our static data length
-      itemCount: StaticData.HouseCardList.length,
+      itemCount: HouseCardList.length,
     );
   }
 
@@ -229,4 +249,21 @@ class _RvListState extends State<RvList> {
       print(getData);
     });
   }
+
+  // void RenewHouseCardList() {
+  //   _dio.get<List<dynamic>>('/smartrv/rv').then((res) {
+  //     print(HouseCardList.length);
+  //     HouseCardList.clear();
+  //     RvData rvData;
+
+  //     for (int i = 0; i < res.data!.length; i++) {
+  //       rvData = RvData.fromJson(res.data?[i]);
+  //       HouseCardList.add(HouseProperty(
+  //         name: rvData.name,
+  //         location: '諾美蒂',
+  //         imagePath: 'bb63eb18-9fa9-42fd-a8be-b6bcbd2c25ee.jpg',
+  //       ));
+  //     }
+  //   });
+  // }
 }
