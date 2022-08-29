@@ -6,6 +6,8 @@ import 'package:flutter_rv_pms/widgets/datepicker_range.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+String baseImageUrl = 'https://rv.5giotlead.com/static/rv/';
+
 class BookingPage extends StatefulWidget {
   const BookingPage({super.key, required rv});
 
@@ -52,19 +54,25 @@ class _BookingPageState extends State<BookingPage> {
                           scrollDirection: Axis.horizontal,
                           children: [
                             Image.network(
-                              'https://picsum.photos/seed/403/600',
+                              (rv?['type'] != null)
+                                  ? '$baseImageUrl${rv['type']['filenames'][0].toString()}.jpg'
+                                  : '${baseImageUrl}1ca79d6e-340a-47b7-a426-4e7c367b6d3f.jpg',
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height * 1,
                               fit: BoxFit.cover,
                             ),
                             Image.network(
-                              'https://picsum.photos/seed/268/600',
+                              (rv?['type'] != null)
+                                  ? '$baseImageUrl${rv['type']['filenames'][1].toString()}.jpg'
+                                  : '${baseImageUrl}0dfb1be0-a9b3-44b3-b3ce-65b1db46ba64.jpg',
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
                             ),
                             Image.network(
-                              'https://picsum.photos/seed/141/600',
+                              (rv?['type'] != null)
+                                  ? '$baseImageUrl${rv['type']['filenames'][2].toString()}.jpg'
+                                  : '${baseImageUrl}dc331115-0174-40de-8648-5c5049574f32.jpg',
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,

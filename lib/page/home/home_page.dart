@@ -10,6 +10,8 @@ import 'package:flutter_rv_pms/utils/constants.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+String baseImageUrl = 'https://rv.5giotlead.com/static/camp/';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
