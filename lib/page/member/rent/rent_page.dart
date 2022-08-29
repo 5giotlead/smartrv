@@ -119,7 +119,7 @@ class _RentPageState extends State<RentPage> {
                             fontWeight: FontWeight.w600,
                           ),
                           suffixIcon: Icon(
-                            Icons.door_back_door_outlined,
+                            Icons.car_rental,
                             color: Color.fromRGBO(105, 108, 121, 1),
                           ),
                           enabledBorder: InputBorder.none,
