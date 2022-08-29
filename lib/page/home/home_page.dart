@@ -311,7 +311,7 @@ class _RvListState extends State<RvList> {
                           ),
                           child: Image.network(
                             baseImageUrl +
-                                'bb63eb18-9fa9-42fd-a8be-b6bcbd2c25ee.jpg',
+                                '${rv['camp']['fileName']}.jpg',
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.cover,
                           ),

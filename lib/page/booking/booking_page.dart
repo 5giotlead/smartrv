@@ -123,7 +123,7 @@ class _BookingPageState extends State<BookingPage> {
                         child: Align(
                           alignment: AlignmentDirectional(0, 0.05),
                           child: Text(
-                            (rv != null)
+                            (rv?['type'] != null)
                                 ? rv['type']['typeName'] as String
                                 : 'typeName',
                             style: TextStyle(
@@ -166,18 +166,20 @@ class _BookingPageState extends State<BookingPage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          // Text(
-                          //   rv['comments'][0]['rate'] as String,
-                          //   style: TextStyle(color: Colors.black),
-                          // ),
-                          // Padding(
-                          //   padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                          //   child: Icon(
-                          //     Icons.star_sharp,
-                          //     color: Colors.black,
-                          //     size: 16,
-                          //   ),
-                          // ),
+                          Text(
+                            (rv?['comments'] != null)
+                                ? rv['comments'][0]['rate'].toString()
+                                : '尚無評價',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                            child: Icon(
+                              Icons.star_sharp,
+                              color: Colors.black,
+                              size: 16,
+                            ),
+                          ),
                           // Padding(
                           //   padding:
                           //       EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
@@ -195,7 +197,7 @@ class _BookingPageState extends State<BookingPage> {
                                 alignment:
                                     const AlignmentDirectional(0.8, 0.05),
                                 child: Text(
-                                    (rv != null)
+                                    (rv?['camp'] != null)
                                         ? rv['camp']['name'] as String
                                         : 'campName',
                                     style:
@@ -228,9 +230,9 @@ class _BookingPageState extends State<BookingPage> {
                           child: Column(
                             children: [
                               Text(
-                                (rv['type']['price'] != null)
-                                    ? rv['type']['price'] as String
-                                    : 'typePrice',
+                                (rv?['type']['price'] != null)
+                                    ? 'NT ${rv['type']['price'].toString() as String}'
+                                    : '-',
                                 style: const TextStyle(color: Colors.black),
                               ),
                               const DatePickerRange(),
@@ -293,7 +295,7 @@ class _BookingPageState extends State<BookingPage> {
                               padding: const EdgeInsetsDirectional.fromSTEB(
                                   10, 10, 10, 10),
                               child: Text(
-                                  (rv['description'] != null)
+                                  (rv?['description'] != null)
                                       ? rv['description'] as String
                                       : 'description',
                                   style: const TextStyle(color: Colors.black)),
