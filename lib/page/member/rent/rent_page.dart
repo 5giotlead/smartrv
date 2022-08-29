@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_rv_pms/shared/models/camp.dart';
+import 'package:flutter_rv_pms/shared/models/rv_file.dart';
 import 'package:flutter_rv_pms/widgets/input_widget.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
@@ -19,6 +21,8 @@ class _RentPageState extends State<RentPage> {
   final assetId = Modular.args.queryParams['assetId'];
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
+  late List<dynamic> campList = [];
+  late dynamic camp = Camp();
   final _formKey = GlobalKey<FormState>();
   TextEditingController rvController = TextEditingController();
   TextEditingController campController = TextEditingController();
@@ -27,25 +31,33 @@ class _RentPageState extends State<RentPage> {
 
   Future<void> _saveRV() async {
     if (_formKey.currentState!.validate()) {
-      print(rvController.text);
-      print(campController.text);
-      print(desController.text);
-      print(photoController.text);
       final data = jsonEncode({
-        'name': '$rvController.text',
-        'description': '$desController.text',
+        'name': '${rvController.text}',
+        'description': '${desController.text}',
         'assetId': assetId != null ? assetId : '',
-        'filenames': [photoController.text],
+        // 'filenames': [photoController.text],
         'type': {
           'id': typeId != null ? typeId : '7c2ad09f-0242-4fee-a006-0cd720ec9e2b'
         },
-        'camp': {
-          'id': 'f6fd537e-16e7-4b6f-ac15-6c8bf57349df'
-        },
+        'camp': {'id': camp['id'] as String},
       });
       print(await _dio.post<String>('/smartrv/rv', data: data));
       ClearText();
     }
+  }
+
+  Future<void> getCampList() async {
+    final res = await _dio.get<List<dynamic>>('/smartrv/camp');
+    setState(() {
+      campList = res.data!;
+      camp = campList.first;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCampList();
   }
 
   @override
@@ -130,41 +142,34 @@ class _RentPageState extends State<RentPage> {
                     ),
                     Container(
                       alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.symmetric(vertical: 5),
+                      margin: const EdgeInsets.symmetric(vertical: 5),
                       height: 50,
                       decoration: BoxDecoration(
-                        color: Color.fromRGBO(247, 247, 249, 1),
+                        color: const Color.fromRGBO(247, 247, 249, 1),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
-                      padding: EdgeInsets.symmetric(horizontal: 24.0),
-                      child: TextFormField(
-                        controller: campController,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: '營區',
-                          hintStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color.fromRGBO(124, 124, 124, 1),
-                            fontWeight: FontWeight.w600,
-                          ),
-                          suffixIcon: Icon(
-                            Icons.landscape_outlined,
-                            color: Color.fromRGBO(105, 108, 121, 1),
-                          ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                          ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: DropdownButton<dynamic>(
+                        value: camp,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 16,
+                        style: const TextStyle(color: Colors.deepPurple),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.deepPurpleAccent,
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '請輸入字元...';
-                          }
-                          return null;
+                        onChanged: (dynamic newValue) {
+                          setState(() {
+                            camp = newValue!;
+                          });
                         },
+                        items: campList
+                            .map<DropdownMenuItem<dynamic>>((dynamic camp) {
+                          return DropdownMenuItem<dynamic>(
+                            value: camp,
+                            child: Text(camp['name'] as String),
+                          );
+                        }).toList(),
                       ),
                     ),
                     Container(
@@ -206,45 +211,45 @@ class _RentPageState extends State<RentPage> {
                         },
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(247, 247, 249, 1),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 24.0),
-                      child: TextFormField(
-                        controller: photoController,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: '圖片',
-                          hintStyle: TextStyle(
-                            fontSize: 16,
-                            color: Color.fromRGBO(124, 124, 124, 1),
-                            fontWeight: FontWeight.w600,
-                          ),
-                          suffixIcon: Icon(
-                            Icons.photo,
-                            color: Color.fromRGBO(105, 108, 121, 1),
-                          ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '請輸入字元...';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
+                    // Container(
+                    //   alignment: Alignment.centerLeft,
+                    //   margin: EdgeInsets.symmetric(vertical: 5),
+                    //   height: 50,
+                    //   decoration: BoxDecoration(
+                    //     color: Color.fromRGBO(247, 247, 249, 1),
+                    //     borderRadius: BorderRadius.circular(12.0),
+                    //   ),
+                    //   padding: EdgeInsets.symmetric(horizontal: 24.0),
+                    //   child: TextFormField(
+                    //     controller: photoController,
+                    //     obscureText: false,
+                    //     decoration: InputDecoration(
+                    //       hintText: '圖片',
+                    //       hintStyle: TextStyle(
+                    //         fontSize: 16,
+                    //         color: Color.fromRGBO(124, 124, 124, 1),
+                    //         fontWeight: FontWeight.w600,
+                    //       ),
+                    //       suffixIcon: Icon(
+                    //         Icons.photo,
+                    //         color: Color.fromRGBO(105, 108, 121, 1),
+                    //       ),
+                    //       enabledBorder: InputBorder.none,
+                    //       focusedBorder: InputBorder.none,
+                    //       border: OutlineInputBorder(
+                    //         borderSide: BorderSide(
+                    //           color: Colors.transparent,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     validator: (value) {
+                    //       if (value == null || value.isEmpty) {
+                    //         return '請輸入字元...';
+                    //       }
+                    //       return null;
+                    //     },
+                    //   ),
+                    // ),
                     // InputWidget("營區", false, Icons.landscape_outlined, false),
                     // InputWidget("描述", false, Icons.note, false),
                     // InputWidget("圖片", false, Icons.photo, false),

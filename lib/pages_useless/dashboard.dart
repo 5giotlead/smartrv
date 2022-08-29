@@ -1,7 +1,7 @@
 // import 'package:smart_rv_starter/utils/constants.dart';
 // import 'package:smart_rv_starter/utils/static_data_property.dart';
 // import 'package:smart_rv_starter/widgets/app_bottom_navigation.dart';
-// import 'package:smart_rv_starter/widgets/house_card.dart';
+// import 'package:smart_rv_starter/widgets/rv_card.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
