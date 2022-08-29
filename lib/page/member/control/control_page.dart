@@ -131,6 +131,7 @@ class _CanvasState extends State<Canvas> {
                     Container(
                       width: 100,
                       height: 40,
+                      color: Color.fromARGB(116, 141, 139, 139),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -156,19 +157,21 @@ class _CanvasState extends State<Canvas> {
                     Container(
                       width: 100,
                       height: 40,
+                      color: Color.fromARGB(116, 141, 139, 139),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           LayoutBuilder(builder: (context, constraints) {
-                            return (store.state == 'OFF')
+                            print(store.state);
+                            return (store.state)
                                 ? const Icon(
                                     Icons.sensor_door_rounded,
-                                    color: Color.fromARGB(255, 255, 0, 0),
+                                    color: Colors.red,
                                     size: 24,
                                   )
                                 : const Icon(
                                     Icons.sensor_door_rounded,
-                                    // color: Colors.black,
+                                    color: Colors.black,
                                     size: 24,
                                   );
                           }),

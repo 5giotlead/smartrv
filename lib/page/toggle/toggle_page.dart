@@ -84,7 +84,7 @@ class _PscScreenState extends State<TogglePage> {
         backgroundColor: Colors.black.withOpacity(0.8),
         cancelCallback: _onPasscodeCancelled,
         // digits: const ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
-        passwordDigits: 6,
+        passwordDigits: 4,
       ),
     ));
   }
