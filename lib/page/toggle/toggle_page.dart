@@ -10,7 +10,7 @@ import 'package:passcode_screen/passcode_screen.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
 
 class TogglePage extends StatefulWidget {
-  TogglePage({super.key, required deviceId});
+  const TogglePage({super.key, required rvId});
 
   @override
   State<StatefulWidget> createState() => _PscScreenState();
@@ -29,7 +29,7 @@ class _PscScreenState extends State<TogglePage> {
   }
 
   Future<void> _toggleSwitch(String passcode) async {
-    bool isValid = false;
+    var isValid = false;
     final rvId = Modular.args.params['rvId'] as String;
     try {
       final res = await _dio.get(

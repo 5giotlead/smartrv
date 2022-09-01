@@ -57,7 +57,7 @@ class PageModule extends Module {
             ChildRoute(
               '/toggle/:rvId',
               child: (context, args) => TogglePage(
-                deviceId: args.params['rvId'],
+                rvId: args.params['rvId'],
               ),
             ),
             ChildRoute(
