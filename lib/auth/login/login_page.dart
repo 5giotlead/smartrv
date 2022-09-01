@@ -1,19 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:flutter_rv_pms/auth/login/cubit/login_cubit.dart';
 import 'package:flutter_rv_pms/l10n/l10n.dart';
-import 'package:thingsboard_client/thingsboard_client.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:thingsboard_client/thingsboard_client.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatelessWidget {
@@ -48,7 +44,6 @@ class LoginView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Wrap(runAlignment: WrapAlignment.center, children: [
                       Container(
@@ -60,17 +55,17 @@ class LoginView extends StatelessWidget {
                         ),
                         width: double.infinity,
                         child: Column(
-                          children: [
+                          children: const [
                             Text(
                               'Login',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 22,
-                                color: const Color.fromRGBO(33, 45, 82, 1),
+                                color: Color.fromRGBO(33, 45, 82, 1),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             SizedBox(
-                              height: 15.0,
+                              height: 15,
                             ),
                             LoginForm(),
                           ],
@@ -276,23 +271,23 @@ class LoginFormState extends State<LoginForm> {
                 child: GestureDetector(
                   onTap: _loginByOAuth,
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 14.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
                     height: 50,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color.fromARGB(204, 251, 250, 250),
                     ),
                     child: Row(
-                      children: [
+                      children: const [
                         // SvgPicture.asset(
                         //   "assets/svg/google.svg",
                         //   width: 30.0,
                         // ),
-                        const Icon(Icons.login),
+                        Icon(Icons.login),
                         SizedBox(
                           width: 15,
                         ),
                         Text(
-                          "Oauth2",
+                          'Oauth2',
                           style: TextStyle(
                             color: Color.fromRGBO(105, 108, 121, 1),
                           ),
@@ -374,9 +369,7 @@ class LoginFormState extends State<LoginForm> {
 }
 
 class AnimatedProgressIndicator extends StatefulWidget {
-  const AnimatedProgressIndicator({
-    required this.value,
-  });
+  const AnimatedProgressIndicator({required this.value, super.key});
 
   final double value;
 
@@ -396,7 +389,9 @@ class _AnimatedProgressIndicatorState extends State<AnimatedProgressIndicator>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        duration: Duration(milliseconds: 1200), vsync: this);
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
 
     final colorTween = TweenSequence([
       TweenSequenceItem(

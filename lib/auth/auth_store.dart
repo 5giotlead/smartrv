@@ -7,6 +7,8 @@ import 'package:thingsboard_client/thingsboard_client.dart';
 class AuthStore extends NotifierStore<Exception, bool> {
   AuthStore() : super(false);
 
+  final authNotifier = RxNotifier<bool>(false);
+
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
   final _storage = Modular.get<FlutterSecureStorage>();
@@ -35,6 +37,7 @@ class AuthStore extends NotifierStore<Exception, bool> {
       await _tbClient.setUserFromJwtToken(token, refreshToken, true);
     }
     update(_tbClient.isAuthenticated() && _tbClient.isJwtTokenValid());
+    authNotifier.value = state;
     // await checkAccess();
     return state;
   }

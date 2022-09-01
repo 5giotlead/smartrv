@@ -19,8 +19,8 @@ class _RentPageState extends State<RentPage> {
   final assetId = Modular.args.queryParams['assetId'];
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
-  late List<dynamic> campList = [];
-  late dynamic camp = Camp();
+  late List<Camp> campList = [];
+  late Camp camp;
   final _formKey = GlobalKey<FormState>();
   TextEditingController rvController = TextEditingController();
   TextEditingController campController = TextEditingController();
@@ -37,7 +37,7 @@ class _RentPageState extends State<RentPage> {
         'type': {
           'id': typeId != null ? typeId : '7c2ad09f-0242-4fee-a006-0cd720ec9e2b'
         },
-        'camp': {'id': camp['id'] as String},
+        'camp': {'id': camp.id},
       });
       print(await _dio.post<String>('/smartrv/rv', data: data));
       ClearText();
@@ -45,7 +45,7 @@ class _RentPageState extends State<RentPage> {
   }
 
   Future<void> getCampList() async {
-    final res = await _dio.get<List<dynamic>>('/smartrv/camp');
+    final res = await _dio.get<List<Camp>>('/smartrv/camp');
     setState(() {
       campList = res.data!;
       camp = campList.first;
@@ -147,7 +147,7 @@ class _RentPageState extends State<RentPage> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       padding: const EdgeInsets.only(left: 24, right: 32),
-                      child: DropdownButton<dynamic>(
+                      child: DropdownButton<Camp>(
                         isExpanded: true,
                         value: camp,
                         icon: const Icon(Icons.arrow_downward),
@@ -157,16 +157,18 @@ class _RentPageState extends State<RentPage> {
                           height: 1,
                           color: Colors.black,
                         ),
-                        onChanged: (dynamic newValue) {
+                        onChanged: (Camp? newValue) {
                           setState(() {
                             camp = newValue!;
                           });
                         },
-                        items: campList
-                            .map<DropdownMenuItem<dynamic>>((dynamic camp) {
-                          return DropdownMenuItem<dynamic>(
+                        items:
+                            campList.map<DropdownMenuItem<Camp>>((Camp camp) {
+                          return DropdownMenuItem<Camp>(
                             value: camp,
-                            child: Text(camp['name'] as String),
+                            child: Text(
+                              camp.name!,
+                            ),
                           );
                         }).toList(),
                       ),

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rv_pms/shopping/widgets/rv_item.dart';
+import 'package:flutter_rv_pms/page/member/order/widgets/rv_item.dart';
 
-class ShoppingPage extends StatefulWidget {
-  const ShoppingPage({Key? key}) : super(key: key);
+class OrderPage extends StatefulWidget {
+  const OrderPage({super.key});
 
   @override
-  State<ShoppingPage> createState() => _ShoppingPageState();
+  State<OrderPage> createState() => _OrderPageState();
 }
 
-class _ShoppingPageState extends State<ShoppingPage> {
+class _OrderPageState extends State<OrderPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 219, 217, 217),
+        backgroundColor: const Color.fromARGB(255, 219, 217, 217),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: Builder(
@@ -21,7 +22,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
-                // tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
                 tooltip: 'xxx',
               );
             },
@@ -29,7 +29,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
           title: const Text('訂單'),
           actions: [
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 12, 0),
               child: IconButton(
                 icon: const Icon(Icons.access_time_filled_outlined),
                 tooltip: 'aa',
@@ -48,15 +48,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
           padding: EdgeInsets.zero,
           primary: false,
           shrinkWrap: true,
-          scrollDirection: Axis.vertical,
           children: [
-            RvItem(),
-            RvItem(),
-            RvItem(),
-            RvItem(),
-            RvItem(),
-            RvItem(),
-            RvItem(),
             RvItem(),
             RvItem(),
           ],

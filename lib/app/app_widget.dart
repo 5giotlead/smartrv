@@ -27,9 +27,12 @@ class AppState extends State<AppWidget> {
   }
 
   Future<void> uniLinksChanged() async {
-    _sub = uriLinkStream.listen((Uri? uri) {
-      Modular.to.navigate(uri!.path);
-    }, onError: (err) {});
+    _sub = uriLinkStream.listen(
+      (Uri? uri) {
+        Modular.to.navigate(uri!.path);
+      },
+      onError: (err) {},
+    );
   }
 
   @override

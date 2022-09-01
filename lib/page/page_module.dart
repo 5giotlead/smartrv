@@ -5,21 +5,39 @@ import 'package:flutter_rv_pms/auth/auth_guard.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/booking/booking_page.dart';
 import 'package:flutter_rv_pms/page/home/home_page.dart';
-import 'package:flutter_rv_pms/page/member/control/power_store.dart';
-import 'package:flutter_rv_pms/page/member/menage/manage_page.dart';
-import 'package:flutter_rv_pms/page/member/control/control_store.dart';
+import 'package:flutter_rv_pms/page/home/widgets/qr_scan.dart';
 import 'package:flutter_rv_pms/page/member/member_module.dart';
 import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/page/toggle/toggle_page.dart';
+import 'package:flutter_rv_pms/shared/models/page_info.dart';
 import 'package:flutter_rv_pms/widgets/bottom_nav_bar.dart';
+import 'package:flutter_triple/flutter_triple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageModule extends Module {
   @override
   List<Bind> get binds => [
         Bind.lazySingleton((i) => PageStore()),
-        Bind.lazySingleton((i) => ControlStore()),
-        Bind.lazySingleton((i) => PowerStore()),
+        Bind.lazySingleton((i) => RxNotifier<List<PageInfo>>([
+              PageInfo(
+                '首頁',
+                '/home',
+                <String>['首頁', 'RV管理', 'RV控制'],
+                const Icon(Icons.search),
+              ),
+              PageInfo(
+                'RV管理',
+                '/member/manage',
+                <String>['首頁', 'RV控制', '登出'],
+                const Icon(Icons.car_repair),
+              ),
+              PageInfo(
+                'RV控制',
+                '/member/control',
+                <String>['首頁', 'RV管理', '登出'],
+                const Icon(Icons.control_camera),
+              ),
+            ])),
       ];
 
   @override
@@ -30,7 +48,11 @@ class PageModule extends Module {
           children: [
             ChildRoute(
               '/home',
-              child: (context, args) => HomePage(),
+              child: (context, args) => const HomePage(),
+            ),
+            ChildRoute(
+              '/qrscan',
+              child: (context, args) => QRScan(),
             ),
             ChildRoute(
               '/toggle/:rvId',
@@ -84,7 +106,7 @@ class _EntryState extends State<EntryPage> {
           ),
           webOnlyWindowName: '_self',
         )) {
-          throw 'Could not launch';
+          throw Exception();
         }
       }
     } else {
@@ -101,7 +123,6 @@ class _EntryState extends State<EntryPage> {
       bottomNavigationBar: const BottomNavBar(),
       body: Row(
         children: const [
-          // Container(width: 2, color: Colors.black45),
           Expanded(child: RouterOutlet()),
         ],
       ),

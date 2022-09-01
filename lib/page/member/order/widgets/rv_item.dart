@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 
 class RvItem extends StatefulWidget {
-  RvItem({Key? key}) : super(key: key);
+  const RvItem({super.key});
 
   @override
   State<RvItem> createState() => _RvItemState();
 }
 
 class _RvItemState extends State<RvItem> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 8),
+      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 8),
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               blurRadius: 3,
               color: Color(0x411D2429),
@@ -25,12 +26,11 @@ class _RvItemState extends State<RvItem> {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+          padding: const EdgeInsetsDirectional.all(8),
           child: Row(
-            mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 1, 1, 1),
+                padding: const EdgeInsetsDirectional.fromSTEB(0, 1, 1, 1),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: Image.network(
@@ -43,12 +43,11 @@ class _RvItemState extends State<RvItem> {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8, 8, 4, 0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 4, 0),
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text('遊牧款豪華衛浴車', style: TextStyle(color: Colors.black)),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 4, 8, 0),
@@ -63,10 +62,9 @@ class _RvItemState extends State<RvItem> {
                 ),
               ),
               Column(
-                mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
+                children: const [
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
                     child: Icon(
@@ -77,9 +75,11 @@ class _RvItemState extends State<RvItem> {
                   ),
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 12, 4, 8),
-                    child: Text('\$11.00',
-                        textAlign: TextAlign.end,
-                        style: TextStyle(color: Colors.black)),
+                    child: Text(
+                      r'$11.00',
+                      textAlign: TextAlign.end,
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                 ],
               ),

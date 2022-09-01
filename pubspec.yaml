@@ -9,10 +9,12 @@ environment:
 
 dependencies:
   bloc: ^8.1.0
+  build_runner: ^2.2.0
+  built_value: ^8.4.1
   dio: ^4.0.6
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.0.1
+  flutter_bloc: ^8.1.1
   flutter_form_builder: ^7.4.0
   flutter_icons_null_safety: ^1.1.0
   flutter_launcher_icons: ^0.9.3
@@ -27,6 +29,8 @@ dependencies:
   google_fonts: ^3.0.1
   http: ^0.13.4
   intl: ^0.17.0
+  json_annotation: ^4.6.0
+  json_serializable: ^6.3.1
   mobile_scanner: ^2.0.0
   passcode_screen: ^2.0.1
   qr_code_scanner: ^1.0.0
@@ -39,7 +43,7 @@ dependencies:
   web_socket_channel: ^2.2.0
 
 dev_dependencies:
-  bloc_test: ^9.0.3
+  bloc_test: ^9.1.0
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0

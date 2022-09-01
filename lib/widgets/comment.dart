@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rv_pms/shared/models/comment.dart';
 
-class ChartCard extends StatelessWidget {
-  ChartCard();
+class CommentCard extends StatelessWidget {
+  CommentCard(this.comment, {super.key});
+
+  Comment comment;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ClipRRect(
@@ -19,45 +21,45 @@ class ChartCard extends StatelessWidget {
           ),
         ),
         Column(
-          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
               child: Container(
                 constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width * 0.75,
                 ),
                 decoration: BoxDecoration(
-                  color: Color(0xF8EDE6E6),
+                  color: const Color(0xF8EDE6E6),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(12, 8, 12, 8),
+                  padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 12, 8),
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Sandra Smith',
                         style: TextStyle(color: Colors.black),
                       ),
                       Text(
-                        'I\'m not really sure about this section here aI think you should do soemthing cool!',
-                        style: TextStyle(color: Colors.black),
+                        (comment.description != null)
+                            ? comment.description!
+                            : 'description',
+                        style: const TextStyle(color: Colors.black),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(12, 4, 0, 0),
-              child: Text(
-                'a min ago',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+            // const Padding(
+            //   padding: EdgeInsetsDirectional.fromSTEB(12, 4, 0, 0),
+            //   child: Text(
+            //     'a min ago',
+            //     style: TextStyle(color: Colors.black),
+            //   ),
+            // ),
           ],
         ),
       ],

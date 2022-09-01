@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DatePickerRange extends StatefulWidget {
-  const DatePickerRange({Key? key, this.restorationId}) : super(key: key);
+  const DatePickerRange({super.key, this.restorationId});
 
   final String? restorationId;
 
@@ -9,18 +9,17 @@ class DatePickerRange extends StatefulWidget {
   State<DatePickerRange> createState() => _DatePickerRangeState();
 }
 
-/// RestorationProperty objects can be used because of RestorationMixin.
 class _DatePickerRangeState extends State<DatePickerRange>
     with RestorationMixin {
-  // In this example, the restoration ID for the mixin is passed in through
-  // the [StatefulWidget]'s constructor.
   @override
   String? get restorationId => widget.restorationId;
 
   final RestorableDateTimeN _startDate = RestorableDateTimeN(
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+  );
   final RestorableDateTimeN _endDate = RestorableDateTimeN(
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day));
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
+  );
   late final RestorableRouteFuture<DateTimeRange?>
       _restorableDateRangePickerRouteFuture =
       RestorableRouteFuture<DateTimeRange?>(
@@ -48,7 +47,9 @@ class _DatePickerRangeState extends State<DatePickerRange>
     registerForRestoration(_startDate, 'start_date');
     registerForRestoration(_endDate, 'end_date');
     registerForRestoration(
-        _restorableDateRangePickerRouteFuture, 'date_picker_route_future');
+      _restorableDateRangePickerRouteFuture,
+      'date_picker_route_future',
+    );
   }
 
   static Route<DateTimeRange?> _dateRangePickerRoute(
@@ -64,7 +65,10 @@ class _DatePickerRangeState extends State<DatePickerRange>
               _initialDateTimeRange(arguments! as Map<dynamic, dynamic>),
           firstDate: DateTime(DateTime.now().year),
           currentDate: DateTime(
-              DateTime.now().year, DateTime.now().month, DateTime.now().day),
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+          ),
           lastDate: DateTime(DateTime.now().year + 1),
         );
       },
@@ -76,12 +80,13 @@ class _DatePickerRangeState extends State<DatePickerRange>
         arguments['initialEndDate'] != null) {
       return DateTimeRange(
         start: DateTime.fromMillisecondsSinceEpoch(
-            arguments['initialStartDate'] as int),
+          arguments['initialStartDate'] as int,
+        ),
         end: DateTime.fromMillisecondsSinceEpoch(
-            arguments['initialEndDate'] as int),
+          arguments['initialEndDate'] as int,
+        ),
       );
     }
-
     return null;
   }
 
@@ -92,13 +97,11 @@ class _DatePickerRangeState extends State<DatePickerRange>
         icon: const Icon(Icons.date_range),
         iconSize: 20,
         tooltip: 'Date',
-        onPressed: () {
-          _restorableDateRangePickerRouteFuture.present();
-        },
+        onPressed: _restorableDateRangePickerRouteFuture.present,
       ),
-      Text(
+      const Text(
         '2022/08/25~2022/09/28',
-        style: TextStyle(fontSize: 5),
+        style: TextStyle(fontSize: 10),
       )
     ]);
   }

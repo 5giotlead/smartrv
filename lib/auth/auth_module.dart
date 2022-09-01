@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/login/login_page.dart';
 import 'package:flutter_rv_pms/auth/logout/logout_page.dart';
+import 'package:flutter_triple/flutter_triple.dart';
 
 class AuthModule extends Module {
   @override

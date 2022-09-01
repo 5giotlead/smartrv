@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'ord.g.dart';
+
+@JsonSerializable()
 class Ord {
   Ord(
     this.id,
@@ -9,11 +14,15 @@ class Ord {
     this.discountId,
   );
 
-  late String id;
-  late String state;
-  late double total;
-  late String startDate;
-  late String endDate;
-  late String userId;
-  late String discountId;
+  factory Ord.fromJson(Map<String, dynamic> json) => _$OrdFromJson(json);
+
+  Map<String, dynamic> toJson() => _$OrdToJson(this);
+
+  String id;
+  String? state;
+  double? total;
+  String? startDate;
+  String? endDate;
+  String? userId;
+  String? discountId;
 }
