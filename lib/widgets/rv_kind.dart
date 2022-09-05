@@ -6,12 +6,12 @@ import 'package:dio/dio.dart';
 typedef CallBack = dynamic Function(dynamic);
 
 class RvKind extends StatelessWidget {
+  RvKind(this.region, this.icon, {super.key, required this.callBack});
+
   final String region;
-  final Icon iconn;
+  final Icon icon;
   final CallBack callBack;
   final _dio = Modular.get<Dio>();
-
-  RvKind(this.region, this.iconn, {required this.callBack});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class RvKind extends StatelessWidget {
                   color: const Color.fromARGB(200, 121, 131, 124),
                   shape: BoxShape.rectangle),
               child: IconButton(
-                icon: iconn,
+                icon: icon,
                 tooltip: 'Search',
                 onPressed: () {
                   this.callBack(getRvList());

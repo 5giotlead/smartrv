@@ -18,20 +18,21 @@ class BookingPage extends StatefulWidget {
 
 class _BookingPageState extends State<BookingPage> {
   PageController? pageViewController;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  final _pageStore = Modular.get<PageStore>();
-  late RV rv;
+  late RV rv = RV('', '', '', 0, '', null, null, [], []);
 
   @override
   void initState() {
     super.initState();
-    rv = Modular.args.data as RV;
+    if (Modular.args.data != null) {
+      rv = Modular.args.data as RV;
+    } else {
+      Modular.to.navigate('/home');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: const Color.fromARGB(255, 219, 217, 217),
       body: SafeArea(
         child: GestureDetector(
@@ -54,8 +55,8 @@ class _BookingPageState extends State<BookingPage> {
                           children: [
                             Image.network(
                               (rv.type?.filenames != null &&
-                                      rv.type!.filenames.isNotEmpty)
-                                  ? '$baseImageUrl${rv.type?.filenames[0]}.jpg'
+                                      rv.type!.filenames != null)
+                                  ? '$baseImageUrl${rv.type?.filenames![0]}.jpg'
                                   : '${baseImageUrl}1ca79d6e-340a-47b7-a426-4e7c367b6d3f.jpg',
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height * 1,
@@ -63,8 +64,8 @@ class _BookingPageState extends State<BookingPage> {
                             ),
                             Image.network(
                               (rv.type?.filenames != null &&
-                                      rv.type!.filenames.isNotEmpty)
-                                  ? '$baseImageUrl${rv.type?.filenames[1]}.jpg'
+                                      rv.type!.filenames != null)
+                                  ? '$baseImageUrl${rv.type?.filenames![1]}.jpg'
                                   : '${baseImageUrl}0dfb1be0-a9b3-44b3-b3ce-65b1db46ba64.jpg',
                               width: 100,
                               height: 100,
@@ -72,8 +73,8 @@ class _BookingPageState extends State<BookingPage> {
                             ),
                             Image.network(
                               (rv.type?.filenames != null &&
-                                      rv.type!.filenames.isNotEmpty)
-                                  ? '$baseImageUrl${rv.type?.filenames[2]}.jpg'
+                                      rv.type!.filenames != null)
+                                  ? '$baseImageUrl${rv.type?.filenames![2]}.jpg'
                                   : '${baseImageUrl}dc331115-0174-40de-8648-5c5049574f32.jpg',
                               width: 100,
                               height: 100,
@@ -92,7 +93,7 @@ class _BookingPageState extends State<BookingPage> {
                             ),
                             child: SmoothPageIndicator(
                               controller: pageViewController ??=
-                                  PageController(initialPage: 0),
+                                  PageController(),
                               count: 3,
                               onDotClicked: (i) {
                                 pageViewController!.animateToPage(
@@ -134,8 +135,9 @@ class _BookingPageState extends State<BookingPage> {
                                 ? rv.type!.typeName!
                                 : 'typeName',
                             style: TextStyle(
-                                color: Colors.black.withOpacity(0.6),
-                                fontSize: 20),
+                              color: Colors.black.withOpacity(0.6),
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                       ),
@@ -160,8 +162,8 @@ class _BookingPageState extends State<BookingPage> {
                       child: Row(
                         children: [
                           Text(
-                            (rv.comments.isNotEmpty)
-                                ? rv.comments[0]!.rate.toString()
+                            (rv.comments != null)
+                                ? rv.comments![0].rate.toString()
                                 : '尚無評價',
                             style: const TextStyle(color: Colors.black),
                           ),
@@ -190,11 +192,11 @@ class _BookingPageState extends State<BookingPage> {
                                 alignment:
                                     const AlignmentDirectional(0.8, 0.05),
                                 child: Text(
-                                    (rv.camp?.name != null)
-                                        ? rv.camp!.name!
-                                        : 'campName',
-                                    style:
-                                        const TextStyle(color: Colors.black)),
+                                  (rv.camp?.name != null)
+                                      ? rv.camp!.name!
+                                      : 'campName',
+                                  style: const TextStyle(color: Colors.black),
+                                ),
                               ),
                             ),
                           ),
@@ -236,50 +238,54 @@ class _BookingPageState extends State<BookingPage> {
                           color: Colors.white,
                         ),
                         child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                              20,
-                              20,
-                              20,
-                              20,
-                            ),
-                            child: PrimaryButton(
-                              '訂房',
-                              () {
-                                Modular.to.navigate('/member/check');
-                              },
-                            )),
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                            20,
+                            20,
+                            20,
+                            20,
+                          ),
+                          child: PrimaryButton(
+                            '訂房',
+                            () {
+                              Modular.to.pushNamed(
+                                '/member/checkout',
+                                arguments: rv,
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Expanded(
                   child: SingleChildScrollView(
-                      child: Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height * 1,
-                        ),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                            10,
-                            10,
-                            10,
-                            10,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 1,
                           ),
-                          child: Text(
-                            (rv.description != null)
-                                ? rv.description!
-                                : 'description',
-                            style: const TextStyle(color: Colors.black),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                              10,
+                              10,
+                              10,
+                              10,
+                            ),
+                            child: Text(
+                              (rv.description != null)
+                                  ? rv.description!
+                                  : 'description',
+                              style: const TextStyle(color: Colors.black),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
+                        Container(
                           width: double.infinity,
                           height: 150,
                           padding: const EdgeInsetsDirectional.fromSTEB(
@@ -302,13 +308,16 @@ class _BookingPageState extends State<BookingPage> {
                               padding: EdgeInsets.zero,
                               scrollDirection: Axis.horizontal,
                               children: [
-                                for (var comment in rv.comments)
-                                  CommentCard(comment!)
+                                if (rv.comments != null)
+                                  for (var comment in rv.comments!)
+                                    CommentCard(comment)
                               ],
                             ),
-                          )),
-                    ],
-                  )),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),

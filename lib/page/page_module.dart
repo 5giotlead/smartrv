@@ -18,26 +18,6 @@ class PageModule extends Module {
   @override
   List<Bind> get binds => [
         Bind.lazySingleton((i) => PageStore()),
-        Bind.lazySingleton((i) => RxNotifier<List<PageInfo>>([
-              PageInfo(
-                '首頁',
-                '/home',
-                <String>['首頁', 'RV管理', 'RV控制'],
-                const Icon(Icons.search),
-              ),
-              PageInfo(
-                'RV管理',
-                '/member/manage',
-                <String>['首頁', 'RV控制', '登出'],
-                const Icon(Icons.car_repair),
-              ),
-              PageInfo(
-                'RV控制',
-                '/member/control',
-                <String>['首頁', 'RV管理', '登出'],
-                const Icon(Icons.control_camera),
-              ),
-            ])),
       ];
 
   @override
@@ -116,10 +96,10 @@ class _EntryState extends State<EntryPage> {
   Widget build(BuildContext context) {
 // debugPaintSizeEnabled = true;
     return Scaffold(
-      bottomNavigationBar: const BottomNavBar(),
-      body: Row(
+      body: Column(
         children: const [
           Expanded(child: RouterOutlet()),
+          BottomNavBar(),
         ],
       ),
     );

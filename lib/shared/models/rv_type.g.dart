@@ -9,7 +9,7 @@ part of 'rv_type.dart';
 RVType _$RVTypeFromJson(Map<String, dynamic> json) => RVType(
       json['id'] as String,
       json['typeName'] as String?,
-      (json['filenames'] as List<dynamic>).map((e) => e as String?).toList(),
+      (json['filenames'] as List<dynamic>?)?.map((e) => e as String).toList(),
       (json['price'] as num?)?.toDouble(),
     );
 

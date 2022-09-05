@@ -139,27 +139,6 @@ class _HomeState extends State<HomePage> {
   }
 }
 
-// Route<dynamic> _createRoute() {
-//   return PageRouteBuilder(
-//     pageBuilder: (context, animation, secondaryAnimation) => const QRScan2(),
-//     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-//       const begin = Offset(0, 1);
-//       const end = Offset.zero;
-//       const curve = Curves.ease;
-//
-//       final tween =
-//           Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-//
-//       return SlideTransition(
-//         position: animation.drive(tween),
-//         child: child,
-//       );
-//     },
-//   );
-// }
-
-dynamic getData;
-
 class RvKindList extends StatefulWidget {
   const RvKindList({super.key});
 
@@ -189,45 +168,35 @@ class _RvKindListState extends State<RvKindList> {
                   '北部',
                   const Icon(Icons.temple_buddhist),
                   callBack: (text) async {
-                    getData = await text;
                     key.currentState?.changeState();
-                    // print(await text);
                   },
                 ),
                 RvKind(
                   '中部',
                   const Icon(Icons.hiking),
                   callBack: (text) async {
-                    getData = await text;
                     key.currentState?.changeState();
-                    // print(await text);
                   },
                 ),
                 RvKind(
                   '南部',
                   const Icon(Icons.sunny),
                   callBack: (text) async {
-                    getData = await text;
                     key.currentState?.changeState();
-                    // print(await text);
                   },
                 ),
                 RvKind(
                   '東部',
                   const Icon(Icons.bike_scooter),
                   callBack: (text) async {
-                    getData = await text;
                     key.currentState?.changeState();
-                    // print(await text);
                   },
                 ),
                 RvKind(
                   '離島',
                   const Icon(Icons.water),
                   callBack: (text) async {
-                    getData = await text;
                     key.currentState?.changeState();
-                    // print(await text);
                   },
                 ),
               ],

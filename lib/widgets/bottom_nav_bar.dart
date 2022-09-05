@@ -44,31 +44,31 @@ class _NavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: NavigationListener(
-        builder: (context, child) {
-          return BottomNavigationBar(
-            items: <BottomNavigationBarItem>[
-              for (int i = 0; i < _pageStore.pagesNotifier.value.length; i++)
-                BottomNavigationBarItem(
-                  icon: _pageStore.pagesNotifier.value[i].icon,
-                  label: _pageStore.pagesNotifier.value[i].name,
-                  // label: context.l10n.bottomNavBarTab1,
+    return NavigationListener(
+      builder: (context, child) {
+        return Row(
+          children: [
+            for (int i = 0; i < _pageStore.pagesNotifier.value.length; i++)
+              Expanded(
+                child: ListTile(
+                  title: Column(
+                    children: [
+                      _pageStore.pagesNotifier.value[i].icon,
+                      Text(_pageStore.pagesNotifier.value[i].name)
+                    ],
+                  ),
+                  onTap: () => {
+                    Modular.to
+                        .navigate(_pageStore.pagesNotifier.value[i].route),
+                    _pageStore.setList(_pageStore.pagesNotifier.value[i].pages),
+                  },
+                  selected: Modular.to.path
+                      .endsWith(_pageStore.pagesNotifier.value[i].route),
                 ),
-            ],
-            currentIndex: _pageStore.state, // now index
-            // fixedColor: Colors.amber, // selecter page
-            onTap: _onItemClick, // press event
-          );
-        },
-      ),
+              ),
+          ],
+        );
+      },
     );
-  }
-
-  Future<void> _onItemClick(int index) async {
-    Modular.to.navigate(_pageStore.pagesNotifier.value[index].route);
-    _pageStore
-      ..setList(_pageStore.pagesNotifier.value[index].pages)
-      ..updateState(index);
   }
 }
