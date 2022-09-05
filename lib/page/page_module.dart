@@ -51,10 +51,6 @@ class PageModule extends Module {
               child: (context, args) => const HomePage(),
             ),
             ChildRoute(
-              '/qrscan',
-              child: (context, args) => QRScan(),
-            ),
-            ChildRoute(
               '/toggle/:rvId',
               child: (context, args) => TogglePage(
                 rvId: args.params['rvId'],

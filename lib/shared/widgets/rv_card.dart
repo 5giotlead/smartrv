@@ -61,9 +61,9 @@ class RVCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'rv',
-                    style: TextStyle(
+                  Text(
+                    (rv.camp?.name != null) ? rv.camp!.name! : '營區',
+                    style: const TextStyle(
                       fontSize: 15,
                       color: Color.fromRGBO(33, 45, 82, 1),
                       fontWeight: FontWeight.w600,

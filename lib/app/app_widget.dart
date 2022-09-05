@@ -16,7 +16,7 @@ class AppWidget extends StatefulWidget {
 }
 
 class AppState extends State<AppWidget> {
-  late StreamSubscription _sub;
+  late StreamSubscription<dynamic> _sub;
 
   Future<void> initUniLinks() async {
     try {
