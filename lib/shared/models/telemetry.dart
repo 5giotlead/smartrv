@@ -4,7 +4,7 @@ class Telemetry {
   Telemetry();
 
   late String name;
-  late String data;
+  late double data;
   late DateTime updateTime;
   late Icon icon;
 }

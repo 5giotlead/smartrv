@@ -6,7 +6,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/page/member/control/control_store.dart';
 import 'package:flutter_rv_pms/shared/models/telemetry.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_triple/flutter_triple.dart';
 import 'package:intl/intl.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -28,12 +27,12 @@ class _ControlState extends State<ControlPage> {
 
   void initListener() {
     _controlStore.switchNotifier.addListener(reBuild);
-    _controlStore.powerNotifier.addListener(reBuild);
+    _controlStore.energyNotifier.addListener(reBuild);
   }
 
   void disposeListener() {
     _controlStore.switchNotifier.removeListener(reBuild);
-    _controlStore.powerNotifier.removeListener(reBuild);
+    _controlStore.energyNotifier.removeListener(reBuild);
   }
 
   void reBuild() {
@@ -146,7 +145,7 @@ class Canvas extends StatelessWidget {
                               0,
                             ),
                             child: Text(
-                              '${_controlStore.powerNotifier.value} W',
+                              '${_controlStore.energyNotifier.value} kWh',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -266,7 +265,7 @@ class TelemetryBlock extends StatefulWidget {
 
 class _TelemetryBlockState extends State<TelemetryBlock> {
   bool _switchConnected = false;
-  bool _powerConnected = false;
+  bool _energyConnected = false;
   final _storage = Modular.get<FlutterSecureStorage>();
   final _controlStore = Modular.get<ControlStore>();
 
@@ -274,38 +273,38 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   final baseWSURL = 'wss://rv.5giotlead.com:8081';
   final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm:ss a');
   late WebSocketChannel wsSwitch;
-  late WebSocketChannel wsPower;
+  late WebSocketChannel wsEnergy;
   List<Telemetry> telemetryData = <Telemetry>[
-    Telemetry()
-      ..name = 'pf'
-      ..updateTime = DateTime.now()
-      ..data = '0'
-      ..icon = const Icon(Icons.flash_on),
+    // Telemetry()
+    //   ..name = 'pf'
+    //   ..updateTime = DateTime.now()
+    //   ..data = 0
+    //   ..icon = const Icon(Icons.flash_on),
     Telemetry()
       ..name = 'voltage'
       ..updateTime = DateTime.now()
-      ..data = '0'
+      ..data = 0
       ..icon = const Icon(Icons.flash_auto),
-    Telemetry()
-      ..name = 'power'
-      ..updateTime = DateTime.now()
-      ..data = '0'
-      ..icon = const Icon(Icons.energy_savings_leaf),
-    Telemetry()
-      ..name = 'reactive_power'
-      ..updateTime = DateTime.now()
-      ..data = '0'
-      ..icon = const Icon(Icons.energy_savings_leaf),
+    // Telemetry()
+    //   ..name = 'power'
+    //   ..updateTime = DateTime.now()
+    //   ..data = 0
+    //   ..icon = const Icon(Icons.energy_savings_leaf),
+    // Telemetry()
+    //   ..name = 'reactive_power'
+    //   ..updateTime = DateTime.now()
+    //   ..data = 0
+    //   ..icon = const Icon(Icons.energy_savings_leaf),
     Telemetry()
       ..name = 'total'
       ..updateTime = DateTime.now()
-      ..data = '0'
+      ..data = 0
       ..icon = const Icon(Icons.energy_savings_leaf),
-    Telemetry()
-      ..name = 'total_returned'
-      ..updateTime = DateTime.now()
-      ..data = '0'
-      ..icon = const Icon(Icons.energy_savings_leaf),
+    // Telemetry()
+    //   ..name = 'total_returned'
+    //   ..updateTime = DateTime.now()
+    //   ..data = 0
+    //   ..icon = const Icon(Icons.energy_savings_leaf),
   ];
 
   @override
@@ -360,11 +359,11 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
           }
         ],
       };
-      if (!_powerConnected) {
-        wsPower = WebSocketChannel.connect(uri);
-        _powerConnected = true;
-        wsPower.sink.add(jsonEncode(object));
-        wsPower.stream.listen(_setPowerTelemetry);
+      if (!_energyConnected) {
+        wsEnergy = WebSocketChannel.connect(uri);
+        _energyConnected = true;
+        wsEnergy.sink.add(jsonEncode(object));
+        wsEnergy.stream.listen(_setEnergyTelemetry);
       }
     }
   }
@@ -384,29 +383,38 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
     }
   }
 
-  void _setPowerTelemetry(dynamic message) {
+  void _setEnergyTelemetry(dynamic message) {
     if (message is String) {
       setState(() {
         final data = jsonDecode(message)['data'] as Map;
         for (final element in data.entries) {
-          if (element.key == 'power') {
-            _controlStore.setPowerStatus(element.value[0][1] as String);
+          if (element.key == 'total') {
+            final energy = double.parse(element.value[0][1] as String) / 1000;
+            _controlStore.setEnergyStatus(energy.floorToDouble());
+            telemetryData
+                .where((telemetry) => telemetry.name == element.key)
+                .first
+              ..updateTime = DateTime.fromMillisecondsSinceEpoch(
+                element.value[0][0] as int,
+              )
+              ..data = energy.floorToDouble();
+          } else if (element.key == 'voltage') {
+            telemetryData
+                .where((telemetry) => telemetry.name == element.key)
+                .first
+              ..updateTime = DateTime.fromMillisecondsSinceEpoch(
+                element.value[0][0] as int,
+              )
+              ..data = double.parse(element.value[0][1] as String);
           }
-          telemetryData
-              .where((telemetry) => telemetry.name == element.key)
-              .first
-            ..updateTime = DateTime.fromMillisecondsSinceEpoch(
-              element.value[0][0] as int,
-            )
-            ..data = element.value[0][1] as String;
         }
       });
     }
   }
 
   void _closeWS() {
-    if (_powerConnected) {
-      wsPower.sink.close();
+    if (_energyConnected) {
+      wsEnergy.sink.close();
     }
     if (_switchConnected) {
       wsSwitch.sink.close();
@@ -432,25 +440,6 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
                     leading: telemetry.icon,
                     title: Text('${telemetry.name}: ${telemetry.data}'),
                     subtitle: Text(formatter.format(telemetry.updateTime)),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      TextButton(
-                        child: const Text('Chart'),
-                        onPressed: () {
-                          /* ... */
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      TextButton(
-                        child: const Text('Log'),
-                        onPressed: () {
-                          /* ... */
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                    ],
                   ),
                 ],
               ),

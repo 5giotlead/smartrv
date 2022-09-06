@@ -34,7 +34,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (Modular.args.data != null) {
       rv = Modular.args.data as RV;
     } else {
-      Modular.to.navigate('/home');
+      // Modular.to.navigate('/home');
     }
   }
 

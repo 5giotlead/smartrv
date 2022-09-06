@@ -6,13 +6,13 @@ final _pages = <PageInfo>[
   PageInfo(
     '首頁',
     '/home',
-    <String>['首頁', 'RV上架', 'RV管理'],
+    <String>['首頁', 'RV上架', 'RV管理', 'RV控制'],
     const Icon(Icons.search),
   ),
   PageInfo(
     'RV上架',
     '/member/rent',
-    <String>['首頁', 'RV管理', 'RV控制'],
+    <String>['首頁', 'RV上架', 'RV管理', 'RV控制'],
     const Icon(Icons.car_repair),
   ),
   PageInfo(
@@ -33,7 +33,7 @@ class PageStore extends NotifierStore<Exception, int> {
   PageStore() : super(0);
 
   final pagesNotifier =
-      RxNotifier<List<PageInfo>>([_pages[0], _pages[1], _pages[2]]);
+      RxNotifier<List<PageInfo>>([_pages[0], _pages[1], _pages[2], _pages[3]]);
 
   void updateState(int index) {
     update(index);

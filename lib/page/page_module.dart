@@ -5,13 +5,10 @@ import 'package:flutter_rv_pms/auth/auth_guard.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/booking/booking_page.dart';
 import 'package:flutter_rv_pms/page/home/home_page.dart';
-import 'package:flutter_rv_pms/page/home/widgets/qr_scan.dart';
 import 'package:flutter_rv_pms/page/member/member_module.dart';
 import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/page/toggle/toggle_page.dart';
-import 'package:flutter_rv_pms/shared/models/page_info.dart';
 import 'package:flutter_rv_pms/widgets/bottom_nav_bar.dart';
-import 'package:flutter_triple/flutter_triple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageModule extends Module {
@@ -37,8 +34,10 @@ class PageModule extends Module {
               ),
             ),
             ChildRoute(
-              '/booking',
-              child: (context, args) => BookingPage(rv: args.data),
+              '/booking/:rvId',
+              child: (context, args) => BookingPage(
+                rvId: args.params['rvId'],
+              ),
             ),
             ModuleRoute(
               '/member',
@@ -86,8 +85,8 @@ class _EntryState extends State<EntryPage> {
         }
       }
     } else {
-      if (kIsWeb && _authStore.pastPage != '') {
-        Modular.to.navigate(_authStore.pastPage);
+      if (kIsWeb && _authStore.forwardPage != '') {
+        Modular.to.navigate(_authStore.forwardPage);
       }
     }
   }

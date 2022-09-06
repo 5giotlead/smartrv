@@ -5,7 +5,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/auth/login/cubit/login_cubit.dart';
-import 'package:flutter_rv_pms/l10n/l10n.dart';
+
+// import 'package:flutter_rv_pms/l10n/l10n.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -19,72 +20,88 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => LogoutCubit(),
-      child: const LoginView(),
+      child: LoginView(),
     );
   }
 }
 
 class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+  LoginView({super.key});
+
+  final _authStore = Modular.get<AuthStore>();
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    // final l10n = context.l10n;
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text(l10n.loginAppBarTitle),
-        //   elevation: 0,
-        //   backgroundColor: Colors.transparent,
-        // ),
-        backgroundColor: const Color.fromARGB(255, 219, 217, 217),
-        // bottomNavigationBar: BottomNavBar(),
-        body: Center(child: SingleChildScrollView(child: Builder(
-          builder: (BuildContext context) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
+      backgroundColor: const Color.fromARGB(255, 219, 217, 217),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Builder(
+            builder: (BuildContext context) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Wrap(runAlignment: WrapAlignment.center, children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 30),
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(255, 255, 255, 0.5),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        width: double.infinity,
-                        child: Column(
-                          children: const [
-                            Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 22,
-                                color: Color.fromRGBO(33, 45, 82, 1),
-                                fontWeight: FontWeight.w600,
+                    Wrap(
+                      runAlignment: WrapAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 30,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(255, 255, 255, 0.5),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          width: double.infinity,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_back_rounded),
+                                    onPressed: () {
+                                      if (_authStore.pastPage != '') {
+                                        Modular.to
+                                            .navigate(_authStore.pastPage);
+                                      } else {
+                                        Modular.to.navigate('/home');
+                                      }
+                                      _authStore
+                                        ..pastPage = '/home'
+                                        ..forwardPage = '';
+                                    },
+                                  ),
+                                  const Text(
+                                    'Login',
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      color: Color.fromRGBO(33, 45, 82, 1),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            LoginForm(),
-                          ],
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              const LoginForm(),
+                            ],
+                          ),
                         ),
-                      ),
-                    ])
-                  ]),
-            );
-          },
-        )
-            // const Center(
-            //   child: SizedBox(
-            //     width: 500,
-            //     child: Card(
-            //       child: LoginForm(),
-            //     ),
-            //   ),
-            // ),
-            )));
+                      ],
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -160,7 +177,7 @@ class LoginFormState extends State<LoginForm> {
         _url = Uri.parse('https://rv.5giotlead.com' + oAuth2Clients[0].url);
       }
       if (!await launchUrl(_url, webOnlyWindowName: '_self')) {
-        throw 'Could not launch $_url';
+        throw Exception('Could not launch $_url');
       }
     }
   }
@@ -195,78 +212,64 @@ class LoginFormState extends State<LoginForm> {
               ),
               const SizedBox(height: 15),
               ValueListenableBuilder(
-                  valueListenable: _showPasswordNotifier,
-                  builder: (BuildContext context, bool showPassword, child) {
-                    return FormBuilderTextField(
-                      name: 'password',
-                      obscureText: !showPassword,
-                      decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                            icon: Icon(showPassword
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            onPressed: () {
-                              _showPasswordNotifier.value =
-                                  !_showPasswordNotifier.value;
-                            },
-                          ),
-                          border: OutlineInputBorder(),
-                          labelText: '請輸入密碼'),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: 'Password is required.'),
-                        FormBuilderValidators.minLength(6, errorText: '少於 6 碼.')
-                      ]),
-                      keyboardType: TextInputType.visiblePassword,
-                    );
-                  }),
+                valueListenable: _showPasswordNotifier,
+                builder: (BuildContext context, bool showPassword, child) {
+                  return FormBuilderTextField(
+                    name: 'password',
+                    obscureText: !showPassword,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          showPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        onPressed: () {
+                          _showPasswordNotifier.value =
+                              !_showPasswordNotifier.value;
+                        },
+                      ),
+                      border: const OutlineInputBorder(),
+                      labelText: '請輸入密碼',
+                    ),
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                        errorText: 'Password is required.',
+                      ),
+                      FormBuilderValidators.minLength(6, errorText: '少於 6 碼.')
+                    ]),
+                    keyboardType: TextInputType.visiblePassword,
+                  );
+                },
+              ),
               const SizedBox(height: 30),
               Container(
-                margin: const EdgeInsets.all(0),
+                margin: EdgeInsets.zero,
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                        child:
-                            // MaterialButton(
-                            //   color: Theme.of(context).colorScheme.secondary,
-                            //   onPressed: _login,
-                            //   child: const Text(
-                            //     "登入",
-                            //     style: TextStyle(color: Colors.white),
-                            //   ),
-                            // ),
-                            PrimaryButton(
-                      '登入',
-                      _login,
-                    )),
+                      child: PrimaryButton(
+                        '登入',
+                        _login,
+                      ),
+                    ),
                     const SizedBox(width: 30),
                     Expanded(
-                        child:
-                            // MaterialButton(
-                            //   color: Theme.of(context).colorScheme.secondary,
-                            //   child: const Text(
-                            //     "重設",
-                            //     style: TextStyle(color: Colors.white),
-                            //   ),
-                            //   onPressed: () {
-                            //     _formKey.currentState!.reset();
-                            //   },
-                            // ),
-                            PrimaryButton(
-                      '重設',
-                      () {
-                        _formKey.currentState!.reset();
-                      },
-                    )),
+                      child: PrimaryButton(
+                        '重設',
+                        () {
+                          _formKey.currentState!.reset();
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Container(
+              const SizedBox(
                 height: 30,
                 width: 500,
-                // color: Color.fromARGB(255, 28, 142, 70),
               ),
-              Container(
+              SizedBox(
                 height: 50,
                 child: GestureDetector(
                   onTap: _loginByOAuth,
@@ -278,10 +281,6 @@ class LoginFormState extends State<LoginForm> {
                     ),
                     child: Row(
                       children: const [
-                        // SvgPicture.asset(
-                        //   "assets/svg/google.svg",
-                        //   width: 30.0,
-                        // ),
                         Icon(Icons.login),
                         SizedBox(
                           width: 15,
@@ -297,69 +296,6 @@ class LoginFormState extends State<LoginForm> {
                   ),
                 ),
               ),
-              // Container(
-              //   height: 50,
-              //   child: GestureDetector(
-              //     onTap: () {},
-              //     child: Container(
-              //       padding: EdgeInsets.symmetric(horizontal: 14.0),
-              //       height: 50,
-              //       decoration: BoxDecoration(
-              //         color: Colors.white,
-              //       ),
-              //       child: Row(
-              //         children: [
-              //           SvgPicture.asset(
-              //             "assets/svg/google.svg",
-              //             width: 30.0,
-              //           ),
-              //           SizedBox(
-              //             width: 10.0,
-              //           ),
-              //           Text(
-              //             "Google",
-              //             style: TextStyle(
-              //               color: Color.fromRGBO(105, 108, 121, 1),
-              //             ),
-              //           )
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(
-              //   width: 10.0,
-              // ),
-              // Container(
-              //   height: 50,
-              //   child: GestureDetector(
-              //     onTap: () {},
-              //     child: Container(
-              //       padding: EdgeInsets.symmetric(horizontal: 14.0),
-              //       height: 50,
-              //       decoration: BoxDecoration(
-              //         color: Colors.white,
-              //       ),
-              //       child: Row(
-              //         children: [
-              //           SvgPicture.asset(
-              //             "assets/svg/facebook.svg",
-              //             width: 30.0,
-              //           ),
-              //           SizedBox(
-              //             width: 10.0,
-              //           ),
-              //           Text(
-              //             "Facebook",
-              //             style: TextStyle(
-              //               color: Color.fromRGBO(105, 108, 121, 1),
-              //             ),
-              //           )
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -413,7 +349,7 @@ class _AnimatedProgressIndicatorState extends State<AnimatedProgressIndicator>
   }
 
   @override
-  void didUpdateWidget(oldWidget) {
+  void didUpdateWidget(AnimatedProgressIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
     _controller.animateTo(widget.value);
   }

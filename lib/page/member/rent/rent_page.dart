@@ -4,6 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/shared/models/camp.dart';
+import 'package:flutter_rv_pms/shared/models/comment.dart';
+import 'package:flutter_rv_pms/shared/models/ord.dart';
+import 'package:flutter_rv_pms/shared/models/rv_type.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
 
@@ -19,9 +22,11 @@ class _RentPageState extends State<RentPage> {
   final assetId = Modular.args.queryParams['assetId'];
   final _tbClient = Modular.get<ThingsboardClient>();
   final _dio = Modular.get<Dio>();
-  late List<Camp> campList = [];
-  late Camp camp = Camp('', '', '', '', '');
   final _formKey = GlobalKey<FormState>();
+  List<Camp> campList = [];
+  Camp camp = Camp('', '', '', '', '');
+  List<RVType> rvTypeList = [];
+  RVType rvType = RVType('', '', [], 0);
   late TextEditingController rvController;
   late TextEditingController campController;
   late TextEditingController desController;
@@ -42,9 +47,10 @@ class _RentPageState extends State<RentPage> {
         'name': rvController.text,
         'description': desController.text,
         'assetId': assetId ?? '',
-        // 'filenames': [photoController.text],
-        'type': {'id': typeId ?? '7c2ad09f-0242-4fee-a006-0cd720ec9e2b'},
+        'type': {'id': rvType.id},
         'camp': {'id': camp.id},
+        'comments': List<Comment>,
+        'ords': List<Ord>,
       });
       try {
         await _dio.post<String>('/smartrv/rv', data: data);
@@ -58,17 +64,33 @@ class _RentPageState extends State<RentPage> {
 
   Future<void> getCampList() async {
     final res = await _dio.get<List<dynamic>>('/smartrv/camp');
-    for (var i = 0; i < res.data!.length; i++) {
-      campList.add(Camp.fromJson(res.data![i] as Map<String, dynamic>));
-      camp = campList.first;
-    }
-    setState(() {});
+    setState(() {
+      for (var i = 0; i < res.data!.length; i++) {
+        campList.add(Camp.fromJson(res.data![i] as Map<String, dynamic>));
+        camp = campList.first;
+      }
+    });
+  }
+
+  Future<void> getRVTypeList() async {
+    final res = await _dio.get<List<dynamic>>('/smartrv/type');
+    setState(() {
+      for (var i = 0; i < res.data!.length; i++) {
+        rvTypeList.add(RVType.fromJson(res.data![i] as Map<String, dynamic>));
+      }
+      if (typeId != null) {
+        rvType = rvTypeList.firstWhere((element) => element.id == typeId);
+      } else {
+        rvType = rvTypeList.first;
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
     getCampList();
+    getRVTypeList();
     initControllers();
   }
 
@@ -115,6 +137,77 @@ class _RentPageState extends State<RentPage> {
               child: Column(
                 children: <Widget>[
                   Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(247, 247, 249, 1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.only(left: 24, right: 32),
+                    child: DropdownButton<RVType>(
+                      isExpanded: true,
+                      value: rvType,
+                      icon: const Icon(Icons.arrow_downward),
+                      // elevation: 16,
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      onChanged: (typeId != null)
+                          ? null
+                          : (RVType? newValue) {
+                              setState(() {
+                                rvType = newValue!;
+                              });
+                            },
+                      items: rvTypeList
+                          .map<DropdownMenuItem<RVType>>((RVType rvType) {
+                        return DropdownMenuItem<RVType>(
+                          value: rvType,
+                          child: Text(
+                            rvType.typeName!,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(247, 247, 249, 1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.only(left: 24, right: 32),
+                    child: DropdownButton<Camp>(
+                      isExpanded: true,
+                      value: camp,
+                      icon: const Icon(Icons.arrow_downward),
+                      // elevation: 16,
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      onChanged: (Camp? newValue) {
+                        setState(() {
+                          camp = newValue!;
+                        });
+                      },
+                      items: campList.map<DropdownMenuItem<Camp>>((Camp camp) {
+                        return DropdownMenuItem<Camp>(
+                          value: camp,
+                          child: Text(
+                            camp.name!,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsets.symmetric(vertical: 5),
                     height: 50,
@@ -150,40 +243,6 @@ class _RentPageState extends State<RentPage> {
                         }
                         return null;
                       },
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(247, 247, 249, 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.only(left: 24, right: 32),
-                    child: DropdownButton<Camp>(
-                      isExpanded: true,
-                      value: camp,
-                      icon: const Icon(Icons.arrow_downward),
-                      // elevation: 16,
-                      style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 1,
-                        color: Colors.black,
-                      ),
-                      onChanged: (Camp? newValue) {
-                        setState(() {
-                          camp = newValue!;
-                        });
-                      },
-                      items: campList.map<DropdownMenuItem<Camp>>((Camp camp) {
-                        return DropdownMenuItem<Camp>(
-                          value: camp,
-                          child: Text(
-                            camp.name!,
-                          ),
-                        );
-                      }).toList(),
                     ),
                   ),
                   Container(
@@ -234,49 +293,10 @@ class _RentPageState extends State<RentPage> {
                     ),
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextFormField(
-                      controller: rvTypeController,
-                      enabled: typeId?.isEmpty,
-                      decoration: const InputDecoration(
-                        hintText: '營車類型',
-                        hintStyle: TextStyle(
-                          fontSize: 16,
-                          color: Color.fromRGBO(124, 124, 124, 1),
-                          fontWeight: FontWeight.w600,
-                        ),
-                        suffixIcon: Icon(
-                          Icons.note,
-                          color: Color.fromRGBO(105, 108, 121, 1),
-                        ),
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '請輸入字元...';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(247, 247, 249, 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: TextFormField(
                       controller: assetController,
                       enabled: assetId?.isEmpty,
                       decoration: const InputDecoration(
-                        hintText: '營車設備ID',
+                        hintText: '營車產品序號',
                         hintStyle: TextStyle(
                           fontSize: 16,
                           color: Color.fromRGBO(124, 124, 124, 1),

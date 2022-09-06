@@ -18,11 +18,13 @@ RV _$RVFromJson(Map<String, dynamic> json) => RV(
       json['type'] == null
           ? null
           : RVType.fromJson(json['type'] as Map<String, dynamic>),
-      (json['comments'] as List<dynamic>?)
-          ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
+      (json['comments'] as List<dynamic>)
+          .map((e) =>
+              e == null ? null : Comment.fromJson(e as Map<String, dynamic>))
           .toList(),
-      (json['ords'] as List<dynamic>?)
-          ?.map((e) => Ord.fromJson(e as Map<String, dynamic>))
+      (json['ords'] as List<dynamic>)
+          .map(
+              (e) => e == null ? null : Ord.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

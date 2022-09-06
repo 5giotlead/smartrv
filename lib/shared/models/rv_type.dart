@@ -15,6 +15,6 @@ class RVType {
 
   String id;
   String? typeName;
-  List<String>? filenames;
+  List<String?> filenames;
   double? price;
 }

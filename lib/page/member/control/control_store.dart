@@ -7,7 +7,7 @@ class ControlStore extends NotifierStore<Exception, bool> {
 
   final switchNotifier = RxNotifier<bool>(false);
 
-  final powerNotifier = RxNotifier<String>('0');
+  final energyNotifier = RxNotifier<double>(0);
 
   void setSwitchStatus(dynamic status) {
     if (status is String) {
@@ -17,7 +17,7 @@ class ControlStore extends NotifierStore<Exception, bool> {
     }
   }
 
-  void setPowerStatus(String status) {
-    powerNotifier.value = status;
+  void setEnergyStatus(double status) {
+    energyNotifier.value = status;
   }
 }

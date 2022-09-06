@@ -23,7 +23,7 @@ class RVCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Modular.to.navigate('/booking', arguments: rv);
+        Modular.to.navigate('/booking/${rv.id}');
       },
       child: Container(
         height: 300,

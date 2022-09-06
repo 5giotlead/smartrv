@@ -4,7 +4,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
 import 'package:flutter_rv_pms/page/home/widgets/home_search.dart';
-import 'package:flutter_rv_pms/page/home/widgets/qr_scan.dart';
 import 'package:flutter_rv_pms/shared/models/rv.dart';
 import 'package:flutter_rv_pms/shared/widgets/rv_card.dart';
 import 'package:flutter_rv_pms/widgets/rv_kind.dart';
@@ -81,24 +80,6 @@ class _HomeState extends State<HomePage> {
                     );
             },
           ),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              if (_authStore.state) {
-                return IconButton(
-                  icon: const Icon(Icons.search),
-                  tooltip: 'Control',
-                  onPressed: () {
-                    Modular.to.navigate('/member/control');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Search')),
-                    );
-                  },
-                );
-              } else {
-                return Container();
-              }
-            },
-          ),
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
             tooltip: 'QR Code Scanner',
@@ -109,8 +90,8 @@ class _HomeState extends State<HomePage> {
           LayoutBuilder(
             builder: (context, constraints) {
               return (_authStore.state)
-                  ? Avatar('assets/images/lady.png')
-                  : Avatar('assets/images/dp.png');
+                  ? Avatar('assets/images/dp.png')
+                  : Avatar('assets/images/account_circle.png');
             },
           ),
         ],

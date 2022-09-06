@@ -31,6 +31,6 @@ class RV {
   String? assetId;
   Camp? camp;
   RVType? type;
-  List<Comment>? comments;
-  List<Ord>? ords;
+  List<Comment?> comments;
+  List<Ord?> ords;
 }

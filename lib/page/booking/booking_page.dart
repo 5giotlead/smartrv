@@ -1,6 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_rv_pms/shared/models/rv.dart';
 import 'package:flutter_rv_pms/widgets/comment.dart';
 import 'package:flutter_rv_pms/widgets/datepicker_range.dart';
@@ -10,21 +10,30 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 String baseImageUrl = 'https://rv.5giotlead.com/static/rv/';
 
 class BookingPage extends StatefulWidget {
-  const BookingPage({super.key, required rv});
+  const BookingPage({super.key, required rvId});
 
   @override
   State<BookingPage> createState() => _BookingPageState();
 }
 
 class _BookingPageState extends State<BookingPage> {
+  final _dio = Modular.get<Dio>();
+
   PageController? pageViewController;
   late RV rv = RV('', '', '', 0, '', null, null, [], []);
+
+  Future<void> getRV(String rvId) async {
+    final res = await _dio.get<dynamic>('/smartrv/rv/$rvId');
+    rv = RV.fromJson(res.data! as Map<String, dynamic>);
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
-    if (Modular.args.data != null) {
-      rv = Modular.args.data as RV;
+    final rvId = Modular.args.params['rvId'] as String;
+    if (rvId != '') {
+      getRV(rvId);
     } else {
       Modular.to.navigate('/home');
     }
@@ -55,8 +64,8 @@ class _BookingPageState extends State<BookingPage> {
                           children: [
                             Image.network(
                               (rv.type?.filenames != null &&
-                                      rv.type!.filenames != null)
-                                  ? '$baseImageUrl${rv.type?.filenames![0]}.jpg'
+                                      rv.type!.filenames.isNotEmpty)
+                                  ? '$baseImageUrl${rv.type?.filenames[0]}.jpg'
                                   : '${baseImageUrl}1ca79d6e-340a-47b7-a426-4e7c367b6d3f.jpg',
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height * 1,
@@ -64,8 +73,8 @@ class _BookingPageState extends State<BookingPage> {
                             ),
                             Image.network(
                               (rv.type?.filenames != null &&
-                                      rv.type!.filenames != null)
-                                  ? '$baseImageUrl${rv.type?.filenames![1]}.jpg'
+                                      rv.type!.filenames.isNotEmpty)
+                                  ? '$baseImageUrl${rv.type?.filenames[1]}.jpg'
                                   : '${baseImageUrl}0dfb1be0-a9b3-44b3-b3ce-65b1db46ba64.jpg',
                               width: 100,
                               height: 100,
@@ -73,8 +82,8 @@ class _BookingPageState extends State<BookingPage> {
                             ),
                             Image.network(
                               (rv.type?.filenames != null &&
-                                      rv.type!.filenames != null)
-                                  ? '$baseImageUrl${rv.type?.filenames![2]}.jpg'
+                                      rv.type!.filenames.isNotEmpty)
+                                  ? '$baseImageUrl${rv.type?.filenames[2]}.jpg'
                                   : '${baseImageUrl}dc331115-0174-40de-8648-5c5049574f32.jpg',
                               width: 100,
                               height: 100,
@@ -162,8 +171,9 @@ class _BookingPageState extends State<BookingPage> {
                       child: Row(
                         children: [
                           Text(
-                            (rv.comments != null)
-                                ? rv.comments![0].rate.toString()
+                            (rv.comments.isNotEmpty &&
+                                    rv.comments[0]?.rate != null)
+                                ? rv.comments[0]!.rate.toString()
                                 : '尚無評價',
                             style: const TextStyle(color: Colors.black),
                           ),
@@ -308,9 +318,9 @@ class _BookingPageState extends State<BookingPage> {
                               padding: EdgeInsets.zero,
                               scrollDirection: Axis.horizontal,
                               children: [
-                                if (rv.comments != null)
-                                  for (var comment in rv.comments!)
-                                    CommentCard(comment)
+                                if (rv.comments.isNotEmpty)
+                                  for (var comment in rv.comments)
+                                    CommentCard(comment!)
                               ],
                             ),
                           ),
