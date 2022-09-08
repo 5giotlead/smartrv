@@ -5,6 +5,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/auth/login/cubit/login_cubit.dart';
+import 'package:flutter_rv_pms/l10n/l10n.dart';
 import 'package:flutter_rv_pms/page/page_store.dart';
 
 // import 'package:flutter_rv_pms/l10n/l10n.dart';
@@ -33,7 +34,7 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final l10n = context.l10n;
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 219, 217, 217),
       body: Center(
@@ -76,9 +77,9 @@ class LoginView extends StatelessWidget {
                                         ..forwardPage = '';
                                     },
                                   ),
-                                  const Text(
-                                    'Login',
-                                    style: TextStyle(
+                                  Text(
+                                    l10n.loginAppBarTitle,
+                                    style: const TextStyle(
                                       fontSize: 22,
                                       color: Color.fromRGBO(33, 45, 82, 1),
                                       fontWeight: FontWeight.w600,
@@ -201,14 +202,14 @@ class LoginFormState extends State<LoginForm> {
               FormBuilderTextField(
                 name: 'username',
                 decoration: const InputDecoration(
-                  labelText: '請輸入帳號',
+                  labelText: '請輸入帳號 ( 信箱 )',
                 ),
                 validator: FormBuilderValidators.compose([
                   FormBuilderValidators.required(
-                    errorText: 'Email is required.',
+                    errorText: '帳號為必填欄位！',
                   ),
                   FormBuilderValidators.email(
-                    errorText: 'Invalid email format.',
+                    errorText: '請確認帳號格式是否正確！',
                   )
                 ]),
                 keyboardType: TextInputType.emailAddress,
@@ -237,7 +238,7 @@ class LoginFormState extends State<LoginForm> {
                     ),
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.required(
-                        errorText: 'Password is required.',
+                        errorText: '密碼為必填欄位！',
                       ),
                       FormBuilderValidators.minLength(6, errorText: '少於 6 碼.')
                     ]),

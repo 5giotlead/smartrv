@@ -83,13 +83,13 @@ class PageStore extends NotifierStore<Exception, int> {
           _pages.firstWhere((element) => element.name == 'RV管理'),
           _pages.firstWhere((element) => element.name == 'RV控制'),
         ];
-      } else {
-        pagesNotifier.value = [
-          _pages.firstWhere((element) => element.name == '首頁'),
-          _pages.firstWhere((element) => element.name == 'QR掃描'),
-          _pages.firstWhere((element) => element.name == '登入')
-        ];
       }
+    } else {
+      pagesNotifier.value = [
+        _pages.firstWhere((element) => element.name == '首頁'),
+        _pages.firstWhere((element) => element.name == 'QR掃描'),
+        _pages.firstWhere((element) => element.name == '登入')
+      ];
     }
   }
 }

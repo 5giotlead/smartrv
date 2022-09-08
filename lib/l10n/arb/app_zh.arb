@@ -4,6 +4,15 @@
     "@loginAppBarTitle": {
      "description": "Text shown in the AppBar of the Login Page"
     },
+    "logoutAppBarTitle": "登出",
+    "@logoutAppBarTitle": {
+    "description": "Text shown in the AppBar of the Logout Page"
+    },
+    "loggingOutText": "登出中...",
+    "bottomNavBarTab1": "Search",
+    "@bottomNavBarTab1": {
+         "description": "Text shown in the first of BottomNavBar."
+    },
     "bottomNavBarTab1": "搜尋",
     "@bottomNavBarTab1": {
         "description": "Text shown in the first of BottomNavBar."

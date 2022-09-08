@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/auth/login/cubit/login_cubit.dart';
 import 'package:flutter_rv_pms/l10n/l10n.dart';
+import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
 
@@ -13,13 +14,20 @@ class LogoutPage extends StatelessWidget {
   final _tbClient = Modular.get<ThingsboardClient>();
   final _storage = Modular.get<FlutterSecureStorage>();
   final _authStore = Modular.get<AuthStore>();
+  final _pageStore = Modular.get<PageStore>();
 
   Future<void> _logout() async {
-    await _tbClient.logout();
-    // await _storage.deleteAll();
-    await _storage.delete(key: 'token');
-    await _storage.delete(key: 'refreshToken');
-    Modular.to.navigate('/home');
+    try {
+      await _tbClient.logout();
+      // await _storage.deleteAll();
+      await _storage.delete(key: 'token');
+      await _storage.delete(key: 'refreshToken');
+      _pageStore.setListByAccess(await _authStore.getCurrentUser());
+    } catch (e) {
+      print(e);
+    } finally {
+      Modular.to.navigate('/home');
+    }
   }
 
   @override
