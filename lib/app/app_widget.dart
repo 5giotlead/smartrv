@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/l10n/l10n.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:uni_links/uni_links.dart';
 
 class AppWidget extends StatefulWidget {
@@ -71,6 +72,7 @@ class AppState extends State<AppWidget> {
         AppLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
+        FormBuilderLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
     ); //added by extension

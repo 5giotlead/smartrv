@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rv_pms/widgets/bottom_nav_bar.dart';
+import 'package:flutter_rv_pms/page/widgets/bottom_nav_bar.dart';
 import 'package:flutter/rendering.dart';
 
 class NotFoundPage extends StatelessWidget {

@@ -6,6 +6,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/shared/models/camp.dart';
 import 'package:flutter_rv_pms/shared/models/comment.dart';
 import 'package:flutter_rv_pms/shared/models/ord.dart';
+import 'package:flutter_rv_pms/shared/models/rv.dart';
 import 'package:flutter_rv_pms/shared/models/rv_type.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
@@ -49,8 +50,8 @@ class _RentPageState extends State<RentPage> {
         'assetId': assetId ?? '',
         'type': {'id': rvType.id},
         'camp': {'id': camp.id},
-        'comments': List<Comment>,
-        'ords': List<Ord>,
+        'comments': <Comment>[],
+        'ords': <Ord>[],
       });
       try {
         await _dio.post<String>('/smartrv/rv', data: data);

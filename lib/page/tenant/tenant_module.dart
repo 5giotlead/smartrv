@@ -6,25 +6,22 @@ import 'package:flutter_rv_pms/page/member/control/control_store.dart';
 import 'package:flutter_rv_pms/page/member/manage/manage_page.dart';
 import 'package:flutter_rv_pms/page/member/order/order_page.dart';
 import 'package:flutter_rv_pms/page/member/rent/rent_page.dart';
+import 'package:flutter_rv_pms/page/tenant/manage/camp_page.dart';
+import 'package:flutter_rv_pms/page/tenant/manage/type_page.dart';
 
-class MemberModule extends Module {
+class TenantModule extends Module {
   @override
-  List<Bind> get binds => [
-        Bind.lazySingleton((i) => ControlStore()),
-      ];
+  List<Bind> get binds => [];
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/rent', child: (context, args) => const RentPage()),
-        ChildRoute('/control', child: (context, args) => const ControlPage()),
-        ChildRoute('/shopping', child: (context, args) => const OrderPage()),
         ChildRoute(
-          '/checkout',
-          child: (context, args) => CheckoutPage(rv: args.data),
+          '/manage-camp',
+          child: (context, args) => const ManageCampPage(),
         ),
         ChildRoute(
-          '/manage',
-          child: (context, args) => const ManagePage(),
+          '/manage-type',
+          child: (context, args) => const ManageTypePage(),
         ),
       ];
 }

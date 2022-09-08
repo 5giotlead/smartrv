@@ -17,16 +17,20 @@ class AuthStore extends NotifierStore<Exception, bool> {
 
   Future<void> checkAccess() async {
     if (state) {
-      // print(
-      //   await _dio.get('/smartrv/access/${_tbClient.getAuthUser()?.userId}'),
-      // );
+      // await _dio.get('/smartrv/access/${_tbClient.getAuthUser()?.userId}');
     }
   }
 
-  Future<void> setOauthAccess(String token, String refreshToken) async {
+  Future<AuthUser?> getCurrentUser() async {
+    await checkAuth();
+    return _tbClient.getAuthUser();
+  }
+
+  Future<void> setOAuthAccess(String token, String refreshToken) async {
     await _tbClient.setUserFromJwtToken(token, refreshToken, true);
     await _storage.write(key: 'token', value: token);
     await _storage.write(key: 'refreshToken', value: refreshToken);
+    await getCurrentUser();
   }
 
   Future<bool> checkAuth() async {

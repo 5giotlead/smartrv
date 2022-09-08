@@ -82,9 +82,9 @@ class _HomeState extends State<HomePage> {
           ),
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
-            tooltip: 'QR Code Scanner',
+            tooltip: 'QR Code掃描',
             onPressed: () {
-              Modular.to.pushNamed('/qrscan');
+              Modular.to.pushNamed('/qr-scan');
             },
           ),
           LayoutBuilder(

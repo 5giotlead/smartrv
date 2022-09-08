@@ -5,6 +5,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/auth/login/cubit/login_cubit.dart';
+import 'package:flutter_rv_pms/page/page_store.dart';
 
 // import 'package:flutter_rv_pms/l10n/l10n.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
@@ -139,6 +140,8 @@ class LoginFormState extends State<LoginForm> {
 
   Future<void> _login() async {
     final _authStore = Modular.get<AuthStore>();
+    final _pageStore = Modular.get<PageStore>();
+
     FocusScope.of(context).unfocus();
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       final loginRequest = _formKey.currentState!.value;
@@ -152,6 +155,7 @@ class LoginFormState extends State<LoginForm> {
           key: 'refreshToken',
           value: loginResponse.refreshToken,
         );
+        _pageStore.setListByAccess(await _authStore.getCurrentUser());
         if (_authStore.pastPage != '') {
           Modular.to.navigate(_authStore.pastPage);
           _authStore.pastPage = '';
@@ -184,7 +188,6 @@ class LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
     return Column(
       children: <Widget>[
         FormBuilder(

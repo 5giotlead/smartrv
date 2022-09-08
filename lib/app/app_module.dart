@@ -5,6 +5,7 @@ import 'package:flutter_rv_pms/auth/auth_store.dart';
 import 'package:flutter_rv_pms/error/notfound_page.dart';
 import 'package:flutter_rv_pms/page/home/widgets/qr_scan.dart';
 import 'package:flutter_rv_pms/page/page_module.dart';
+import 'package:flutter_rv_pms/page/page_store.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
 
@@ -17,6 +18,7 @@ class AppModule extends Module {
   @override
   List<Bind> get binds => [
         Bind.lazySingleton((i) => AuthStore()),
+        Bind.lazySingleton((i) => PageStore()),
         Bind.lazySingleton(
           (i) => ThingsboardClient(baseURL),
         ),
@@ -35,7 +37,7 @@ class AppModule extends Module {
           module: AuthModule(),
         ),
         ChildRoute(
-          '/qrscan',
+          '/qr-scan',
           child: (context, args) => QRScan(),
         ),
         WildcardRoute(child: (context, args) => NotFoundPage()),
