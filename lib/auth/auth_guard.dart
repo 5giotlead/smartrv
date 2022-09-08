@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
+import 'package:thingsboard_client/thingsboard_client.dart';
 
 class AuthGuard extends RouteGuard {
   AuthGuard() : super(redirectTo: '/auth/login');
@@ -16,6 +17,18 @@ class AuthGuard extends RouteGuard {
       }
       _authStore.forwardPage = path;
     }
-    return Modular.get<AuthStore>().checkAuth();
+    return _authStore.checkAuth();
+  }
+}
+
+class AccessGuard extends RouteGuard {
+  AccessGuard() : super(redirectTo: '/home');
+
+  final _tbClient = Modular.get<ThingsboardClient>();
+
+  @override
+  Future<bool> canActivate(String path, ModularRoute route) {
+    final user = _tbClient.getAuthUser();
+    return Future.value(user?.authority == Authority.TENANT_ADMIN);
   }
 }

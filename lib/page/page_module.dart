@@ -46,7 +46,7 @@ class PageModule extends Module {
             ModuleRoute(
               '/tenant',
               module: TenantModule(),
-              guards: [AuthGuard()],
+              guards: [AccessGuard()],
             ),
           ],
         ),

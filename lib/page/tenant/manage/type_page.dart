@@ -23,7 +23,7 @@ class _ManageTypeState extends State<ManageTypePage> {
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       final data = _formKey.currentState!.value;
       try {
-        await _dio.post('/smartrv/type', data: data);
+        await _dio.post<dynamic>('/smartrv/type', data: data);
         Modular.to.navigate('/home');
       } catch (e) {
         print(e);
