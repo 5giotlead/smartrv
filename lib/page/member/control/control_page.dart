@@ -40,8 +40,8 @@ class _ControlState extends State<ControlPage> {
   }
 
   Future<void> getStatus() async {
-    // const deviceId = '623188e0-1176-11ed-b3ac-871000fc4069';
-    const deviceId = '7f07f5a0-1174-11ed-b3ac-871000fc4069';
+    // const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
+    const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
     final data = jsonEncode({
       'method': 'Switch.GetStatus',
       'params': {'id': 0}
@@ -80,6 +80,8 @@ class _ControlState extends State<ControlPage> {
               children: [
                 Image.network(
                   'https://rv.5giotlead.com/static/rv/0ca29309-3f7d-49ab-a38c-183cd9592823.jpg',
+                  // 'https://rv.5giotlead.com/static/all/black.jpg',
+                  // 'https://rv.5giotlead.com/static/all/white.jpg',
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,
@@ -90,10 +92,10 @@ class _ControlState extends State<ControlPage> {
             //   ],
             // ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: PowerSwitch(),
+          const SizedBox(
+            height: 200,
           ),
+          PowerSwitch(),
           const SizedBox(
             height: 15,
           ),
@@ -127,9 +129,9 @@ class Canvas extends StatelessWidget {
                 Column(
                   children: [
                     Container(
-                      width: 100,
+                      width: 160,
                       height: 40,
-                      color: const Color.fromARGB(116, 141, 139, 139),
+                      color: const Color.fromARGB(160, 250, 240, 230),
                       child: Row(
                         children: [
                           const Icon(
@@ -137,29 +139,21 @@ class Canvas extends StatelessWidget {
                             color: Colors.black,
                             size: 20,
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                              15,
-                              0,
-                              0,
-                              0,
-                            ),
-                            child: Text(
-                              '${_controlStore.energyNotifier.value} kWh',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 10,
-                              ),
+                          Text(
+                            '總耗電量: ${_controlStore.energyNotifier.value} 度電',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             ),
                           ),
                         ],
                       ),
                     ),
                     Container(
-                      width: 100,
+                      width: 160,
                       height: 40,
-                      color: const Color.fromARGB(116, 141, 139, 139),
+                      color: const Color.fromARGB(160, 250, 240, 230),
                       child: Row(
                         children: [
                           LayoutBuilder(
@@ -185,9 +179,7 @@ class Canvas extends StatelessWidget {
                               0,
                             ),
                             child: Text(
-                              _controlStore.switchNotifier.value
-                                  ? 'open'
-                                  : 'closed',
+                              _controlStore.switchNotifier.value ? '開啟' : '關閉',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -217,10 +209,11 @@ class PowerSwitch extends StatelessWidget {
 
   final _tbClient = Modular.get<ThingsboardClient>();
   final _controlStore = Modular.get<ControlStore>();
+  List<bool> toggleStatus = <bool>[false, false];
 
-  Future<void> toggleSwitch() async {
-    // const deviceId = '623188e0-1176-11ed-b3ac-871000fc4069';
-    const deviceId = '7f07f5a0-1174-11ed-b3ac-871000fc4069';
+  Future<void> toggleSwitch(int index) async {
+    // const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
+    const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
     final data = jsonEncode({
       'method': 'Switch.Toggle',
       'params': {'id': 0}
@@ -239,18 +232,38 @@ class PowerSwitch extends StatelessWidget {
     // );
   }
 
+  void checkToggleStatus() {
+    _controlStore.switchNotifier.value
+        ? toggleStatus = [true, false]
+        : toggleStatus = [false, true];
+  }
+
   @override
   Widget build(BuildContext context) {
+    checkToggleStatus();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('開關'),
-        Switch(
-          value: _controlStore.switchNotifier.value,
-          onChanged: (value) {
-            toggleSwitch();
-          },
-        ),
+        ToggleButtons(
+          direction: Axis.vertical,
+          onPressed: toggleSwitch,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          selectedBorderColor: Colors.red[700],
+          selectedColor: Colors.white,
+          fillColor: Colors.red[200],
+          color: Colors.red[400],
+          constraints: const BoxConstraints(
+            minHeight: 80,
+            minWidth: 80,
+          ),
+          isSelected: toggleStatus,
+          children: const <Widget>[Text('開啟'), Text('關閉')],
+        ), // Switch(
+        //   value: _controlStore.switchNotifier.value,
+        //   onChanged: (value) {
+        //     toggleSwitch();
+        //   },
+        // ),
       ],
     );
   }
@@ -269,8 +282,9 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   final _storage = Modular.get<FlutterSecureStorage>();
   final _controlStore = Modular.get<ControlStore>();
 
-  // final baseWSURL = 'wss://rv.5giotlead.com';
-  final baseWSURL = 'wss://rv.5giotlead.com:8081';
+  final baseWSURL = 'wss://rv.5giotlead.com';
+
+  // final baseWSURL = 'wss://rv.5giotlead.com:8080';
   final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm:ss a');
   late WebSocketChannel wsSwitch;
   late WebSocketChannel wsEnergy;
@@ -331,8 +345,8 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
       '$baseWSURL/api/ws/plugins/telemetry?token=$token',
     );
     if (type == 'p1') {
-      // entityId = '623188e0-1176-11ed-b3ac-871000fc4069';
-      entityId = '7f07f5a0-1174-11ed-b3ac-871000fc4069';
+      // entityId = '3edf4180-3312-11ed-beac-410b5c7ea157';
+      entityId = '33dcf520-3312-11ed-beac-410b5c7ea157';
       final object = {
         'tsSubCmds': [
           {
@@ -349,7 +363,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
         wsSwitch.stream.listen(_setSwitchTelemetry);
       }
     } else if (type == 'em') {
-      entityId = '9031bf40-1954-11ed-a371-210ec0665214';
+      entityId = '7f14f9f0-331e-11ed-9d40-89fa88f80717';
       final object = {
         'tsSubCmds': [
           {
@@ -427,27 +441,27 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
     _startWS('p1');
     return SizedBox(
       height: 500,
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-        itemBuilder: (BuildContext context, int index) {
-          final telemetry = telemetryData[index];
-          return Center(
-            child: Card(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                    leading: telemetry.icon,
-                    title: Text('${telemetry.name}: ${telemetry.data}'),
-                    subtitle: Text(formatter.format(telemetry.updateTime)),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-        itemCount: telemetryData.length,
-      ),
+      // child: ListView.builder(
+      //   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      //   itemBuilder: (BuildContext context, int index) {
+      //     final telemetry = telemetryData[index];
+      //     return Center(
+      //       child: Card(
+      //         child: Column(
+      //           mainAxisSize: MainAxisSize.min,
+      //           children: <Widget>[
+      //             ListTile(
+      //               leading: telemetry.icon,
+      //               title: Text('${telemetry.name}: ${telemetry.data}'),
+      //               subtitle: Text(formatter.format(telemetry.updateTime)),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     );
+      //   },
+      //   itemCount: telemetryData.length,
+      // ),
     );
   }
 }

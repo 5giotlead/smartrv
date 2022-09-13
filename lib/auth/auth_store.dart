@@ -41,6 +41,10 @@ class AuthStore extends NotifierStore<Exception, bool> {
         refreshToken == null)) {
       await _tbClient.setUserFromJwtToken(token, refreshToken, true);
     }
+    if (!_tbClient.isJwtTokenValid()) {
+      await _storage.delete(key: 'token');
+      await _storage.delete(key: 'refreshToken');
+    }
     update(_tbClient.isAuthenticated() && _tbClient.isJwtTokenValid());
     authNotifier.value = state;
     // await checkAccess();

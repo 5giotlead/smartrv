@@ -42,76 +42,60 @@ class _ManageState extends State<ManagePage> {
   Widget build(BuildContext context) {
     // debugPaintSizeEnabled = true; // After Build Widget
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 219, 217, 217),
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                // tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-                tooltip: 'menu',
-              );
+      backgroundColor: const Color.fromARGB(255, 219, 217, 217),
+      appBar: AppBar(
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: 'menu',
+            );
+          },
+        ),
+        title: const Text('RV'),
+        actions: <Widget>[
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return _authStore.state
+                  ? IconButton(
+                      icon: const Icon(Icons.logout),
+                      tooltip: 'Logout',
+                      onPressed: () {
+                        Modular.to.navigate('/auth/logout');
+                      },
+                    )
+                  : IconButton(
+                      icon: const Icon(Icons.login),
+                      tooltip: 'Login',
+                      onPressed: () {
+                        Modular.to.navigate('/auth/login');
+                      },
+                    );
             },
           ),
-          title: const Text('RV'),
-          actions: <Widget>[
-            LayoutBuilder(builder: (context, constraints) {
-              if (_authStore.state) {
-                return IconButton(
-                  icon: const Icon(Icons.logout),
-                  tooltip: 'Logout',
-                  onPressed: () {
-                    Modular.to.navigate('/auth/logout');
-                  },
-                );
-              } else {
-                return IconButton(
-                  icon: const Icon(Icons.login),
-                  tooltip: 'Login',
-                  onPressed: () {
-                    Modular.to.navigate('/auth/login');
-                  },
-                );
-              }
-            }),
-            LayoutBuilder(builder: (context, constraints) {
-              if (_authStore.state) {
-                return IconButton(
-                  icon: const Icon(Icons.search),
-                  tooltip: 'Control',
-                  onPressed: () {
-                    Modular.to.navigate('/member/control');
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text('Search')));
-                  },
-                );
-              } else {
-                return Container();
-              }
-            }),
-            IconButton(
-              icon: const Icon(Icons.qr_code_scanner),
-              tooltip: 'QR Code Scanner',
-              onPressed: () {
-                Navigator.of(context).push(_createRoute());
-              },
-            ),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return (_authStore.state)
-                    ? Avatar('assets/images/lady.png')
-                    : Avatar('assets/images/dp.png');
-              },
-            ),
-          ],
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        //bottomNavigationBar: BottomNavBar(),
-        body: Column(children: [
+          IconButton(
+            icon: const Icon(Icons.qr_code_scanner),
+            tooltip: 'QR Code掃描',
+            onPressed: () {
+              Modular.to.pushNamed('/qr-scan');
+            },
+          ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return (_authStore.state)
+                  ? Avatar('assets/images/dp.png')
+                  : Avatar('assets/images/account_circle.png');
+            },
+          ),
+        ],
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Column(
+        children: [
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 24, right: 24),
@@ -121,7 +105,9 @@ class _ManageState extends State<ManagePage> {
               ),
             ),
           )
-        ]));
+        ],
+      ),
+    );
   }
 }
 
@@ -158,17 +144,29 @@ class _RvListState extends State<RvList> {
   List<RV> rvList = [];
 
   Future<void> getRVList() async {
-    final assetList = await _tbClient.get<dynamic>(
-      '/api/customer/dc8089d0-1ec7-11ed-8663-afdbeac61784/assets?page=0&pageSize=10',
-    );
-    final assets = assetList.data;
-    for (var i = 0; i < (assets['totalElements'] as int); i++) {
-      final res = await _dio.get<List<dynamic>>(
-        '/smartrv/rv?assetId=${assets['data'][i]['id']['id']}',
-      );
-      rvList.add(RV.fromJson(res.data![0] as Map<String, dynamic>));
+    var assetList;
+    final user = _tbClient.getAuthUser();
+    if (user != null) {
+      (user.authority == Authority.TENANT_ADMIN)
+          ? assetList = await _tbClient.get<dynamic>(
+              '/api/tenant/assets?page=0&pageSize=10',
+            )
+          : assetList = await _tbClient.get<dynamic>(
+              '/api/customer/${user.customerId}/assets?page=0&pageSize=10',
+            );
     }
-    setState(() {});
+    final assets = assetList.data;
+    if (assetList.data != null) {
+      for (var i = 0; i < (assets['totalElements'] as int); i++) {
+        if (assets['data'][i]['type'] == 'SmartRV') {
+          final res = await _dio.get<List<dynamic>>(
+            '/smartrv/rv?assetId=${assets['data'][i]['id']['id']}',
+          );
+          rvList.add(RV.fromJson(res.data![0] as Map<String, dynamic>));
+        }
+      }
+      setState(() {});
+    }
   }
 
   Future<void> deleteRV(String rvId) async {
