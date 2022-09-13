@@ -316,8 +316,16 @@ class _RentPageState extends State<RentPage> {
                         ),
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        final numberList = value!.split('-');
+                        if (value.isEmpty) {
                           return '請輸入字元...';
+                        } else if (numberList.length != 5 ||
+                            numberList[0].length != 8 ||
+                            numberList[1].length != 4 ||
+                            numberList[2].length != 4 ||
+                            numberList[3].length != 4 ||
+                            numberList[4].length != 12) {
+                          return '格式不符，請重新輸入！';
                         }
                         return null;
                       },
