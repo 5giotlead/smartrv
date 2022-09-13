@@ -80,8 +80,6 @@ class _ControlState extends State<ControlPage> {
               children: [
                 Image.network(
                   'https://rv.5giotlead.com/static/rv/0ca29309-3f7d-49ab-a38c-183cd9592823.jpg',
-                  // 'https://rv.5giotlead.com/static/all/black.jpg',
-                  // 'https://rv.5giotlead.com/static/all/white.jpg',
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,
@@ -210,6 +208,7 @@ class PowerSwitch extends StatelessWidget {
   final _tbClient = Modular.get<ThingsboardClient>();
   final _controlStore = Modular.get<ControlStore>();
   List<bool> toggleStatus = <bool>[false, false];
+  List<bool> delayToggleStatus = <bool>[false];
 
   Future<void> toggleSwitch(int index) async {
     // const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
@@ -218,24 +217,33 @@ class PowerSwitch extends StatelessWidget {
       'method': 'Switch.Toggle',
       'params': {'id': 0}
     });
-    // final delayClose = jsonEncode({
-    //   'method': 'Switch.Set',
-    //   'params': {'id': 0, 'on': _controlStore.state, 'toggle_after': 5}
-    // });
     await _tbClient.post<String>(
       '/api/rpc/twoway/$deviceId',
       data: data,
     );
-    // await _tbClient.post<String>(
-    //   '/api/rpc/twoway/$deviceId',
-    //   data: delayClose,
-    // );
+  }
+
+  Future<void> delayToggleSwitch(int index) async {
+    // const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
+    const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
+    final delayClose = jsonEncode({
+      'method': 'Switch.Set',
+      'params': {'id': 0, 'on': true, 'toggle_after': 5}
+    });
+    await _tbClient.post<String>(
+      '/api/rpc/twoway/$deviceId',
+      data: delayClose,
+    );
   }
 
   void checkToggleStatus() {
-    _controlStore.switchNotifier.value
-        ? toggleStatus = [true, false]
-        : toggleStatus = [false, true];
+    if (_controlStore.switchNotifier.value) {
+      toggleStatus = [true, false];
+      delayToggleStatus = [true];
+    } else {
+      toggleStatus = [false, true];
+      delayToggleStatus = [false];
+    }
   }
 
   @override
@@ -258,12 +266,25 @@ class PowerSwitch extends StatelessWidget {
           ),
           isSelected: toggleStatus,
           children: const <Widget>[Text('開啟'), Text('關閉')],
-        ), // Switch(
-        //   value: _controlStore.switchNotifier.value,
-        //   onChanged: (value) {
-        //     toggleSwitch();
-        //   },
-        // ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        ToggleButtons(
+          direction: Axis.vertical,
+          onPressed: delayToggleSwitch,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          selectedBorderColor: Colors.green[700],
+          selectedColor: Colors.white,
+          fillColor: Colors.green[200],
+          color: Colors.green[400],
+          constraints: const BoxConstraints(
+            minHeight: 160,
+            minWidth: 160,
+          ),
+          isSelected: delayToggleStatus,
+          children: const <Widget>[Text('門鎖控制')],
+        ),
       ],
     );
   }
@@ -439,7 +460,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   Widget build(BuildContext context) {
     _startWS('em');
     _startWS('p1');
-    return SizedBox(
+    return const SizedBox(
       height: 500,
       // child: ListView.builder(
       //   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),

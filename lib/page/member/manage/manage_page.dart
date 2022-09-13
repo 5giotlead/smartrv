@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/auth/auth_store.dart';
-import 'package:flutter_rv_pms/page/home/widgets/qr_scan2.dart';
 import 'package:flutter_rv_pms/page/home/widgets/avatar.dart';
 import 'package:flutter_rv_pms/shared/models/rv.dart';
 import 'package:flutter_rv_pms/shared/widgets/rv_card.dart';
@@ -109,26 +108,6 @@ class _ManageState extends State<ManagePage> {
       ),
     );
   }
-}
-
-Route<dynamic> _createRoute() {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => const QRScan2(),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      const begin = Offset(0, 1);
-      const end = Offset.zero;
-      const curve = Curves.ease;
-
-      final tween = Tween(begin: begin, end: end).chain(
-        CurveTween(curve: curve),
-      );
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
 }
 
 class RvList extends StatefulWidget {

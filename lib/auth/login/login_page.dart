@@ -119,6 +119,8 @@ class LoginForm extends StatefulWidget {
 class LoginFormState extends State<LoginForm> {
   final tbClient = Modular.get<ThingsboardClient>();
   final _storage = const FlutterSecureStorage();
+  final _authStore = Modular.get<AuthStore>();
+  final _pageStore = Modular.get<PageStore>();
   final _formKey = GlobalKey<FormBuilderState>();
   final _isLoginNotifier = ValueNotifier<bool>(false);
   final _showPasswordNotifier = ValueNotifier<bool>(false);
@@ -140,9 +142,6 @@ class LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _login() async {
-    final _authStore = Modular.get<AuthStore>();
-    final _pageStore = Modular.get<PageStore>();
-
     FocusScope.of(context).unfocus();
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       final loginRequest = _formKey.currentState!.value;
@@ -171,6 +170,29 @@ class LoginFormState extends State<LoginForm> {
     }
   }
 
+  Future<void> loginByQR() async {
+    final username = Modular.args.queryParams['username'];
+    final passwd = Modular.args.queryParams['passwd'];
+    try {
+      final loginResponse =
+          await tbClient.login(LoginRequest(username!, passwd!));
+      await _storage.write(key: 'token', value: loginResponse.token);
+      await _storage.write(
+        key: 'refreshToken',
+        value: loginResponse.refreshToken,
+      );
+      _pageStore.setListByAccess(await _authStore.getCurrentUser());
+      if (_authStore.pastPage != '') {
+        Modular.to.navigate(_authStore.pastPage);
+        _authStore.pastPage = '';
+      } else {
+        Modular.to.navigate('/home');
+      }
+    } catch (e) {
+      throw Exception('error');
+    }
+  }
+
   Future<void> _loginByOAuth() async {
     final oAuth2Clients = await tbClient.getOAuth2Service().getOAuth2Clients();
     if (oAuth2Clients.isNotEmpty) {
@@ -184,6 +206,15 @@ class LoginFormState extends State<LoginForm> {
       if (!await launchUrl(_url, webOnlyWindowName: '_self')) {
         throw Exception('Could not launch $_url');
       }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (Modular.args.queryParams['username'] != null &&
+        Modular.args.queryParams['passwd'] != null) {
+      loginByQR();
     }
   }
 

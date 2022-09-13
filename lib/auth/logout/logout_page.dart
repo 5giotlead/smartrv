@@ -23,6 +23,7 @@ class LogoutPage extends StatelessWidget {
       await _storage.delete(key: 'token');
       await _storage.delete(key: 'refreshToken');
       _pageStore.setListByAccess(await _authStore.getCurrentUser());
+      _authStore.forwardPage = '';
     } catch (e) {
       print(e);
     } finally {
