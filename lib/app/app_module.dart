@@ -10,10 +10,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:thingsboard_client/thingsboard_client.dart';
 
 class AppModule extends Module {
-  final baseURL = 'https://rv.5giotlead.com';
+  final baseURL = '';
 
   // final baseURI = 'http://localhost:8080';
-  // final baseURL = 'https://rv.5giotlead.com:8081';
+  // final baseURL = 'https://rv.5giotlead.com:8080';
 
   @override
   List<Bind> get binds => [

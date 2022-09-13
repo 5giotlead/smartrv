@@ -303,9 +303,9 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   final _storage = Modular.get<FlutterSecureStorage>();
   final _controlStore = Modular.get<ControlStore>();
 
-  final baseWSURL = 'wss://rv.5giotlead.com';
+  // final baseWSURL = '';
 
-  // final baseWSURL = 'wss://rv.5giotlead.com:8080';
+  final baseWSURL = 'wss://rv.5giotlead.com:8080';
   final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm:ss a');
   late WebSocketChannel wsSwitch;
   late WebSocketChannel wsEnergy;
