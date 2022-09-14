@@ -40,8 +40,8 @@ class _ControlState extends State<ControlPage> {
   }
 
   Future<void> getStatus() async {
-    // const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
-    const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
+    const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
+    // const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
     final data = jsonEncode({
       'method': 'Switch.GetStatus',
       'params': {'id': 0}
@@ -206,8 +206,8 @@ class PowerSwitch extends StatelessWidget {
   List<bool> delayToggleStatus = <bool>[false];
 
   Future<void> toggleSwitch(int index) async {
-    // const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
-    const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
+    const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
+    // const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
     final data = jsonEncode({
       'method': 'Switch.Toggle',
       'params': {'id': 0}
@@ -219,8 +219,8 @@ class PowerSwitch extends StatelessWidget {
   }
 
   Future<void> delayToggleSwitch(int index) async {
-    // const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
-    const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
+    const deviceId = '3edf4180-3312-11ed-beac-410b5c7ea157';
+    // const deviceId = '33dcf520-3312-11ed-beac-410b5c7ea157';
     final delayClose = jsonEncode({
       'method': 'Switch.Set',
       'params': {'id': 0, 'on': true, 'toggle_after': 5}
@@ -378,8 +378,8 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
       '$baseWSURL/api/ws/plugins/telemetry?token=$token',
     );
     if (type == 'p1') {
-      // entityId = '3edf4180-3312-11ed-beac-410b5c7ea157';
-      entityId = '33dcf520-3312-11ed-beac-410b5c7ea157';
+      entityId = '3edf4180-3312-11ed-beac-410b5c7ea157';
+      // entityId = '33dcf520-3312-11ed-beac-410b5c7ea157';
       final object = {
         'tsSubCmds': [
           {
