@@ -299,6 +299,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   final _controlStore = Modular.get<ControlStore>();
   final energyTranslateList = {
     'voltage': '電壓',
+    'current': '電流',
     'power': '功率',
     'total': '總耗電量',
   };
@@ -318,17 +319,20 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
     Telemetry()
       ..name = '電壓'
       ..updateTime = DateTime.now()
-      ..data = '0 V'
+      ..data = 0
+      ..unit = 'V'
       ..icon = const Icon(Icons.energy_savings_leaf_outlined),
-    // Telemetry()
-    //   ..name = '安培'
-    //   ..updateTime = DateTime.now()
-    //   ..data = '0 mA'
-    //   ..icon = const Icon(Icons.flash_auto),
+    Telemetry()
+      ..name = '電流'
+      ..updateTime = DateTime.now()
+      ..data = 0
+      ..unit = 'mA'
+      ..icon = const Icon(Icons.flash_auto),
     Telemetry()
       ..name = '功率'
       ..updateTime = DateTime.now()
-      ..data = '0 W'
+      ..data = 0
+      ..unit = 'W'
       ..icon = const Icon(Icons.power_outlined),
     // Telemetry()
     //   ..name = 'reactive_power'
@@ -338,7 +342,8 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
     Telemetry()
       ..name = '總耗電量'
       ..updateTime = DateTime.now()
-      ..data = '0 度電'
+      ..data = 0
+      ..unit = '度電'
       ..icon = const Icon(
         Icons.electric_meter_outlined,
       ),
@@ -426,6 +431,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   }
 
   void _setEnergyTelemetry(dynamic message) {
+    // var currentTime = DateTime.now();
     if (message is String) {
       setState(() {
         final data = jsonDecode(message)['data'] as Map;
@@ -441,7 +447,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
               ..updateTime = DateTime.fromMillisecondsSinceEpoch(
                 element.value[0][0] as int,
               )
-              ..data = '${energy.floorToDouble()} 度電';
+              ..data = energy.floorToDouble();
           } else if (element.key == 'voltage') {
             telemetryData
                 .where(
@@ -452,7 +458,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
               ..updateTime = DateTime.fromMillisecondsSinceEpoch(
                 element.value[0][0] as int,
               )
-              ..data = '${element.value[0][1] as String} V';
+              ..data = double.parse(element.value[0][1] as String);
           } else if (element.key == 'power') {
             telemetryData
                 .where(
@@ -462,9 +468,28 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
               ..updateTime = DateTime.fromMillisecondsSinceEpoch(
                 element.value[0][0] as int,
               )
-              ..data = '${element.value[0][1] as String} W';
+              ..data = double.parse(element.value[0][1] as String);
           }
         }
+        final voltageData = telemetryData
+            .where(
+              (telemetry) => telemetry.name == energyTranslateList['voltage'],
+            )
+            .first;
+        final powerData = telemetryData
+            .where(
+              (telemetry) => telemetry.name == energyTranslateList['power'],
+            )
+            .first;
+        final current = powerData.data / voltageData.data * 10000;
+        final currentTime = powerData.updateTime;
+        telemetryData
+            .where(
+              (telemetry) => telemetry.name == energyTranslateList['current'],
+            )
+            .first
+          ..updateTime = currentTime
+          ..data = current.floorToDouble() / 10;
       });
     }
   }
@@ -493,7 +518,9 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
               children: <Widget>[
                 ListTile(
                   leading: telemetry.icon,
-                  title: Text('${telemetry.name}: ${telemetry.data}'),
+                  title: Text(
+                    '${telemetry.name}: ${telemetry.data} ${telemetry.unit}',
+                  ),
                   subtitle: Text(formatter.format(telemetry.updateTime)),
                 ),
               ],

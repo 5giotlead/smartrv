@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/shared/models/camp.dart';
@@ -56,7 +57,9 @@ class _RentPageState extends State<RentPage> {
       try {
         await _dio.post<String>('/smartrv/rv', data: data);
       } catch (e) {
-        print('error');
+        if (kDebugMode) {
+          print('error');
+        }
       } finally {
         Modular.to.navigate('/home');
       }
@@ -295,7 +298,7 @@ class _RentPageState extends State<RentPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: TextFormField(
                       controller: assetController,
-                      enabled: assetId?.isEmpty,
+                      // enabled: assetId?.isEmpty,
                       decoration: const InputDecoration(
                         hintText: '營車產品序號',
                         hintStyle: TextStyle(
