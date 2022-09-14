@@ -89,10 +89,15 @@ class _ControlState extends State<ControlPage> {
             ),
           ),
           const SizedBox(
-            height: 250,
+            height: 240,
             child: TelemetryBlock(),
           ),
-          PowerSwitch(),
+          Expanded(
+            child: PowerSwitch(),
+          ),
+          const SizedBox(
+            height: 9,
+          ),
         ],
       ),
     );
