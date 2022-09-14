@@ -87,19 +87,12 @@ class _ControlState extends State<ControlPage> {
                 Align(alignment: Alignment.topRight, child: Canvas()),
               ],
             ),
-            //   ],
-            // ),
           ),
           const SizedBox(
-            height: 200,
-          ),
-          PowerSwitch(),
-          const SizedBox(
-            height: 15,
-          ),
-          const Expanded(
+            height: 250,
             child: TelemetryBlock(),
           ),
+          PowerSwitch(),
         ],
       ),
     );
@@ -133,7 +126,7 @@ class Canvas extends StatelessWidget {
                       child: Row(
                         children: [
                           const Icon(
-                            Icons.power,
+                            Icons.electric_meter,
                             color: Colors.black,
                             size: 20,
                           ),
@@ -192,9 +185,6 @@ class Canvas extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          Container(
-            height: 30,
           ),
         ],
       ),
@@ -302,10 +292,15 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   bool _energyConnected = false;
   final _storage = Modular.get<FlutterSecureStorage>();
   final _controlStore = Modular.get<ControlStore>();
+  final energyTranslateList = {
+    'voltage': '電壓',
+    'power': '功率',
+    'total': '總耗電量',
+  };
 
-  // final baseWSURL = '';
+  final baseWSURL = 'wss://rv.5giotlead.com';
 
-  final baseWSURL = 'wss://rv.5giotlead.com:8080';
+  // final baseWSURL = 'wss://rv.5giotlead.com:8080';
   final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm:ss a');
   late WebSocketChannel wsSwitch;
   late WebSocketChannel wsEnergy;
@@ -316,25 +311,32 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
     //   ..data = 0
     //   ..icon = const Icon(Icons.flash_on),
     Telemetry()
-      ..name = 'voltage'
+      ..name = '電壓'
       ..updateTime = DateTime.now()
-      ..data = 0
-      ..icon = const Icon(Icons.flash_auto),
+      ..data = '0 V'
+      ..icon = const Icon(Icons.energy_savings_leaf_outlined),
     // Telemetry()
-    //   ..name = 'power'
+    //   ..name = '安培'
     //   ..updateTime = DateTime.now()
-    //   ..data = 0
-    //   ..icon = const Icon(Icons.energy_savings_leaf),
+    //   ..data = '0 mA'
+    //   ..icon = const Icon(Icons.flash_auto),
+    Telemetry()
+      ..name = '功率'
+      ..updateTime = DateTime.now()
+      ..data = '0 W'
+      ..icon = const Icon(Icons.power_outlined),
     // Telemetry()
     //   ..name = 'reactive_power'
     //   ..updateTime = DateTime.now()
     //   ..data = 0
     //   ..icon = const Icon(Icons.energy_savings_leaf),
     Telemetry()
-      ..name = 'total'
+      ..name = '總耗電量'
       ..updateTime = DateTime.now()
-      ..data = 0
-      ..icon = const Icon(Icons.energy_savings_leaf),
+      ..data = '0 度電'
+      ..icon = const Icon(
+        Icons.electric_meter_outlined,
+      ),
     // Telemetry()
     //   ..name = 'total_returned'
     //   ..updateTime = DateTime.now()
@@ -427,20 +429,35 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
             final energy = double.parse(element.value[0][1] as String) / 1000;
             _controlStore.setEnergyStatus(energy.floorToDouble());
             telemetryData
-                .where((telemetry) => telemetry.name == element.key)
+                .where(
+                  (telemetry) => telemetry.name == energyTranslateList['total'],
+                )
                 .first
               ..updateTime = DateTime.fromMillisecondsSinceEpoch(
                 element.value[0][0] as int,
               )
-              ..data = energy.floorToDouble();
+              ..data = '${energy.floorToDouble()} 度電';
           } else if (element.key == 'voltage') {
             telemetryData
-                .where((telemetry) => telemetry.name == element.key)
+                .where(
+                  (telemetry) =>
+                      telemetry.name == energyTranslateList['voltage'],
+                )
                 .first
               ..updateTime = DateTime.fromMillisecondsSinceEpoch(
                 element.value[0][0] as int,
               )
-              ..data = double.parse(element.value[0][1] as String);
+              ..data = '${element.value[0][1] as String} V';
+          } else if (element.key == 'power') {
+            telemetryData
+                .where(
+                  (telemetry) => telemetry.name == energyTranslateList['power'],
+                )
+                .first
+              ..updateTime = DateTime.fromMillisecondsSinceEpoch(
+                element.value[0][0] as int,
+              )
+              ..data = '${element.value[0][1] as String} W';
           }
         }
       });
@@ -460,29 +477,26 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   Widget build(BuildContext context) {
     _startWS('em');
     _startWS('p1');
-    return const SizedBox(
-      height: 500,
-      // child: ListView.builder(
-      //   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-      //   itemBuilder: (BuildContext context, int index) {
-      //     final telemetry = telemetryData[index];
-      //     return Center(
-      //       child: Card(
-      //         child: Column(
-      //           mainAxisSize: MainAxisSize.min,
-      //           children: <Widget>[
-      //             ListTile(
-      //               leading: telemetry.icon,
-      //               title: Text('${telemetry.name}: ${telemetry.data}'),
-      //               subtitle: Text(formatter.format(telemetry.updateTime)),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     );
-      //   },
-      //   itemCount: telemetryData.length,
-      // ),
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+      itemBuilder: (BuildContext context, int index) {
+        final telemetry = telemetryData[index];
+        return Center(
+          child: Card(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: telemetry.icon,
+                  title: Text('${telemetry.name}: ${telemetry.data}'),
+                  subtitle: Text(formatter.format(telemetry.updateTime)),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      itemCount: telemetryData.length,
     );
   }
 }
