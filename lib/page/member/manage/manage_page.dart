@@ -25,7 +25,8 @@ class _ManageState extends State<ManagePage> {
     super.initState();
     mounted = true;
     _authStore.observer(
-      onState: (state) => {
+      onState: (state) =>
+      {
         if (mounted) {setState(() {})}
       },
     );
@@ -60,19 +61,19 @@ class _ManageState extends State<ManagePage> {
             builder: (context, constraints) {
               return _authStore.state
                   ? IconButton(
-                      icon: const Icon(Icons.logout),
-                      tooltip: 'Logout',
-                      onPressed: () {
-                        Modular.to.navigate('/auth/logout');
-                      },
-                    )
+                icon: const Icon(Icons.logout),
+                tooltip: 'Logout',
+                onPressed: () {
+                  Modular.to.navigate('/auth/logout');
+                },
+              )
                   : IconButton(
-                      icon: const Icon(Icons.login),
-                      tooltip: 'Login',
-                      onPressed: () {
-                        Modular.to.navigate('/auth/login');
-                      },
-                    );
+                icon: const Icon(Icons.login),
+                tooltip: 'Login',
+                onPressed: () {
+                  Modular.to.navigate('/auth/login');
+                },
+              );
             },
           ),
           IconButton(
@@ -128,11 +129,11 @@ class _RvListState extends State<RvList> {
     if (user != null) {
       (user.authority == Authority.TENANT_ADMIN)
           ? assetList = await _tbClient.get<dynamic>(
-              '/api/tenant/assets?page=0&pageSize=10',
-            )
+        '/api/tenant/assets?page=0&pageSize=10',
+      )
           : assetList = await _tbClient.get<dynamic>(
-              '/api/customer/${user.customerId}/assets?page=0&pageSize=10',
-            );
+        '/api/customer/${user.customerId}/assets?page=0&pageSize=10',
+      );
     }
     final assets = assetList.data;
     if (assetList.data != null) {
@@ -141,7 +142,9 @@ class _RvListState extends State<RvList> {
           final res = await _dio.get<List<dynamic>>(
             '/smartrv/rv?assetId=${assets['data'][i]['id']['id']}',
           );
-          rvList.add(RV.fromJson(res.data![0] as Map<String, dynamic>));
+          if (res.data!.isNotEmpty) {
+            rvList.add(RV.fromJson(res.data![0] as Map<String, dynamic>));
+          }
         }
       }
       setState(() {});
