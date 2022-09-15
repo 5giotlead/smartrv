@@ -295,7 +295,8 @@ class TelemetryBlock extends StatefulWidget {
 class _TelemetryBlockState extends State<TelemetryBlock> {
   bool _switchConnected = false;
   bool _energyConnected = false;
-  final _storage = Modular.get<FlutterSecureStorage>();
+
+  final _tbClient = Modular.get<ThingsboardClient>();
   final _controlStore = Modular.get<ControlStore>();
   final energyTranslateList = {
     'voltage': '電壓',
@@ -371,11 +372,10 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
     _closeWS();
   }
 
-  Future<void> _startWS(String type) async {
+  void _startWS(String type) {
     var entityId = '';
-    final token = await _storage.read(key: 'token');
     final uri = Uri.parse(
-      '$baseWSURL/api/ws/plugins/telemetry?token=$token',
+      '$baseWSURL/api/ws/plugins/telemetry?token=${_tbClient.getJwtToken()}',
     );
     if (type == 'p1') {
       entityId = '3edf4180-3312-11ed-beac-410b5c7ea157';
@@ -431,7 +431,6 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
   }
 
   void _setEnergyTelemetry(dynamic message) {
-    // var currentTime = DateTime.now();
     if (message is String) {
       setState(() {
         final data = jsonDecode(message)['data'] as Map;

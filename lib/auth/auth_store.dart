@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -33,19 +34,43 @@ class AuthStore extends NotifierStore<Exception, bool> {
     await getCurrentUser();
   }
 
+  Future<void> setTokenFromTBClient() async {
+    await _storage.write(
+      key: 'token',
+      value: _tbClient.getJwtToken(),
+    );
+    await _storage.write(
+      key: 'refreshToken',
+      value: _tbClient.getRefreshToken(),
+    );
+  }
+
+  Future<void> clearToken() async {
+    await _storage.delete(key: 'token');
+    await _storage.delete(key: 'refreshToken');
+  }
+
   Future<bool> checkAuth() async {
-    final token = await _storage.read(key: 'token');
-    final refreshToken = await _storage.read(key: 'refreshToken');
-    if (!(_tbClient.isAuthenticated() ||
-        token == null ||
-        refreshToken == null)) {
-      await _tbClient.setUserFromJwtToken(token, refreshToken, true);
+    if (!_tbClient.isAuthenticated()) {
+      final token = await _storage.read(key: 'token');
+      final refreshToken = await _storage.read(key: 'refreshToken');
+      if (token != null && refreshToken != null) {
+        await _tbClient.setUserFromJwtToken(token, refreshToken, true);
+        if (!_tbClient.isJwtTokenValid()) {
+          await _tbClient.refreshJwtToken(
+            refreshToken: _tbClient.getRefreshToken(),
+            notify: true,
+          );
+          if (_tbClient.getJwtToken() != null &&
+              _tbClient.getRefreshToken() != null) {
+            await setTokenFromTBClient();
+          } else {
+            await clearToken();
+          }
+        }
+      }
     }
-    if (!_tbClient.isJwtTokenValid()) {
-      await _storage.delete(key: 'token');
-      await _storage.delete(key: 'refreshToken');
-    }
-    update(_tbClient.isAuthenticated() && _tbClient.isJwtTokenValid());
+    update(_tbClient.isAuthenticated());
     authNotifier.value = state;
     // await checkAccess();
     return state;

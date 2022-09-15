@@ -89,7 +89,7 @@ class _HomeState extends State<HomePage> {
           ),
           LayoutBuilder(
             builder: (context, constraints) {
-              return (_authStore.state)
+              return _authStore.state
                   ? Avatar('assets/images/dp.png')
                   : Avatar('assets/images/account_circle.png');
             },

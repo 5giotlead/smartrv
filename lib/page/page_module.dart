@@ -101,7 +101,6 @@ class _EntryState extends State<EntryPage> {
   @override
   void initState() {
     super.initState();
-    _authStore.checkAuth();
     setBottomList();
     removeUriParams();
   }
