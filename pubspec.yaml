@@ -12,6 +12,7 @@ dependencies:
   build_runner: ^2.2.0
   built_value: ^8.4.1
   dio: ^4.0.6
+  file_picker: ^5.1.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1

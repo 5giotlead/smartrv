@@ -6,6 +6,7 @@ import 'package:flutter_rv_pms/page/member/control/control_store.dart';
 import 'package:flutter_rv_pms/page/member/manage/manage_page.dart';
 import 'package:flutter_rv_pms/page/member/order/order_page.dart';
 import 'package:flutter_rv_pms/page/member/rent/rent_page.dart';
+import 'package:flutter_rv_pms/page/member/upload/upload_page.dart';
 
 class MemberModule extends Module {
   @override
@@ -15,6 +16,7 @@ class MemberModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
+        ChildRoute('/upload', child: (context, args) => UploadPage()),
         ChildRoute('/rent', child: (context, args) => const RentPage()),
         ChildRoute('/control', child: (context, args) => const ControlPage()),
         ChildRoute('/shopping', child: (context, args) => const OrderPage()),
