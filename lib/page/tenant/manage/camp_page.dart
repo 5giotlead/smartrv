@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rv_pms/l10n/l10n.dart';
+import 'package:flutter_rv_pms/shared/models/rv_file.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
@@ -19,7 +21,18 @@ class _ManageCampState extends State<ManageCampPage> {
   final _dio = Modular.get<Dio>();
   final _formKey = GlobalKey<FormBuilderState>();
   final regionList = <String>['北部', '中部', '南部', '東部', '離島'];
+  final fileList = <RVFile>[];
   bool _regionHasError = false;
+  bool _fileHasError = false;
+
+  Future<void> _getFiles() async {
+    final res = await _dio.get<List<dynamic>>('/smartrv/file?block=camp');
+    setState(() {
+      for (var i = 0; i < res.data!.length; i++) {
+        fileList.add(RVFile.fromJson(res.data![i] as Map<String, dynamic>));
+      }
+    });
+  }
 
   Future<void> _saveCamp() async {
     FocusScope.of(context).unfocus();
@@ -32,6 +45,12 @@ class _ManageCampState extends State<ManageCampPage> {
         print(e);
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getFiles();
   }
 
   @override
@@ -104,12 +123,36 @@ class _ManageCampState extends State<ManageCampPage> {
                 ),
                 keyboardType: TextInputType.number,
               ),
-              FormBuilderTextField(
+              FormBuilderDropdown<String>(
                 name: 'fileName',
                 decoration: const InputDecoration(
                   labelText: '營區圖片',
                 ),
-                keyboardType: TextInputType.text,
+                validator: FormBuilderValidators.compose(
+                  [FormBuilderValidators.required()],
+                ),
+                items: fileList
+                    .map(
+                      (file) => DropdownMenuItem(
+                        alignment: AlignmentDirectional.center,
+                        value: file.id,
+                        child: ListTile(
+                          leading: Image.network(
+                            'https://rv.5giotlead.com/static/camp/${file.id}.${file.mediaType}',
+                          ),
+                          title: Text(file.originalName!),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _fileHasError = !(_formKey.currentState?.fields['fileName']
+                            ?.validate() ??
+                        false);
+                  });
+                },
+                valueTransformer: (val) => val?.toString(),
               ),
               const SizedBox(height: 30),
               Container(

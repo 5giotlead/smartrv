@@ -156,15 +156,15 @@ class Canvas extends StatelessWidget {
                             builder: (context, constraints) {
                               return _controlStore.switchNotifier.value
                                   ? const Icon(
-                                      Icons.sensor_door_rounded,
-                                      color: Colors.red,
-                                      size: 24,
-                                    )
+                                Icons.sensor_door_rounded,
+                                color: Colors.red,
+                                size: 24,
+                              )
                                   : const Icon(
-                                      Icons.sensor_door_rounded,
-                                      color: Colors.black,
-                                      size: 24,
-                                    );
+                                Icons.sensor_door_rounded,
+                                color: Colors.black,
+                                size: 24,
+                              );
                             },
                           ),
                           Padding(
@@ -372,6 +372,39 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
     _closeWS();
   }
 
+  void onData(List<AttributeData> message) {
+    print(message);
+
+    // data example
+    // [
+    //   AttributeData
+    //   {lastUpdateTs: 1663317744618, key: pf, value: 0.98},
+    //   AttributeData
+    //   {lastUpdateTs: 1663317744618, key: power, value: 45.78},
+    //   AttributeData
+    //   {lastUpdateTs: 1663317744618, key: reactive_power, value: 8.88},
+    //   AttributeData
+    //   {lastUpdateTs: 1663317744618, key: total, value: 368254.4},
+    //   AttributeData
+    //   {lastUpdateTs: 1663317744618, key: total_returned, value: 50.6},
+    //   AttributeData
+    //   {lastUpdateTs: 1663317744618, key: voltage, value: 227.13}
+    // ]
+  }
+
+  void subByTBClient() {
+    final telemetrySub = TelemetrySubscriber.createEntityAttributesSubscription(
+      telemetryService: _tbClient.getTelemetryService(),
+      entityId: EntityId.fromTypeAndUuid(
+        EntityType.DEVICE,
+        '7f14f9f0-331e-11ed-9d40-89fa88f80717',
+      ),
+      attributeScope: 'LATEST_TELEMETRY',
+    )
+      ..subscribe();
+    telemetrySub.attributeDataStream.listen(onData);
+  }
+
   void _startWS(String type) {
     var entityId = '';
     final uri = Uri.parse(
@@ -441,7 +474,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
             telemetryData
                 .where(
                   (telemetry) => telemetry.name == energyTranslateList['total'],
-                )
+            )
                 .first
               ..updateTime = DateTime.fromMillisecondsSinceEpoch(
                 element.value[0][0] as int,
@@ -451,8 +484,8 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
             telemetryData
                 .where(
                   (telemetry) =>
-                      telemetry.name == energyTranslateList['voltage'],
-                )
+              telemetry.name == energyTranslateList['voltage'],
+            )
                 .first
               ..updateTime = DateTime.fromMillisecondsSinceEpoch(
                 element.value[0][0] as int,
@@ -462,7 +495,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
             telemetryData
                 .where(
                   (telemetry) => telemetry.name == energyTranslateList['power'],
-                )
+            )
                 .first
               ..updateTime = DateTime.fromMillisecondsSinceEpoch(
                 element.value[0][0] as int,
@@ -473,19 +506,19 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
         final voltageData = telemetryData
             .where(
               (telemetry) => telemetry.name == energyTranslateList['voltage'],
-            )
+        )
             .first;
         final powerData = telemetryData
             .where(
               (telemetry) => telemetry.name == energyTranslateList['power'],
-            )
+        )
             .first;
         final current = powerData.data / voltageData.data * 10000;
         final currentTime = powerData.updateTime;
         telemetryData
             .where(
               (telemetry) => telemetry.name == energyTranslateList['current'],
-            )
+        )
             .first
           ..updateTime = currentTime
           ..data = current.floorToDouble() / 10;

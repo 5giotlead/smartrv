@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_rv_pms/shared/models/rv_file.dart';
 import 'package:flutter_rv_pms/widgets/primary_button.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
@@ -17,6 +18,17 @@ class ManageTypePage extends StatefulWidget {
 class _ManageTypeState extends State<ManageTypePage> {
   final _dio = Modular.get<Dio>();
   final _formKey = GlobalKey<FormBuilderState>();
+  final fileList = <RVFile>[];
+  bool _fileHasError = false;
+
+  Future<void> _getFiles() async {
+    final res = await _dio.get<List<dynamic>>('/smartrv/file?block=rv');
+    setState(() {
+      for (var i = 0; i < res.data!.length; i++) {
+        fileList.add(RVFile.fromJson(res.data![i] as Map<String, dynamic>));
+      }
+    });
+  }
 
   Future<void> _saveRVType() async {
     FocusScope.of(context).unfocus();
@@ -29,6 +41,12 @@ class _ManageTypeState extends State<ManageTypePage> {
         print(e);
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getFiles();
   }
 
   @override
@@ -67,12 +85,36 @@ class _ManageTypeState extends State<ManageTypePage> {
                 ]),
                 keyboardType: TextInputType.text,
               ),
-              FormBuilderTextField(
+              FormBuilderDropdown<String>(
                 name: 'filenames',
                 decoration: const InputDecoration(
-                  labelText: '車款圖片',
+                  labelText: '營區圖片',
                 ),
-                keyboardType: TextInputType.text,
+                validator: FormBuilderValidators.compose(
+                  [FormBuilderValidators.required()],
+                ),
+                items: fileList
+                    .map(
+                      (file) => DropdownMenuItem(
+                        alignment: AlignmentDirectional.center,
+                        value: file.id,
+                        child: ListTile(
+                          leading: Image.network(
+                            'https://rv.5giotlead.com/static/rv/${file.id}.${file.mediaType}',
+                          ),
+                          title: Text(file.originalName!),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (val) {
+                  setState(() {
+                    _fileHasError = !(_formKey.currentState?.fields['fileName']
+                            ?.validate() ??
+                        false);
+                  });
+                },
+                valueTransformer: (val) => val?.toString(),
               ),
               FormBuilderTextField(
                 name: 'price',
