@@ -429,7 +429,7 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
         wsSwitch.stream.listen(_setSwitchTelemetry);
       }
     } else if (type == 'em') {
-      entityId = '7f14f9f0-331e-11ed-9d40-89fa88f80717';
+      entityId = 'fb9ce810-3d47-11ed-996d-3ddca1d12b3d';
       final object = {
         'tsSubCmds': [
           {
