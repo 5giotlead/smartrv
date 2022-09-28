@@ -155,7 +155,7 @@ class LoginFormState extends State<LoginForm> {
           key: 'refreshToken',
           value: loginResponse.refreshToken,
         );
-        _pageStore.setListByAccess(await _authStore.getCurrentUser());
+        _pageStore.setListByAccess(tbClient.getAuthUser());
         if (_authStore.pastPage != '') {
           Modular.to.navigate(_authStore.pastPage);
           _authStore.pastPage = '';

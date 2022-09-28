@@ -40,6 +40,11 @@ final _pages = <PageInfo>[
     const Icon(Icons.control_camera),
   ),
   PageInfo(
+    '檔案上傳',
+    '/member/upload',
+    const Icon(Icons.upload_file),
+  ),
+  PageInfo(
     '登入',
     '/auth/login',
     const Icon(Icons.login),
@@ -68,13 +73,14 @@ class PageStore extends NotifierStore<Exception, int> {
     if (user != null) {
       if (user.authority == Authority.TENANT_ADMIN) {
         pagesNotifier.value = [
-          // _pages.firstWhere((element) => element.name == '首頁'),
-          // _pages.firstWhere((element) => element.name == 'RV上架'),
-          // _pages.firstWhere((element) => element.name == 'RV管理'),
-          // _pages.firstWhere((element) => element.name == 'RV控制'),
           _pages.firstWhere((element) => element.name == '首頁'),
-          _pages.firstWhere((element) => element.name == '營區管理'),
-          _pages.firstWhere((element) => element.name == '車款管理'),
+          _pages.firstWhere((element) => element.name == 'RV上架'),
+          _pages.firstWhere((element) => element.name == 'RV管理'),
+          _pages.firstWhere((element) => element.name == 'RV控制'),
+          // _pages.firstWhere((element) => element.name == '首頁'),
+          // _pages.firstWhere((element) => element.name == '營區管理'),
+          // _pages.firstWhere((element) => element.name == '車款管理'),
+          // _pages.firstWhere((element) => element.name == '檔案上傳'),
         ];
       } else if (user.authority == Authority.CUSTOMER_USER) {
         pagesNotifier.value = [
