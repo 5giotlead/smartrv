@@ -305,9 +305,9 @@ class _TelemetryBlockState extends State<TelemetryBlock> {
     'total': '總耗電量',
   };
 
-  final baseWSURL = 'wss://rv.5giotlead.com';
+  // final baseWSURL = 'wss://rv.5giotlead.com';
 
-  // final baseWSURL = 'wss://rv.5giotlead.com:8080';
+  final baseWSURL = 'wss://rv.5giotlead.com:8080';
   final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm:ss a');
   late WebSocketChannel wsSwitch;
   late WebSocketChannel wsEnergy;
