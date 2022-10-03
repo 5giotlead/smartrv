@@ -10,3 +10,8 @@
   to = "https://rv.5giotlead.com:8080/smartrv/:splat"
   status = 200
   force = true # COMMENT: ensure that we always redirect
+ 
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
